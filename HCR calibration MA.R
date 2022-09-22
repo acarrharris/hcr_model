@@ -15,7 +15,7 @@
 state1="MA"
 state_no=25
 
-p_star_sf <- 0.73
+p_star_sf <- 0.74
 p_star_bsb<- 0.58
 p_star_scup<-0.47
   
@@ -101,12 +101,12 @@ for(p in levels(periodz)){
       sf_catch_data1$csum_keep <- ave(sf_catch_data1$keep, sf_catch_data1$tripid, FUN=cumsum)
       sf_catch_data1$keep_adj = ifelse(sf_catch_data1$csum_keep>fluke_bag, 0,sf_catch_data1$keep)
       
-      #Add the following lines to end the trip once the bag limit is reached (rather than continuing to discard)
-      ###
-      sf_catch_data1$post_bag_fish=ifelse(sf_catch_data1$csum_keep>fluke_bag, 1,0)
-      sf_catch_data1= subset(sf_catch_data1,post_bag_fish==0 )
-      sf_catch_data1 <- subset(sf_catch_data1, select=-c(post_bag_fish ))
-      ###
+      # #Add the following lines to end the trip once the bag limit is reached (rather than continuing to discard)
+      # ###
+      # sf_catch_data1$post_bag_fish=ifelse(sf_catch_data1$csum_keep>fluke_bag, 1,0)
+      # sf_catch_data1= subset(sf_catch_data1,post_bag_fish==0 )
+      # sf_catch_data1 <- subset(sf_catch_data1, select=-c(post_bag_fish ))
+      # ###
       
       sf_catch_data1 <- subset(sf_catch_data1, select=-c(keep, csum_keep))
       names(sf_catch_data1)[names(sf_catch_data1) == "keep_adj"] = "keep"
@@ -274,6 +274,7 @@ for(p in levels(periodz)){
       
       scup_catch_data1$csum_keep <- ave(scup_catch_data1$keep, scup_catch_data1$tripid, FUN=cumsum)
       scup_catch_data1$keep_adj = ifelse(scup_catch_data1$csum_keep>scup_bag, 0,scup_catch_data1$keep)
+      
       scup_catch_data1 <- subset(scup_catch_data1, select=-c(keep, csum_keep))
       names(scup_catch_data1)[names(scup_catch_data1) == "keep_adj"] = "keep"
       
@@ -344,6 +345,11 @@ for(p in levels(periodz)){
 
 pds_all= list.stack(pds, fill=TRUE)
 pds_all[is.na(pds_all)] = 0
+
+pds_all$tot_bsb_catch=pds_all$tot_keep_bsb+pds_all$tot_rel_bsb
+pds_all$tot_sf_catch=pds_all$tot_keep_sf+pds_all$tot_rel_sf
+pds_all$tot_scup_catch=pds_all$tot_keep_scup+pds_all$tot_rel_scup
+
 rm(pds)
 
 #Create random draws of preference parameters based on the estimated means and SD from the choice model
@@ -509,36 +515,60 @@ costs_new_all_MA[is.na(costs_new_all_MA)] = 0
 rm(costs_new_MA)
 
 
+###Compare calibration model output with MRIP 
 
+MRIP_data_sf <- subset(data.frame( read.csv("total AB1B2 2021 by state.csv")), state=="MASSACHUSETTS" & species=="SUMMER FLOUNDER")                                                                          
+MRIP_data_bsb <- subset(data.frame( read.csv("total AB1B2 2021 by state.csv")), state=="MASSACHUSETTS" & species=="BLACK SEA BASS")                                                                          
+MRIP_data_scup <- subset(data.frame( read.csv("total AB1B2 2021 by state.csv")), state=="MASSACHUSETTS" & species=="SCUP")                                                                          
+
+
+##SF
 sum(pds_new_all_MA$tot_keep_sf)
-((52097-sum(pds_new_all_MA$tot_keep_sf))/52097)*100
+sum(MRIP_data_sf$tot_harvest)
+((sum(MRIP_data_sf$tot_harvest)-sum(pds_new_all_MA$tot_keep_sf))/sum(MRIP_data_sf$tot_harvest))*100
 
 sum(pds_new_all_MA$tot_rel_sf)
-((176682-sum(pds_new_all_MA$tot_rel_sf))/176682)*100
+sum(MRIP_data_sf$tot_rel)
+((sum(MRIP_data_sf$tot_rel)-sum(pds_new_all_MA$tot_rel_sf))/sum(MRIP_data_sf$tot_rel))*100
 
 sum(pds_new_all_MA$tot_sf_catch)
-((228779-sum(pds_new_all_MA$tot_sf_catch))/228779)*100
+sum(MRIP_data_sf$tot_catch)
+((sum(MRIP_data_sf$tot_catch)-sum(pds_new_all_MA$tot_sf_catch))/sum(MRIP_data_sf$tot_catch))*100
 
 
 
+
+
+##BSB
 sum(pds_new_all_MA$tot_keep_bsb)
-((1212386-sum(pds_new_all_MA$tot_keep_bsb))/1212386)*100
+sum(MRIP_data_bsb$tot_harvest)
+((sum(MRIP_data_bsb$tot_harvest)-sum(pds_new_all_MA$tot_keep_bsb))/sum(MRIP_data_bsb$tot_harvest))*100
 
 sum(pds_new_all_MA$tot_rel_bsb)
-((3791478 	-sum(pds_new_all_MA$tot_rel_bsb))/3791478)*100
+sum(MRIP_data_bsb$tot_rel)
+((sum(MRIP_data_bsb$tot_rel)-sum(pds_new_all_MA$tot_rel_bsb))/sum(MRIP_data_bsb$tot_rel))*100
 
 sum(pds_new_all_MA$tot_bsb_catch)
-((5003864-sum(pds_new_all_MA$tot_bsb_catch))/5003864)*100
+sum(MRIP_data_bsb$tot_catch)
+((sum(MRIP_data_bsb$tot_catch)-sum(pds_new_all_MA$tot_bsb_catch))/sum(MRIP_data_bsb$tot_catch))*100
 
 
 
+
+
+##scup
 sum(pds_new_all_MA$tot_keep_scup)
-((3691578-sum(pds_new_all_MA$tot_keep_scup))/3691578)*100
+sum(MRIP_data_scup$tot_harvest)
+((sum(MRIP_data_scup$tot_harvest)-sum(pds_new_all_MA$tot_keep_scup))/sum(MRIP_data_scup$tot_harvest))*100
 
 sum(pds_new_all_MA$tot_rel_scup)
-((2875241-sum(pds_new_all_MA$tot_rel_scup))/2875241)*100
+sum(MRIP_data_scup$tot_rel)
+((sum(MRIP_data_scup$tot_rel)-sum(pds_new_all_MA$tot_rel_scup))/sum(MRIP_data_scup$tot_rel))*100
 
 sum(pds_new_all_MA$tot_scup_catch)
-((6566819-sum(pds_new_all_MA$tot_scup_catch))/6566819)*100
+sum(MRIP_data_scup$tot_catch)
+((sum(MRIP_data_scup$tot_catch)-sum(pds_new_all_MA$tot_scup_catch))/sum(MRIP_data_scup$tot_catch))*100
+
+
 
 sum(pds_new_all_MA$observed_trips)
