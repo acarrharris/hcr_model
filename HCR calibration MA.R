@@ -15,9 +15,9 @@
 state1="MA"
 state_no=25
 
-p_star_sf <- 0.74
-p_star_bsb<- 0.58
-p_star_scup<-0.47
+p_star_sf <- 0.7
+p_star_bsb<- 0.51
+p_star_scup<-0.39
   
 
 ######################################

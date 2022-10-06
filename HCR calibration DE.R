@@ -15,8 +15,8 @@
 state1="DE"
 state_no=10
 
-p_star_sf <- .80
-p_star_bsb<- 0.715
+p_star_sf <- .8
+p_star_bsb<- 0.73
 #p_star_scup<-.46
 
 ######################################

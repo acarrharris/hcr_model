@@ -15,9 +15,9 @@
 state1="RI"
 state_no=44
 
-p_star_sf <- 0.917
-p_star_bsb<- 0.845
-p_star_scup<-.51
+p_star_sf <- 0.91
+p_star_bsb<- 0.81
+p_star_scup<-.43
 
 
 ######################################

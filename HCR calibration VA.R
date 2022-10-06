@@ -15,9 +15,9 @@
 state1="VA"
 state_no=51
 
-p_star_sf <- 0.85
-p_star_bsb<- 0.845
-p_star_scup<-0.22
+p_star_sf <- 0.854
+p_star_bsb<- 0.855
+p_star_scup<-0.21
 
 
 ######################################

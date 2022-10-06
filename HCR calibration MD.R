@@ -16,7 +16,7 @@ state1="MD"
 state_no=24
 
 p_star_sf <- 0.88
-p_star_bsb<- 0.937
+p_star_bsb<- 0.938
 #p_star_scup<-0.6
 
 

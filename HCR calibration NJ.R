@@ -16,8 +16,8 @@ state1="NJ"
 state_no=34
 
 p_star_sf <- .86
-p_star_bsb<- 0.57
-p_star_scup<-.47
+p_star_bsb<- 0.6
+p_star_scup<-.52
 
 ######################################
 ##   Begin simulating trip outcomes ##

@@ -15,9 +15,9 @@
 state1="NY"
 state_no=36
 
-p_star_sf <- .927
-p_star_bsb<- 0.863
-p_star_scup<-0.425
+p_star_sf <- .925
+p_star_bsb<- 0.855
+p_star_scup<-0.39
 
 
 ######################################

@@ -15,9 +15,9 @@
 state1="CT"
 state_no=9
 
-p_star_sf <- 0.83
-p_star_bsb<- .835
-p_star_scup<-0.55
+p_star_sf <- 0.815
+p_star_bsb<- .82
+p_star_scup<-0.49
 
 
 ######################################
