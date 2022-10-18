@@ -65,7 +65,7 @@ library(stats)
 source("calibration year copula params.R")
 
 
-n_drawz<-2000
+n_drawz<-50
 
 # Start the clock!
 ptm <- proc.time()
@@ -109,72 +109,72 @@ year_output = data.frame()
   calibration_output_by_period[is.na(calibration_output_by_period)] = 0
   
   
-  MRIP_data_sf <- subset(data.frame( read.csv("total AB1B2 2021 by state.csv")),  species=="SUMMER FLOUNDER")                                                                          
-  MRIP_data_bsb <- subset(data.frame( read.csv("total AB1B2 2021 by state.csv")), species=="BLACK SEA BASS")                                                                          
-  MRIP_data_scup <- subset(data.frame( read.csv("total AB1B2 2021 by state.csv")), species=="SCUP")                                                                          
+  # MRIP_data_sf <- subset(data.frame( read.csv("total AB1B2 2021 by state.csv")),  species=="SUMMER FLOUNDER")                                                                          
+  # MRIP_data_bsb <- subset(data.frame( read.csv("total AB1B2 2021 by state.csv")), species=="BLACK SEA BASS")                                                                          
+  # MRIP_data_scup <- subset(data.frame( read.csv("total AB1B2 2021 by state.csv")), species=="SCUP")                                                                          
+  # 
+  # sum(calibration_output_by_period$tot_sf_catch)
+  # sum(MRIP_data_sf$tot_catch)
+  # (sum(MRIP_data_sf$tot_catch)-sum(calibration_output_by_period$tot_sf_catch))/sum(MRIP_data_sf$tot_catch)
+  # 
+  # sum(calibration_output_by_period$tot_keep_sf)
+  # sum(MRIP_data_sf$tot_harvest)
+  # (sum(MRIP_data_sf$tot_harvest)-sum(calibration_output_by_period$tot_keep_sf))/sum(MRIP_data_sf$tot_harvest)
+  # 
+  # sum(calibration_output_by_period$tot_rel_sf)
+  # sum(MRIP_data_sf$tot_rel)
+  # (sum(MRIP_data_sf$tot_rel)-sum(calibration_output_by_period$tot_rel_sf))/sum(MRIP_data_sf$tot_rel)
+  # 
+  # #########
+  # 
+  # sum(calibration_output_by_period$tot_bsb_catch)
+  # sum(MRIP_data_bsb$tot_catch)
+  # (sum(MRIP_data_bsb$tot_catch)-sum(calibration_output_by_period$tot_bsb_catch))/sum(MRIP_data_bsb$tot_catch)
+  # 
+  # sum(calibration_output_by_period$tot_keep_bsb)
+  # sum(MRIP_data_bsb$tot_harvest)
+  # (sum(MRIP_data_bsb$tot_harvest)-sum(calibration_output_by_period$tot_keep_bsb))/sum(MRIP_data_bsb$tot_harvest)
+  # 
+  # sum(calibration_output_by_period$tot_rel_bsb)
+  # sum(MRIP_data_bsb$tot_rel)
+  # (sum(MRIP_data_bsb$tot_rel)-sum(calibration_output_by_period$tot_rel_bsb))/sum(MRIP_data_bsb$tot_rel)
+  # 
+  # #########
+  # 
+  # sum(calibration_output_by_period$tot_scup_catch)
+  # sum(MRIP_data_scup$tot_catch)
+  # (sum(MRIP_data_scup$tot_catch)-sum(calibration_output_by_period$tot_scup_catch))/sum(MRIP_data_scup$tot_catch)
+  # 
+  # sum(calibration_output_by_period$tot_keep_scup)
+  # sum(MRIP_data_scup$tot_harvest)
+  # (sum(MRIP_data_scup$tot_harvest)-sum(calibration_output_by_period$tot_keep_scup))/sum(MRIP_data_scup$tot_harvest)
+  # 
+  # sum(calibration_output_by_period$tot_rel_scup)
+  # sum(MRIP_data_scup$tot_rel)
+  # (sum(MRIP_data_scup$tot_rel)-sum(calibration_output_by_period$tot_rel_scup))/sum(MRIP_data_scup$tot_rel)
   
-  sum(calibration_output_by_period$tot_sf_catch)
-  sum(MRIP_data_sf$tot_catch)
-  (sum(MRIP_data_sf$tot_catch)-sum(calibration_output_by_period$tot_sf_catch))/sum(MRIP_data_sf$tot_catch)
   
-  sum(calibration_output_by_period$tot_keep_sf)
-  sum(MRIP_data_sf$tot_harvest)
-  (sum(MRIP_data_sf$tot_harvest)-sum(calibration_output_by_period$tot_keep_sf))/sum(MRIP_data_sf$tot_harvest)
-  
-  sum(calibration_output_by_period$tot_rel_sf)
-  sum(MRIP_data_sf$tot_rel)
-  (sum(MRIP_data_sf$tot_rel)-sum(calibration_output_by_period$tot_rel_sf))/sum(MRIP_data_sf$tot_rel)
-
-  #########
-  
-  sum(calibration_output_by_period$tot_bsb_catch)
-  sum(MRIP_data_bsb$tot_catch)
-  (sum(MRIP_data_bsb$tot_catch)-sum(calibration_output_by_period$tot_bsb_catch))/sum(MRIP_data_bsb$tot_catch)
-  
-  sum(calibration_output_by_period$tot_keep_bsb)
-  sum(MRIP_data_bsb$tot_harvest)
-  (sum(MRIP_data_bsb$tot_harvest)-sum(calibration_output_by_period$tot_keep_bsb))/sum(MRIP_data_bsb$tot_harvest)
-  
-  sum(calibration_output_by_period$tot_rel_bsb)
-  sum(MRIP_data_bsb$tot_rel)
-  (sum(MRIP_data_bsb$tot_rel)-sum(calibration_output_by_period$tot_rel_bsb))/sum(MRIP_data_bsb$tot_rel)
-  
-  #########
-  
-  sum(calibration_output_by_period$tot_scup_catch)
-  sum(MRIP_data_scup$tot_catch)
-  (sum(MRIP_data_scup$tot_catch)-sum(calibration_output_by_period$tot_scup_catch))/sum(MRIP_data_scup$tot_catch)
-  
-  sum(calibration_output_by_period$tot_keep_scup)
-  sum(MRIP_data_scup$tot_harvest)
-  (sum(MRIP_data_scup$tot_harvest)-sum(calibration_output_by_period$tot_keep_scup))/sum(MRIP_data_scup$tot_harvest)
-  
-  sum(calibration_output_by_period$tot_rel_scup)
-  sum(MRIP_data_scup$tot_rel)
-  (sum(MRIP_data_scup$tot_rel)-sum(calibration_output_by_period$tot_rel_scup))/sum(MRIP_data_scup$tot_rel)
-  
-  
-  #calibration_output_by_period$draw = x
+  calibration_output_by_period$draw = 1
   
   
   write_xlsx(calibration_output_by_period,"calibration_output_by_period.xlsx")
   saveRDS(calibration_output_by_period, file = "calibration_output_by_period.rds")
   
   #For multiple draws, stack these in state_cal_output
-  state_cal_output =rbind.fill(state_cal_output, calibration_output_by_period)
+  #state_cal_output =rbind.fill(state_cal_output, calibration_output_by_period)
   
 #}
 #write_xlsx(state_cal_output,"calibration_output_by_period.xlsx")
   
   
   state_pred_output = data.frame()
-  years <- c("2015", "2016", "2017", "2018", "2020", "2021")
+  years <- c("2023")
   
   # regs <- c("minus1")
   
-  for (x in 1:30){
-    for (y in years){
-      year <- y
+  #for (x in 1:30){
+   # for (y in years){
+     # year <- y
       
       # 
       #for (x in 1:30){
@@ -189,7 +189,8 @@ year_output = data.frame()
       # THIS IS WHERE TO IMPORT THE ALKS FOR EACH SPECIES
       # Import the fluke ALK (in centimeters) provided by M. Terceiro
       fluke_ALK <- data.frame(read_csv("fluke_ALK_2018_adj.csv", show_col_types = FALSE))
-      bsb_ALK <- data.frame(read_csv("", show_col_types = FALSE))
+      #bsb_ALK <- data.frame(read_csv("", show_col_types = FALSE))
+      scup_ALK <- data.frame(read_csv("scup_ALK_2015_2018_adj.csv", show_col_types = FALSE))
       
       
       
@@ -198,16 +199,16 @@ year_output = data.frame()
       fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2021.csv", show_col_types = FALSE))
       fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==1)
       
-      # Import the fluke MCMC draws
-      bsb_numbers_at_age = data.frame(read_csv("bsb_MCMC_100_2021.csv", show_col_types = FALSE))
-      bsb_numbers_at_age = subset(bsb_numbers_at_age, bsb_numbers_at_age$draw==1)
+      # Import the bsb MCMC draws
+      #bsb_numbers_at_age = data.frame(read_csv("bsb_MCMC_100_2021.csv", show_col_types = FALSE))
+      #bsb_numbers_at_age = subset(bsb_numbers_at_age, bsb_numbers_at_age$draw==1)
       
-      # Import the fluke MCMC draws
+      # Import the scup MCMC draws
       scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2021.csv", show_col_types = FALSE))
       scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
       
     
-      source("CAL given stock structure by state.R")
+      source("CAL given stock structure.R")
       
       ##########  
       
@@ -216,11 +217,11 @@ year_output = data.frame()
       ##########  
       # run the simulation code under the new set of regulations (regulation file is directed_trips_region - alternative regs test.xlsx)
       
-      directed_trip_alt_regs=data.frame(read_excel( paste0("directed_trips_regions_bimonthly_19_",year,".xlsx")))
-      directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip_2019)
+      directed_trip_alt_regs=data.frame(read_csv("directed trips and regulations 2021.csv", show_col_types = FALSE))
+      directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip)
       
       
-      source("prediction3 MA.R")
+      source("HCR prediction MA.R")
       source("prediction3 RI.R")
       source("prediction3 CT.R")
       source("prediction3 NY.R")

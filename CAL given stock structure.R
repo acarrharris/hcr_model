@@ -113,93 +113,105 @@ fluke_catch_expansion_factor_NC=round(tot_pred_fluke_cat_NC/tot_cat_NC_base, dig
 ######################################### 
 
 
-# Merge the ALK and Na datasets and create population numbers-at-length (inches)
-bsb_numbers_at_length <-  merge(bsb_ALK,bsb_numbers_at_age,by="age", all.x=TRUE, all.y=TRUE)
-bsb_numbers_at_length$N_l <- bsb_numbers_at_length$proportion*bsb_numbers_at_length$Na
+# # Merge the ALK and Na datasets and create population numbers-at-length (inches)
+# bsb_numbers_at_length <-  merge(bsb_ALK,bsb_numbers_at_age,by="age", all.x=TRUE, all.y=TRUE)
+# bsb_numbers_at_length$N_l <- bsb_numbers_at_length$proportion*bsb_numbers_at_length$Na
+# 
+# bsb_numbers_at_length <- aggregate(bsb_numbers_at_length, by=list(bsb_numbers_at_length$l_in_bin),FUN=sum, na.rm=TRUE)
+# bsb_numbers_at_length <-subset(bsb_numbers_at_length, select=c(Group.1,N_l))
+# names(bsb_numbers_at_length)[names(bsb_numbers_at_length) == "Group.1"] <- "length"
+# sum(bsb_numbers_at_length$N_l)
+# 
+# # Translate cms's to inches 
+# bsb_numbers_at_length$length <- round(bsb_numbers_at_length$length/2.54)
+# bsb_numbers_at_length <- aggregate(bsb_numbers_at_length, by=list(bsb_numbers_at_length$length),FUN=sum, na.rm=TRUE)
+# bsb_numbers_at_length <-subset(bsb_numbers_at_length, select=c(Group.1,N_l))
+# names(bsb_numbers_at_length)[names(bsb_numbers_at_length) == "Group.1"] <- "length"
+# 
+# 
+# # Import and merge the selectivity data to this file 
+# bsb_selectivity <- data.frame(read_csv("rec_selectivity_bsb_2021.csv", show_col_types = FALSE))
+# bsb_numbers_at_length_new <-  merge(bsb_selectivity,bsb_numbers_at_length,by=c("length"),  all.x=TRUE, all.y=TRUE)
+# bsb_numbers_at_length_new <- subset(bsb_numbers_at_length_new, N_l!=0 & state!=0)
+# 
+# 
+# # Create catch-at-length based on the new numbers-at-length
+# bsb_numbers_at_length_new$q <- as.numeric(bsb_numbers_at_length_new$q)
+# 
+# #numbers_at_length_new$C_l_new <- (numbers_at_length_new$q)*(numbers_at_length_new$N_l)*(numbers_at_length_new$E)
+# bsb_numbers_at_length_new$C_l_new <- (bsb_numbers_at_length_new$q)*(bsb_numbers_at_length_new$N_l)
+# 
+# sum(bsb_numbers_at_length_new$C_l_new)
+# sum(bsb_numbers_at_length_new$tot_cat)
+# 
+# 
+# ###########
+# 
+# 
+# # subset the catch-at-length new datstet by region
+# bsb_Cl_new_MA <-subset(bsb_numbers_at_length_new, state=="MA", select=c(length, C_l_new))
+# bsb_Cl_new_RI <-subset(bsb_numbers_at_length_new, state=="RI", select=c(length, C_l_new))
+# bsb_Cl_new_CT <-subset(bsb_numbers_at_length_new, state=="CT", select=c(length, C_l_new))
+# bsb_Cl_new_NY <-subset(bsb_numbers_at_length_new, state=="NY", select=c(length, C_l_new))
+# bsb_Cl_new_NJ <-subset(bsb_numbers_at_length_new, state=="NJ", select=c(length, C_l_new))
+# bsb_Cl_new_DE <-subset(bsb_numbers_at_length_new, state=="DE", select=c(length, C_l_new))
+# bsb_Cl_new_MD <-subset(bsb_numbers_at_length_new, state=="MD", select=c(length, C_l_new))
+# bsb_Cl_new_VA <-subset(bsb_numbers_at_length_new, state=="VA", select=c(length, C_l_new))
+# bsb_Cl_new_NC <-subset(bsb_numbers_at_length_new, state=="NC", select=c(length, C_l_new))
+# 
+# bsb_Cl_new_MA$C_l_new=round(bsb_Cl_new_MA$C_l_new)
+# bsb_Cl_new_RI$C_l_new=round(bsb_Cl_new_RI$C_l_new)
+# bsb_Cl_new_CT$C_l_new=round(bsb_Cl_new_CT$C_l_new)
+# bsb_Cl_new_NY$C_l_new=round(bsb_Cl_new_NY$C_l_new)
+# bsb_Cl_new_NJ$C_l_new=round(bsb_Cl_new_NJ$C_l_new)
+# bsb_Cl_new_DE$C_l_new=round(bsb_Cl_new_DE$C_l_new)
+# bsb_Cl_new_MD$C_l_new=round(bsb_Cl_new_MD$C_l_new)
+# bsb_Cl_new_VA$C_l_new=round(bsb_Cl_new_VA$C_l_new)
+# bsb_Cl_new_NC$C_l_new=round(bsb_Cl_new_NC$C_l_new)
+# 
+# tot_pred_bsb_cat_MA=sum(bsb_Cl_new_MA$C_l_new)
+# tot_pred_bsb_cat_RI=sum(bsb_Cl_new_RI$C_l_new)
+# tot_pred_bsb_cat_CT=sum(bsb_Cl_new_CT$C_l_new)
+# tot_pred_bsb_cat_NY=sum(bsb_Cl_new_NY$C_l_new)
+# tot_pred_bsb_cat_NJ=sum(bsb_Cl_new_NJ$C_l_new)
+# tot_pred_bsb_cat_DE=sum(bsb_Cl_new_DE$C_l_new)
+# tot_pred_bsb_cat_MD=sum(bsb_Cl_new_MD$C_l_new)
+# tot_pred_bsb_cat_VA=sum(bsb_Cl_new_VA$C_l_new)
+# tot_pred_bsb_cat_NC=sum(bsb_Cl_new_NC$C_l_new)
+# 
+# tot_cat_MA_base=sum(subset(bsb_selectivity, state == "MA")$tot_cat)
+# tot_cat_RI_base=sum(subset(bsb_selectivity, state == "RI")$tot_cat)
+# tot_cat_CT_base=sum(subset(bsb_selectivity, state == "CT")$tot_cat)
+# tot_cat_NY_base=sum(subset(bsb_selectivity, state == "NY")$tot_cat)
+# tot_cat_NJ_base=sum(subset(bsb_selectivity, state == "NJ")$tot_cat)
+# tot_cat_DE_base=sum(subset(bsb_selectivity, state == "DE")$tot_cat)
+# tot_cat_MD_base=sum(subset(bsb_selectivity, state == "MD")$tot_cat)
+# tot_cat_VA_base=sum(subset(bsb_selectivity, state == "VA")$tot_cat)
+# tot_cat_NC_base=sum(subset(bsb_selectivity, state == "NC")$tot_cat)
+# 
+# #Create a factor that expands total catch in the prediction year
+# bsb_catch_expansion_factor_MA=round(tot_pred_bsb_cat_MA/tot_cat_MA_base, digits=4)
+# bsb_catch_expansion_factor_RI=round(tot_pred_bsb_cat_RI/tot_cat_RI_base, digits=4)
+# bsb_catch_expansion_factor_CT=round(tot_pred_bsb_cat_CT/tot_cat_CT_base, digits=4)
+# bsb_catch_expansion_factor_NY=round(tot_pred_bsb_cat_NY/tot_cat_NY_base, digits=4)
+# bsb_catch_expansion_factor_NJ=round(tot_pred_bsb_cat_NJ/tot_cat_NJ_base, digits=4)
+# bsb_catch_expansion_factor_DE=round(tot_pred_bsb_cat_DE/tot_cat_DE_base, digits=4)
+# bsb_catch_expansion_factor_MD=round(tot_pred_bsb_cat_MD/tot_cat_MD_base, digits=4)
+# bsb_catch_expansion_factor_VA=round(tot_pred_bsb_cat_VA/tot_cat_VA_base, digits=4)
+# bsb_catch_expansion_factor_NC=round(tot_pred_bsb_cat_NC/tot_cat_NC_base, digits=4)
 
-bsb_numbers_at_length <- aggregate(bsb_numbers_at_length, by=list(bsb_numbers_at_length$l_in_bin),FUN=sum, na.rm=TRUE)
-bsb_numbers_at_length <-subset(bsb_numbers_at_length, select=c(Group.1,N_l))
-names(bsb_numbers_at_length)[names(bsb_numbers_at_length) == "Group.1"] <- "length"
-sum(bsb_numbers_at_length$N_l)
-
-# Translate cms's to inches 
-bsb_numbers_at_length$length <- round(bsb_numbers_at_length$length/2.54)
-bsb_numbers_at_length <- aggregate(bsb_numbers_at_length, by=list(bsb_numbers_at_length$length),FUN=sum, na.rm=TRUE)
-bsb_numbers_at_length <-subset(bsb_numbers_at_length, select=c(Group.1,N_l))
-names(bsb_numbers_at_length)[names(bsb_numbers_at_length) == "Group.1"] <- "length"
 
 
-# Import and merge the selectivity data to this file 
-bsb_selectivity <- data.frame(read_csv("rec_selectivity_bsb_2021.csv", show_col_types = FALSE))
-bsb_numbers_at_length_new <-  merge(bsb_selectivity,bsb_numbers_at_length,by=c("length"),  all.x=TRUE, all.y=TRUE)
-bsb_numbers_at_length_new <- subset(bsb_numbers_at_length_new, N_l!=0 & state!=0)
-
-
-# Create catch-at-length based on the new numbers-at-length
-bsb_numbers_at_length_new$q <- as.numeric(bsb_numbers_at_length_new$q)
-
-#numbers_at_length_new$C_l_new <- (numbers_at_length_new$q)*(numbers_at_length_new$N_l)*(numbers_at_length_new$E)
-bsb_numbers_at_length_new$C_l_new <- (bsb_numbers_at_length_new$q)*(bsb_numbers_at_length_new$N_l)
-
-sum(bsb_numbers_at_length_new$C_l_new)
-sum(bsb_numbers_at_length_new$tot_cat)
-
-
-###########
-
-
-# subset the catch-at-length new datstet by region
-bsb_Cl_new_MA <-subset(bsb_numbers_at_length_new, state=="MA", select=c(length, C_l_new))
-bsb_Cl_new_RI <-subset(bsb_numbers_at_length_new, state=="RI", select=c(length, C_l_new))
-bsb_Cl_new_CT <-subset(bsb_numbers_at_length_new, state=="CT", select=c(length, C_l_new))
-bsb_Cl_new_NY <-subset(bsb_numbers_at_length_new, state=="NY", select=c(length, C_l_new))
-bsb_Cl_new_NJ <-subset(bsb_numbers_at_length_new, state=="NJ", select=c(length, C_l_new))
-bsb_Cl_new_DE <-subset(bsb_numbers_at_length_new, state=="DE", select=c(length, C_l_new))
-bsb_Cl_new_MD <-subset(bsb_numbers_at_length_new, state=="MD", select=c(length, C_l_new))
-bsb_Cl_new_VA <-subset(bsb_numbers_at_length_new, state=="VA", select=c(length, C_l_new))
-bsb_Cl_new_NC <-subset(bsb_numbers_at_length_new, state=="NC", select=c(length, C_l_new))
-
-bsb_Cl_new_MA$C_l_new=round(bsb_Cl_new_MA$C_l_new)
-bsb_Cl_new_RI$C_l_new=round(bsb_Cl_new_RI$C_l_new)
-bsb_Cl_new_CT$C_l_new=round(bsb_Cl_new_CT$C_l_new)
-bsb_Cl_new_NY$C_l_new=round(bsb_Cl_new_NY$C_l_new)
-bsb_Cl_new_NJ$C_l_new=round(bsb_Cl_new_NJ$C_l_new)
-bsb_Cl_new_DE$C_l_new=round(bsb_Cl_new_DE$C_l_new)
-bsb_Cl_new_MD$C_l_new=round(bsb_Cl_new_MD$C_l_new)
-bsb_Cl_new_VA$C_l_new=round(bsb_Cl_new_VA$C_l_new)
-bsb_Cl_new_NC$C_l_new=round(bsb_Cl_new_NC$C_l_new)
-
-tot_pred_bsb_cat_MA=sum(bsb_Cl_new_MA$C_l_new)
-tot_pred_bsb_cat_RI=sum(bsb_Cl_new_RI$C_l_new)
-tot_pred_bsb_cat_CT=sum(bsb_Cl_new_CT$C_l_new)
-tot_pred_bsb_cat_NY=sum(bsb_Cl_new_NY$C_l_new)
-tot_pred_bsb_cat_NJ=sum(bsb_Cl_new_NJ$C_l_new)
-tot_pred_bsb_cat_DE=sum(bsb_Cl_new_DE$C_l_new)
-tot_pred_bsb_cat_MD=sum(bsb_Cl_new_MD$C_l_new)
-tot_pred_bsb_cat_VA=sum(bsb_Cl_new_VA$C_l_new)
-tot_pred_bsb_cat_NC=sum(bsb_Cl_new_NC$C_l_new)
-
-tot_cat_MA_base=sum(subset(bsb_selectivity, state == "MA")$tot_cat)
-tot_cat_RI_base=sum(subset(bsb_selectivity, state == "RI")$tot_cat)
-tot_cat_CT_base=sum(subset(bsb_selectivity, state == "CT")$tot_cat)
-tot_cat_NY_base=sum(subset(bsb_selectivity, state == "NY")$tot_cat)
-tot_cat_NJ_base=sum(subset(bsb_selectivity, state == "NJ")$tot_cat)
-tot_cat_DE_base=sum(subset(bsb_selectivity, state == "DE")$tot_cat)
-tot_cat_MD_base=sum(subset(bsb_selectivity, state == "MD")$tot_cat)
-tot_cat_VA_base=sum(subset(bsb_selectivity, state == "VA")$tot_cat)
-tot_cat_NC_base=sum(subset(bsb_selectivity, state == "NC")$tot_cat)
-
-#Create a factor that expands total catch in the prediction year
-bsb_catch_expansion_factor_MA=round(tot_pred_bsb_cat_MA/tot_cat_MA_base, digits=4)
-bsb_catch_expansion_factor_RI=round(tot_pred_bsb_cat_RI/tot_cat_RI_base, digits=4)
-bsb_catch_expansion_factor_CT=round(tot_pred_bsb_cat_CT/tot_cat_CT_base, digits=4)
-bsb_catch_expansion_factor_NY=round(tot_pred_bsb_cat_NY/tot_cat_NY_base, digits=4)
-bsb_catch_expansion_factor_NJ=round(tot_pred_bsb_cat_NJ/tot_cat_NJ_base, digits=4)
-bsb_catch_expansion_factor_DE=round(tot_pred_bsb_cat_DE/tot_cat_DE_base, digits=4)
-bsb_catch_expansion_factor_MD=round(tot_pred_bsb_cat_MD/tot_cat_MD_base, digits=4)
-bsb_catch_expansion_factor_VA=round(tot_pred_bsb_cat_VA/tot_cat_VA_base, digits=4)
-bsb_catch_expansion_factor_NC=round(tot_pred_bsb_cat_NC/tot_cat_NC_base, digits=4)
-
+###########Place holder for BSB
+ bsb_catch_expansion_factor_MA=1
+ bsb_catch_expansion_factor_RI=1
+ bsb_catch_expansion_factor_CT=1
+ bsb_catch_expansion_factor_NY=1
+ bsb_catch_expansion_factor_NJ=1
+ bsb_catch_expansion_factor_DE=1
+ bsb_catch_expansion_factor_MD=1
+ bsb_catch_expansion_factor_VA=1
+ bsb_catch_expansion_factor_NC=1
 
 ######################################### 
 ############ END BSB ##################
@@ -230,7 +242,7 @@ names(scup_numbers_at_length)[names(scup_numbers_at_length) == "Group.1"] <- "le
 
 
 # Import and merge the selectivity data to this file 
-scup_selectivity <- data.frame(read_csv("rec_selectivity_scup_2021.csv", show_col_types = FALSE))
+scup_selectivity <- data.frame(read_csv("rec_selectvity_scup_2021.csv", show_col_types = FALSE))
 scup_numbers_at_length_new <-  merge(scup_selectivity,scup_numbers_at_length,by=c("length"),  all.x=TRUE, all.y=TRUE)
 scup_numbers_at_length_new <- subset(scup_numbers_at_length_new, N_l!=0 & state!=0)
 
@@ -405,83 +417,83 @@ saveRDS(fluke_sizes_all_y2,file = "sf_fitted_sizes_y2plus.rds")
 
 
 ##########BSB
-bsb_Cl_new_MA <- bsb_Cl_new_MA %>% 
-  rename(nfish = C_l_new) %>% 
-  mutate(fitted_prob = nfish/sum(.$nfish),
-         state = rep("MA",nrow(.)),
-         year = rep("y2", nrow(.))) %>% 
-  I()
-
-bsb_Cl_new_RI <- bsb_Cl_new_RI %>% 
-  rename(nfish = C_l_new) %>% 
-  mutate(fitted_prob = nfish/sum(.$nfish),
-         state = rep("RI",nrow(.)),
-         year = rep("y2", nrow(.))) %>% 
-  I()
-
-bsb_Cl_new_CT <- bsb_Cl_new_CT %>% 
-  rename(nfish = C_l_new) %>% 
-  mutate(fitted_prob = nfish/sum(.$nfish),
-         state = rep("CT",nrow(.)),
-         year = rep("y2", nrow(.))) %>% 
-  I()
-
-bsb_Cl_new_NY <- bsb_Cl_new_NY %>% 
-  rename(nfish = C_l_new) %>% 
-  mutate(fitted_prob = nfish/sum(.$nfish),
-         state = rep("NY",nrow(.)),
-         year = rep("y2", nrow(.))) %>% 
-  I()
-
-bsb_Cl_new_NJ <- bsb_Cl_new_NJ %>% 
-  rename(nfish = C_l_new) %>% 
-  mutate(fitted_prob = nfish/sum(.$nfish),
-         state = rep("NJ",nrow(.)),
-         year = rep("y2", nrow(.))) %>% 
-  I()
-
-bsb_Cl_new_DE <- bsb_Cl_new_DE %>% 
-  rename(nfish = C_l_new) %>% 
-  mutate(fitted_prob = nfish/sum(.$nfish),
-         state = rep("DE",nrow(.)),
-         year = rep("y2", nrow(.))) %>% 
-  I()
-
-bsb_Cl_new_MD <- bsb_Cl_new_MD %>% 
-  rename(nfish = C_l_new) %>% 
-  mutate(fitted_prob = nfish/sum(.$nfish),
-         state = rep("MD",nrow(.)),
-         year = rep("y2", nrow(.))) %>% 
-  I()
-
-bsb_Cl_new_VA <- bsb_Cl_new_VA %>% 
-  rename(nfish = C_l_new) %>% 
-  mutate(fitted_prob = nfish/sum(.$nfish),
-         state = rep("VA",nrow(.)),
-         year = rep("y2", nrow(.))) %>% 
-  I()
-
-
-bsb_Cl_new_NC <- bsb_Cl_new_NC %>% 
-  rename(nfish = C_l_new) %>% 
-  mutate(fitted_prob = nfish/sum(.$nfish),
-         state = rep("NC",nrow(.)),
-         year = rep("y2", nrow(.))) %>% 
-  I()
-
-
-
-
-#combine the datasets
-bsb_sizes_all_y2 = bind_rows(bsb_Cl_new_MA, bsb_Cl_new_RI,
-                              bsb_Cl_new_CT, bsb_Cl_new_NY,
-                              bsb_Cl_new_NJ, bsb_Cl_new_DE, 
-                              bsb_Cl_new_MD, bsb_Cl_new_VA, bsb_Cl_new_NC )
-
-
-
-bsb_sizes_region_all_y2 = subset(bsb_sizes_all_y2, select=c(fitted_prob, length, state, year))
-saveRDS(bsb_sizes_region_all_y2,file = "sf_fitted_sizes_y2plus.rds")
+# bsb_Cl_new_MA <- bsb_Cl_new_MA %>% 
+#   rename(nfish = C_l_new) %>% 
+#   mutate(fitted_prob = nfish/sum(.$nfish),
+#          state = rep("MA",nrow(.)),
+#          year = rep("y2", nrow(.))) %>% 
+#   I()
+# 
+# bsb_Cl_new_RI <- bsb_Cl_new_RI %>% 
+#   rename(nfish = C_l_new) %>% 
+#   mutate(fitted_prob = nfish/sum(.$nfish),
+#          state = rep("RI",nrow(.)),
+#          year = rep("y2", nrow(.))) %>% 
+#   I()
+# 
+# bsb_Cl_new_CT <- bsb_Cl_new_CT %>% 
+#   rename(nfish = C_l_new) %>% 
+#   mutate(fitted_prob = nfish/sum(.$nfish),
+#          state = rep("CT",nrow(.)),
+#          year = rep("y2", nrow(.))) %>% 
+#   I()
+# 
+# bsb_Cl_new_NY <- bsb_Cl_new_NY %>% 
+#   rename(nfish = C_l_new) %>% 
+#   mutate(fitted_prob = nfish/sum(.$nfish),
+#          state = rep("NY",nrow(.)),
+#          year = rep("y2", nrow(.))) %>% 
+#   I()
+# 
+# bsb_Cl_new_NJ <- bsb_Cl_new_NJ %>% 
+#   rename(nfish = C_l_new) %>% 
+#   mutate(fitted_prob = nfish/sum(.$nfish),
+#          state = rep("NJ",nrow(.)),
+#          year = rep("y2", nrow(.))) %>% 
+#   I()
+# 
+# bsb_Cl_new_DE <- bsb_Cl_new_DE %>% 
+#   rename(nfish = C_l_new) %>% 
+#   mutate(fitted_prob = nfish/sum(.$nfish),
+#          state = rep("DE",nrow(.)),
+#          year = rep("y2", nrow(.))) %>% 
+#   I()
+# 
+# bsb_Cl_new_MD <- bsb_Cl_new_MD %>% 
+#   rename(nfish = C_l_new) %>% 
+#   mutate(fitted_prob = nfish/sum(.$nfish),
+#          state = rep("MD",nrow(.)),
+#          year = rep("y2", nrow(.))) %>% 
+#   I()
+# 
+# bsb_Cl_new_VA <- bsb_Cl_new_VA %>% 
+#   rename(nfish = C_l_new) %>% 
+#   mutate(fitted_prob = nfish/sum(.$nfish),
+#          state = rep("VA",nrow(.)),
+#          year = rep("y2", nrow(.))) %>% 
+#   I()
+# 
+# 
+# bsb_Cl_new_NC <- bsb_Cl_new_NC %>% 
+#   rename(nfish = C_l_new) %>% 
+#   mutate(fitted_prob = nfish/sum(.$nfish),
+#          state = rep("NC",nrow(.)),
+#          year = rep("y2", nrow(.))) %>% 
+#   I()
+# 
+# 
+# 
+# 
+# #combine the datasets
+# bsb_sizes_all_y2 = bind_rows(bsb_Cl_new_MA, bsb_Cl_new_RI,
+#                               bsb_Cl_new_CT, bsb_Cl_new_NY,
+#                               bsb_Cl_new_NJ, bsb_Cl_new_DE, 
+#                               bsb_Cl_new_MD, bsb_Cl_new_VA, bsb_Cl_new_NC )
+# 
+# 
+# 
+# bsb_sizes_region_all_y2 = subset(bsb_sizes_all_y2, select=c(fitted_prob, length, state, year))
+# saveRDS(bsb_sizes_region_all_y2,file = "bsb_fitted_sizes_y2plus.rds")
 
 
 
@@ -566,6 +578,6 @@ scup_sizes_all_y2 = bind_rows(scup_Cl_new_MA, scup_Cl_new_RI,
 
 
 scup_sizes_region_all_y2 = subset(scup_sizes_all_y2, select=c(fitted_prob, length, state, year))
-saveRDS(scup_sizes_region_all_y2,file = "sf_fitted_sizes_y2plus.rds")
+saveRDS(scup_sizes_region_all_y2,file = "scup_fitted_sizes_y2plus.rds")
 
 
