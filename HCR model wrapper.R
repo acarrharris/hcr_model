@@ -216,12 +216,6 @@ year_output = data.frame()
       ##########  
       # run the simulation code under the new set of regulations (regulation file is directed_trips_region - alternative regs test.xlsx)
       
-      #directed_trip_alt_regs=data.frame(read_excel(paste0("directed_trips_regions_bimonthly_HCR_",regulation,".xlsx")))
-      #directed_trip_alt_regs=data.frame(read_excel("directed_trips_regions_bimonthly.xlsx"))
-      #directed_trip_alt_regs=data.frame(read_excel("directed_trips_regions_bimonthly_19_16.xlsx"))
-      #directed_trip_alt_regs=data.frame(read_excel("directed_trips_regions_bimonthly_test.xlsx"))
-      #2018 regs
-      #directed_trip_alt_regs=data.frame(read_excel("directed_trips_regions_bimonthly_19_15.xlsx"))
       directed_trip_alt_regs=data.frame(read_excel( paste0("directed_trips_regions_bimonthly_19_",year,".xlsx")))
       directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip_2019)
       

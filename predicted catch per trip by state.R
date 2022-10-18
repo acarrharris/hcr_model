@@ -1,8 +1,10 @@
 
 
 #The following creates an catch-per-trip dataset adjusted to reflect:
- # 1) Uncertainty in MRIP catch-per-trip estimates, as we draw from different sets of NB parameters
- # 2) the population size
+ # 1) Uncertainty in MRIP catch-per-trip estimates, as we draw from different sets of NB parameters. 
+ #    The file nb_params.csv contains a distribution of parameters based on uncertainty in catch per-trip in 2021
+ # 2) the population size. This is reflected in the species_catch_expansion_factor_ST scalars 
+ #    computed in "CAL given stock structure.R" 
 
 
 

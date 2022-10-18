@@ -399,8 +399,8 @@ fluke_sizes_all_y2 = bind_rows(fluke_Cl_new_MA, fluke_Cl_new_RI,
 
 
 
-fluke_sizes_region_all_y2 = subset(fluke_sizes_all_y2, select=c(fitted_prob, length, state, year))
-saveRDS(fluke_sizes_region_all_y2,file = "sf_fitted_sizes_y2plus.rds")
+fluke_sizes_all_y2 = subset(fluke_sizes_all_y2, select=c(fitted_prob, length, state, year))
+saveRDS(fluke_sizes_all_y2,file = "sf_fitted_sizes_y2plus.rds")
 
 
 
