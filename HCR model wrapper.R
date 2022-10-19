@@ -65,7 +65,7 @@ library(stats)
 source("calibration year copula params.R")
 
 
-n_drawz<-50
+n_drawz<-1000
 
 # Start the clock!
 ptm <- proc.time()
@@ -168,14 +168,13 @@ year_output = data.frame()
   
   
   state_pred_output = data.frame()
-  years <- c("2023")
-  
+  years<-c("2021", "2023")
   # regs <- c("minus1")
   
-  #for (x in 1:30){
-   # for (y in years){
-     # year <- y
-      
+  for (x in 1:50){
+    for (y in years){
+     year <- y
+      #x<-1
       # 
       #for (x in 1:30){
       #regulation="2015"
@@ -196,16 +195,16 @@ year_output = data.frame()
       
       # THIS IS WHERE TO IMPORT THE NUMBERS AT AGE FOR EACH SPECIES BASED ON THE YEAR(S) OF INTEREST
       # Import the fluke MCMC draws
-      fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2021.csv", show_col_types = FALSE))
-      fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==1)
+      fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
       
       # Import the bsb MCMC draws
       #bsb_numbers_at_age = data.frame(read_csv("bsb_MCMC_100_2021.csv", show_col_types = FALSE))
       #bsb_numbers_at_age = subset(bsb_numbers_at_age, bsb_numbers_at_age$draw==1)
       
       # Import the scup MCMC draws
-      scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2021.csv", show_col_types = FALSE))
-      scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
+      scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
       
     
       source("CAL given stock structure.R")
@@ -217,19 +216,19 @@ year_output = data.frame()
       ##########  
       # run the simulation code under the new set of regulations (regulation file is directed_trips_region - alternative regs test.xlsx)
       
-      directed_trip_alt_regs=data.frame(read_csv("directed trips and regulations 2021.csv", show_col_types = FALSE))
+      directed_trip_alt_regs=data.frame(read_csv(paste0("directed trips and regulations ", year,".csv"), show_col_types = FALSE))
       directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip)
       
       
       source("HCR prediction MA.R")
-      source("prediction3 RI.R")
-      source("prediction3 CT.R")
-      source("prediction3 NY.R")
-      source("prediction3 NJ.R")
-      source("prediction3 DE.R")
-      source("prediction3 MD.R")
-      source("prediction3 VA.R")
-      source("prediction3 NC.R")
+      source("HCR prediction RI.R")
+      source("HCR prediction CT.R")
+      source("HCR prediction NY.R")
+      source("HCR prediction NJ.R")
+      source("HCR prediction DE.R")
+      source("HCR prediction MD.R")
+      source("HCR prediction VA.R")
+      source("HCR prediction NC.R")
       
       
       prediction_output_by_period = as.data.frame(bind_rows(pds_new_all_MA, pds_new_all_RI, pds_new_all_CT,
@@ -245,27 +244,31 @@ year_output = data.frame()
       state_prediction_output=prediction_output_by_period
       
       
-      state_prediction_output$state1=with(state_prediction_output, match(state, unique(state)))
-      state_prediction_output1= subset(state_prediction_output, select=-c(state, period))
-      state_prediction_output1=aggregate(state_prediction_output1, by=list(state_prediction_output1$state1),FUN=sum, na.rm=TRUE)
-      state_prediction_output1= subset(state_prediction_output1, select=-c(state1))
-      names(state_prediction_output1)[names(state_prediction_output1) == "Group.1"] = "state1"
+      # state_prediction_output$state1=with(state_prediction_output, match(state, unique(state)))
+      # state_prediction_output1= subset(state_prediction_output, select=-c(state, period))
+      # state_prediction_output1=aggregate(state_prediction_output1, by=list(state_prediction_output1$state1),FUN=sum, na.rm=TRUE)
+      # state_prediction_output1= subset(state_prediction_output1, select=-c(state1))
+      # names(state_prediction_output1)[names(state_prediction_output1) == "Group.1"] = "state1"
+      # 
+      # 
+      # state_names=subset(state_prediction_output, select=c(state, state1))
+      # state_names = state_names[!duplicated(state_names), ]
+      # state_prediction_output1 =  merge(state_prediction_output1,state_names,by="state1", all.x=TRUE, all.y=TRUE)
+      
+      state_prediction_output$draw <- x
+      state_prediction_output$year <- y
       
       
-      state_names=subset(state_prediction_output, select=c(state, state1))
-      state_names = state_names[!duplicated(state_names), ]
-      state_prediction_output1 =  merge(state_prediction_output1,state_names,by="state1", all.x=TRUE, all.y=TRUE)
-      
-      state_prediction_output1$draw <- x
-      state_prediction_output1$year <- y
-      
-      
-      state_pred_output <- rbind.fill(state_pred_output, state_prediction_output1)
+      state_pred_output <- rbind.fill(state_pred_output, state_prediction_output)
       
       #year_output <- rbind.fill(year_output, state_pred_output)
       
     }
+  
+  
   }
+  write_xlsx(state_pred_output,"state_output.xlsx")
+  
   write_xlsx(state_pred_output,"state_output_new_pop_ns_15_21.xlsx")
   #write_xlsx(state_pred_output,"state_output_new_pop_ns_15_21_avg_selectivity.xlsx")
   

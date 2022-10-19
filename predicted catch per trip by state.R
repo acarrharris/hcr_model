@@ -10,7 +10,7 @@
 
 ########################
 ###Massachusetts
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==25 & draw==1)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==25 & draw==x)
 
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
@@ -138,7 +138,7 @@ saveRDS(pred_catch_data_MA, "pred_catch_data_MA.rds")
 
 ########################
 ###Rhode Island 
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==44 & draw==1)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==44 & draw==x)
 
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
@@ -263,7 +263,7 @@ saveRDS(pred_catch_data_RI, "pred_catch_data_RI.rds")
 
 ########################
 ###Connecticut
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==9 & draw==1)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==9 & draw==x)
 
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
@@ -389,7 +389,7 @@ saveRDS(pred_catch_data_CT, "pred_catch_data_CT.rds")
 
 ########################
 ###New York 
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==36 & draw==1)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==36 & draw==x)
 
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
@@ -517,7 +517,7 @@ saveRDS(pred_catch_data_NY, "pred_catch_data_NY.rds")
 
 ########################
 ###New Jersey 
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==34 & draw==1)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==34 & draw==x)
 
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
@@ -642,7 +642,7 @@ saveRDS(pred_catch_data_NJ, "pred_catch_data_NJ.rds")
 
 ########################
 ###Delaware
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==10 & draw==1)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==10 & draw==x)
 
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
@@ -748,7 +748,7 @@ saveRDS(pred_catch_data_DE, "pred_catch_data_DE.rds")
 
 ########################
 ###Marlyand
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==24 & draw==1)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==24 & draw==x)
 
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
@@ -853,7 +853,7 @@ saveRDS(pred_catch_data_MD, "pred_catch_data_MD.rds")
 
 ########################
 ###Virgina 
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==51 & draw==1)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==51 & draw==x)
 
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
@@ -981,7 +981,7 @@ saveRDS(pred_catch_data_VA, "pred_catch_data_VA.rds")
 
 ########################
 ###North Carolina
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==37 & draw==1)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==37 & draw==x)
 
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
