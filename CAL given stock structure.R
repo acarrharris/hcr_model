@@ -203,6 +203,19 @@ fluke_catch_expansion_factor_NC=round(tot_pred_fluke_cat_NC/tot_cat_NC_base, dig
 
 
 ###########Place holder for BSB
+
+####Sizes for next year, for now, will be equal to baseline year
+bsb_selectivity <- data.frame(read_csv("rec_selectivity_bsb_2021.csv", show_col_types = FALSE))
+bsb_Cl_new_MA <-subset(bsb_selectivity, state=="MA", select=c(length, prob_star))
+bsb_Cl_new_RI <-subset(bsb_selectivity, state=="RI", select=c(length, prob_star))
+bsb_Cl_new_CT <-subset(bsb_selectivity, state=="CT", select=c(length, prob_star))
+bsb_Cl_new_NY <-subset(bsb_selectivity, state=="NY", select=c(length, prob_star))
+bsb_Cl_new_NJ <-subset(bsb_selectivity, state=="NJ", select=c(length, prob_star))
+bsb_Cl_new_DE <-subset(bsb_selectivity, state=="DE", select=c(length, prob_star))
+bsb_Cl_new_MD <-subset(bsb_selectivity, state=="MD", select=c(length, prob_star))
+bsb_Cl_new_VA <-subset(bsb_selectivity, state=="VA", select=c(length, prob_star))
+bsb_Cl_new_NC <-subset(bsb_selectivity, state=="NC", select=c(length, prob_star))
+
  bsb_catch_expansion_factor_MA=1
  bsb_catch_expansion_factor_RI=1
  bsb_catch_expansion_factor_CT=1
@@ -417,6 +430,63 @@ saveRDS(fluke_sizes_all_y2,file = "sf_fitted_sizes_y2plus.rds")
 
 
 ##########BSB
+bsb_Cl_new_MA <- bsb_Cl_new_MA %>%
+  rename(fitted_prob = prob_star) %>%
+  mutate(state = rep("MA",nrow(.)),
+         year = rep("y2", nrow(.))) %>%
+  I()
+
+bsb_Cl_new_RI <- bsb_Cl_new_RI %>%
+  rename(fitted_prob = prob_star) %>%
+  mutate(state = rep("RI",nrow(.)),
+         year = rep("y2", nrow(.))) %>%
+  I()
+
+bsb_Cl_new_CT <- bsb_Cl_new_CT %>%
+  rename(fitted_prob = prob_star) %>%
+  mutate(state = rep("CT",nrow(.)),
+         year = rep("y2", nrow(.))) %>%
+  I()
+
+bsb_Cl_new_NY <- bsb_Cl_new_NY %>%
+  rename(fitted_prob = prob_star) %>%
+  mutate(state = rep("NY",nrow(.)),
+         year = rep("y2", nrow(.))) %>%
+  I()
+
+bsb_Cl_new_NJ <- bsb_Cl_new_NJ %>%
+  rename(fitted_prob = prob_star) %>%
+  mutate(state = rep("NJ",nrow(.)),
+         year = rep("y2", nrow(.))) %>%
+  I()
+
+bsb_Cl_new_DE <- bsb_Cl_new_DE %>%
+  rename(fitted_prob = prob_star) %>%
+  mutate(state = rep("DE",nrow(.)),
+         year = rep("y2", nrow(.))) %>%
+  I()
+
+bsb_Cl_new_MD <- bsb_Cl_new_MD %>%
+  rename(fitted_prob = prob_star) %>%
+  mutate(state = rep("MD",nrow(.)),
+         year = rep("y2", nrow(.))) %>%
+  I()
+
+bsb_Cl_new_VA <- bsb_Cl_new_VA %>%
+  rename(fitted_prob = prob_star) %>%
+  mutate(state = rep("VA",nrow(.)),
+         year = rep("y2", nrow(.))) %>%
+  I()
+
+bsb_Cl_new_NC <- bsb_Cl_new_NC %>%
+  rename(fitted_prob = prob_star) %>%
+  mutate(state = rep("NC",nrow(.)),
+         year = rep("y2", nrow(.))) %>%
+  I()
+
+
+
+
 # bsb_Cl_new_MA <- bsb_Cl_new_MA %>% 
 #   rename(nfish = C_l_new) %>% 
 #   mutate(fitted_prob = nfish/sum(.$nfish),
@@ -484,16 +554,16 @@ saveRDS(fluke_sizes_all_y2,file = "sf_fitted_sizes_y2plus.rds")
 # 
 # 
 # 
-# #combine the datasets
-# bsb_sizes_all_y2 = bind_rows(bsb_Cl_new_MA, bsb_Cl_new_RI,
-#                               bsb_Cl_new_CT, bsb_Cl_new_NY,
-#                               bsb_Cl_new_NJ, bsb_Cl_new_DE, 
-#                               bsb_Cl_new_MD, bsb_Cl_new_VA, bsb_Cl_new_NC )
-# 
-# 
-# 
-# bsb_sizes_region_all_y2 = subset(bsb_sizes_all_y2, select=c(fitted_prob, length, state, year))
-# saveRDS(bsb_sizes_region_all_y2,file = "bsb_fitted_sizes_y2plus.rds")
+#combine the datasets
+bsb_sizes_all_y2 = bind_rows(bsb_Cl_new_MA, bsb_Cl_new_RI,
+                              bsb_Cl_new_CT, bsb_Cl_new_NY,
+                              bsb_Cl_new_NJ, bsb_Cl_new_DE,
+                              bsb_Cl_new_MD, bsb_Cl_new_VA, bsb_Cl_new_NC )
+
+
+
+bsb_sizes_region_all_y2 = subset(bsb_sizes_all_y2, select=c(fitted_prob, length, state, year))
+saveRDS(bsb_sizes_region_all_y2,file = "bsb_fitted_sizes_y2plus.rds")
 
 
 

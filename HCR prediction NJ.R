@@ -19,7 +19,7 @@
 
 
 
-state1 <- "MA"
+state1 <- "NJ"
 
 
 # Input the calibration output which contains the number of choice occasions needed to simulate
@@ -54,9 +54,16 @@ for(p in levels(periodz)){
   #n_draws = min(1000,n_trips*2.5 )
   n_draws = n_drawz
   
-  fluke_bag <- mean(directed_trips_p$fluke_bag)
-  fluke_min <- mean(directed_trips_p$fluke_min)
-  fluke_max <- mean(directed_trips_p$fluke_max)
+  ##NJ has the slot 
+  fluke_bag1 <- mean(directed_trips_p$fluke_bag1)
+  fluke_min1 <- mean(directed_trips_p$fluke_min1)
+  fluke_max1 <- mean(directed_trips_p$fluke_max1)
+  
+  fluke_bag2 <- mean(directed_trips_p$fluke_bag2)
+  fluke_min2 <- mean(directed_trips_p$fluke_min2)
+  fluke_max2 <- mean(directed_trips_p$fluke_max2)
+  
+  
   bsb_bag <- mean(directed_trips_p$bsb_bag)
   bsb_min <- mean(directed_trips_p$bsb_min)
   scup_bag <- mean(directed_trips_p$scup_bag)
@@ -69,7 +76,7 @@ for(p in levels(periodz)){
   for(i in 1:10) {
     
     # Input catch-per-trip numbers 
-    sf_catch_data <- data.frame(readRDS("pred_catch_data_MA.rds"))                                                                            
+    sf_catch_data <- data.frame(readRDS("pred_catch_data_NJ.rds"))                                                                            
     tot_sf_catch <- sf_catch_data$sf_pred_cat
     tot_bsb_catch <- sf_catch_data$bsb_pred_cat
     tot_scup_catch <- sf_catch_data$scup_pred_cat
@@ -120,7 +127,7 @@ for(p in levels(periodz)){
     
     catch_size_data <- catch_size_data %>% 
       #left_join(regs, by = "period") %>% 
-      mutate(posskeep = ifelse(fitted_length>=fluke_min & fitted_length<=fluke_max,1,0)) %>% 
+      mutate(posskeep = ifelse(fitted_length>=fluke_min1 & fitted_length<fluke_max1,1,0)) %>% 
       group_by(tripid) %>% 
       # keep = case_when(
       # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
@@ -129,19 +136,28 @@ for(p in levels(periodz)){
       ungroup() %>% 
       mutate(
         keep_adj = case_when(
-          fluke_bag > 0 ~ ifelse(csum_keep<=fluke_bag & posskeep==1,1,0),
-          TRUE ~ 0),
-        # keep_adj = case_when(
-        #   csum_keep<=bag & keep==1 ~ 1,
-        #   TRUE ~ 0),
-        release = case_when(
-          fluke_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>fluke_bag ), 1,0)))
-
+          fluke_bag1 > 0 ~ ifelse(csum_keep<=fluke_bag1 & posskeep==1,1,0),
+          TRUE ~ 0)) %>%
+      
+      mutate(posskeep2 = ifelse(fitted_length>=fluke_min2 & fitted_length<fluke_max2,1,0)) %>% 
+      group_by(tripid) %>% 
+      # keep = case_when(
+      # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
+      # TRUE ~ 0),
+      mutate(csum_keep2 = cumsum(posskeep2)) %>% 
+      ungroup() %>% 
+      mutate(
+        keep_adj2 = case_when(
+          fluke_bag2 > 0 ~ ifelse(csum_keep2<=fluke_bag2 & posskeep2==1,1,0)))
     
-    catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
-      rename(keep = keep_adj)
+    catch_size_data$release<-ifelse((catch_size_data$keep_adj==0 & catch_size_data$keep_adj2==0), 1,0)
+    catch_size_data$keep_tot<-catch_size_data$keep_adj+catch_size_data$keep_adj2
     
 
+    catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_tot, release)) %>% 
+      rename(keep = keep_tot)
+    
+    
     new_size_data <- catch_size_data %>% 
       group_by( tripid, fitted_length) %>% 
       summarize(keep = sum(keep),
@@ -196,7 +212,7 @@ for(p in levels(periodz)){
     ###  Black sea bass  ####
     #########################
     
-   
+    
     #draw sizes for black sea bass catch
     bsb_catch_data <-subset(sf_bsb_scup_catch_data, select=c(tripid, tot_bsb_catch))
     bsb_catch_data <- bsb_catch_data[!duplicated(bsb_catch_data), ]
@@ -204,7 +220,7 @@ for(p in levels(periodz)){
     
     
     ##############
-
+    
     # subset trips with zero catch, as no size draws are required
     bsb_zero_catch <- subset(bsb_catch_data, tot_bsb_catch == 0)
     
@@ -316,7 +332,7 @@ for(p in levels(periodz)){
     trip_data[is.na(trip_data)] <- 0    
     
     
- 
+    
     
     #########################
     ###  Scup  ####
@@ -446,7 +462,7 @@ for(p in levels(periodz)){
     trip_data$tot_scup_catch <- trip_data$tot_keep_scup+trip_data$tot_rel_scup
     trip_data[is.na(trip_data)] <- 0      
     
- 
+    
     trip_data$catch_draw <- i
     dfs[[i]] <- trip_data
     
@@ -480,7 +496,7 @@ for(p in levels(periodz)){
   # Merge the prediction year data to the calibration data
   pds <- subset(pds_all, period==p)
   
-  cost_data <- subset(costs_new_all_MA, period == p, select=-c(period))
+  cost_data <- subset(costs_new_all_NJ, period == p, select=-c(period))
   trip_data <-  merge(pds,cost_data,by=c("tripid", "catch_draw"))
   trip_data[is.na(trip_data)] <- 0
   
@@ -492,8 +508,8 @@ for(p in levels(periodz)){
     
     # Use the previously drawn set of utility parameters to calculate expected utility, welfare, and effort in the prediction year
     
-    #param_draws_MA_prediction <- subset(param_draws_MA, parameter_draw==1)
-    trip_data <-  merge(param_draws_MA,trip_data,by="tripid")
+    #param_draws_NJ_prediction <- subset(param_draws_NJ, parameter_draw==1)
+    trip_data <-  merge(param_draws_NJ,trip_data,by="tripid")
     
     
     # Expected utility (prediction year)
@@ -538,7 +554,7 @@ for(p in levels(periodz)){
     
     #Now put the two values in the same column, exponentiate, and caluculate their sum (vA_col_sum)
     mean_trip_data$expon_vA <- case_when(mean_trip_data$alt==1 ~ exp(mean_trip_data$vA), 
-                                        mean_trip_data$alt==2 ~ exp(mean_trip_data$vA_optout)) 
+                                         mean_trip_data$alt==2 ~ exp(mean_trip_data$vA_optout)) 
     
     mean_trip_data$expon_v0 <- case_when(mean_trip_data$alt==1 ~ exp(mean_trip_data$v0), 
                                          mean_trip_data$alt==2 ~ exp(mean_trip_data$v0_optout)) 
@@ -556,14 +572,14 @@ for(p in levels(periodz)){
     #change in Consmer surplus between prediction year and baseline year 
     mean_trip_data$change_CS <- (1/mean_trip_data$beta_cost)*(log(mean_trip_data$expon_vA_col_sum) - log(mean_trip_data$expon_v0_col_sum))
     
-
+    
     # Get rid of things we don't need. 
     mean_trip_data <- subset(mean_trip_data, alt==1,select=-c(alt, beta_cost,beta_opt_out, beta_sqrt_bsb_keep, beta_sqrt_bsb_release, beta_sqrt_scup_catch, 
                                                               beta_sqrt_sf_keep ,beta_sqrt_sf_release, catch_draw, expon_v0 ,expon_v0_col_sum, expon_vA, 
                                                               Group.1, opt_out, v0, v0_optout, vA, vA_optout, expon_vA_col_sum, tot_keep_bsb_base, tot_cat_scup_base, 
                                                               tot_rel_bsb_base, tot_rel_sf_base , tot_keep_sf_base))                                                        
     
-
+    
     # Multiply the average trip probability by each of the catch variables (not the variable below) to get probability-weighted values
     list_names <- colnames(mean_trip_data)[colnames(mean_trip_data) !="tripid" 
                                            &  colnames(mean_trip_data) !="period" 
@@ -585,7 +601,7 @@ for(p in levels(periodz)){
     mean_trip_data$n_choice_occasions <- 1
     
     list_names <- colnames(mean_trip_data)[ colnames(mean_trip_data) !="tripid" 
-                                           & colnames(mean_trip_data) !="period"]
+                                            & colnames(mean_trip_data) !="period"]
     
     for (l in list_names){
       mean_trip_data[,l] <- mean_trip_data[,l]*expand
@@ -621,9 +637,9 @@ for(p in levels(periodz)){
 }
 
 
-pds_new_all_MA <-list.stack(pds_new, fill=TRUE)
-pds_new_all_MA[is.na(pds_new_all_MA)] = 0
-pds_new_all_MA$state = state1
+pds_new_all_NJ <-list.stack(pds_new, fill=TRUE)
+pds_new_all_NJ[is.na(pds_new_all_NJ)] = 0
+pds_new_all_NJ$state = state1
 
 
 

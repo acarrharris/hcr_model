@@ -393,8 +393,8 @@ for(p in levels(periodz)){
   costs_new_NY[[p]] = subset(trip_data, select=c(tripid, cost, catch_draw, tot_keep_sf, tot_rel_sf,
                                                  tot_keep_bsb,tot_rel_bsb,tot_scup_catch  ))
   
-  names(costs_new_NY[[p]])[names(costs_new_NY[[p]]) == "tot_keep"] = "tot_keep_sf_base"
-  names(costs_new_NY[[p]])[names(costs_new_NY[[p]]) == "tot_rel"] = "tot_rel_sf_base"
+  names(costs_new_NY[[p]])[names(costs_new_NY[[p]]) == "tot_keep_sf"] = "tot_keep_sf_base"
+  names(costs_new_NY[[p]])[names(costs_new_NY[[p]]) == "tot_rel_sf"] = "tot_rel_sf_base"
   names(costs_new_NY[[p]])[names(costs_new_NY[[p]]) == "tot_keep_bsb"] = "tot_keep_bsb_base"
   names(costs_new_NY[[p]])[names(costs_new_NY[[p]]) == "tot_rel_bsb"] = "tot_rel_bsb_base"
   names(costs_new_NY[[p]])[names(costs_new_NY[[p]]) == "tot_scup_catch"] = "tot_cat_scup_base"
