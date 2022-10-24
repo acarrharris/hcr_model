@@ -80,15 +80,19 @@ for(p in levels(periodz)){
     sf_bsb_scup_catch_data <- sf_catch_data
     
     
+    sum_catch_check_sf<-sum(sf_bsb_scup_catch_data$tot_sf_catch)
+    sum_catch_check_bsb<-sum(sf_bsb_scup_catch_data$tot_bsb_catch)
+    
     
     # subset trips with zero catch, as no size draws are required
     sf_zero_catch <- subset(sf_catch_data, tot_sf_catch == 0)
     
     
+    if (sum_catch_check_sf!=0){
+    
     
     #remove trips with zero summer flounder catch
     sf_catch_data<-sf_catch_data[sf_catch_data$tot_sf_catch!=0, ]
-    
     
     
     #expand the sf_catch_data so that each row represents a fish
@@ -179,16 +183,26 @@ for(p in levels(periodz)){
       left_join(release_size_data, by = c( "tripid")) #%>% 
     #I()
     #trip_data
+
+    
     
     #add the zero catch trips 
     trip_data <- bind_rows(trip_data, sf_zero_catch) %>% 
       #arrange(period, catch_draw, tripid) %>% 
       mutate_if(is.numeric, replace_na, replace = 0) %>% 
       mutate_if(is.character, replace_na, replace = state1) #%>%
+    trip_data <- subset(trip_data, select=-c(tot_bsb_catch))
+      
     #trip_data$tot_sf_catch <- trip_data$tot_keep_sf+trip_data$tot_rel_sf
+    }
     
-    
-    
+    if (sum_catch_check_sf==0){
+      trip_data<-sf_catch_data
+      trip_data$tot_keep_sf<-0
+      trip_data$tot_rel_sf<-0
+      trip_data <- subset(trip_data, select=-c(tot_bsb_catch))
+      
+    }
     
     
     #########################
@@ -203,11 +217,11 @@ for(p in levels(periodz)){
     
     
     ##############
-    
+
     # subset trips with zero catch, as no size draws are required
     bsb_zero_catch <- subset(bsb_catch_data, tot_bsb_catch == 0)
     
-    
+    if (sum_catch_check_bsb!=0){
     
     #remove trips with zero summer flounder catch
     bsb_catch_data<-bsb_catch_data[bsb_catch_data$tot_bsb_catch!=0, ]
@@ -312,6 +326,16 @@ for(p in levels(periodz)){
     
     # merge the bsb trip data with the rest of the trip data 
     trip_data <-  merge(trip_data,trip_data_bsb,by="tripid")
+    
+    }
+    
+    if (sum_catch_check_bsb==0){ 
+      trip_data_bsb<-bsb_catch_data
+      trip_data_bsb$tot_keep_bsb<-0
+      trip_data_bsb$tot_rel_bsb<-0
+      trip_data <-  merge(trip_data,trip_data_bsb,by="tripid")
+      
+    }
     
     
     trip_data[is.na(trip_data)] <- 0    
@@ -504,7 +528,6 @@ for(p in levels(periodz)){
 pds_new_all_NC <-list.stack(pds_new, fill=TRUE)
 pds_new_all_NC[is.na(pds_new_all_NC)] = 0
 pds_new_all_NC$state = state1
-
 
 
 

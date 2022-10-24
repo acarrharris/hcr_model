@@ -80,12 +80,15 @@ for(p in levels(periodz)){
     sf_catch_data$tripid <- 1:nrow(sf_catch_data)
     sf_bsb_scup_catch_data <- sf_catch_data
     
-    
+    sum_catch_check_sf<-sum(sf_bsb_scup_catch_data$tot_sf_catch)
+    sum_catch_check_bsb<-sum(sf_bsb_scup_catch_data$tot_bsb_catch)    
+    sum_catch_check_scup<-sum(sf_bsb_scup_catch_data$tot_scup_catch)    
     
     # subset trips with zero catch, as no size draws are required
     sf_zero_catch <- subset(sf_catch_data, tot_sf_catch == 0)
     
-    
+    if (sum_catch_check_sf!=0){
+      
     
     #remove trips with zero summer flounder catch
     sf_catch_data<-sf_catch_data[sf_catch_data$tot_sf_catch!=0, ]
@@ -187,6 +190,19 @@ for(p in levels(periodz)){
       mutate_if(is.numeric, replace_na, replace = 0) %>% 
       mutate_if(is.character, replace_na, replace = state1) #%>%
     #trip_data$tot_sf_catch <- trip_data$tot_keep_sf+trip_data$tot_rel_sf
+    trip_data <- subset(trip_data, select=-c(tot_bsb_catch, tot_scup_catch))
+    
+    }
+    
+  
+  
+  if (sum_catch_check_sf==0){
+    trip_data<-sf_catch_data
+    trip_data$tot_keep_sf<-0
+    trip_data$tot_rel_sf<-0
+    trip_data <- subset(trip_data, select=-c(tot_bsb_catch, tot_scup_catch))
+    
+  }
     
     
     
@@ -208,7 +224,8 @@ for(p in levels(periodz)){
     # subset trips with zero catch, as no size draws are required
     bsb_zero_catch <- subset(bsb_catch_data, tot_bsb_catch == 0)
     
-    
+    if (sum_catch_check_bsb!=0){
+      
     
     #remove trips with zero summer flounder catch
     bsb_catch_data<-bsb_catch_data[bsb_catch_data$tot_bsb_catch!=0, ]
@@ -313,6 +330,18 @@ for(p in levels(periodz)){
     
     # merge the bsb trip data with the rest of the trip data 
     trip_data <-  merge(trip_data,trip_data_bsb,by="tripid")
+    
+    }
+    
+    if (sum_catch_check_bsb==0){ 
+      trip_data_bsb<-bsb_catch_data
+      trip_data_bsb$tot_keep_bsb<-0
+      trip_data_bsb$tot_rel_bsb<-0
+      trip_data <-  merge(trip_data,trip_data_bsb,by="tripid")
+      
+    }
+    
+    
     trip_data[is.na(trip_data)] <- 0    
     
     
@@ -335,7 +364,8 @@ for(p in levels(periodz)){
     scup_zero_catch <- subset(scup_catch_data, tot_scup_catch == 0)
     
     
-    
+    if (sum_catch_check_scup!=0){
+      
     #remove trips with zero summer flounder catch
     scup_catch_data<-scup_catch_data[scup_catch_data$tot_scup_catch!=0, ]
     
@@ -439,8 +469,19 @@ for(p in levels(periodz)){
     
     # merge the scup trip data with the rest of the trip data 
     trip_data <-  merge(trip_data,trip_data_scup,by="tripid")
+    }
     
-    trip_data<- subset(trip_data, select=-c(tot_bsb_catch.x, tot_bsb_catch.y, tot_scup_catch.x, tot_scup_catch.y, tot_sf_catch))  
+    
+    if (sum_catch_check_scup==0){ 
+      trip_data_scup<-scup_catch_data
+      trip_data_scup$tot_keep_scup<-0
+      trip_data_scup$tot_rel_scup<-0
+      trip_data <-  merge(trip_data,trip_data_scup,by="tripid")
+      
+    }
+    
+    
+    #trip_data<- subset(trip_data, select=-c(tot_bsb_catch.x, tot_bsb_catch.y, tot_scup_catch.x, tot_scup_catch.y, tot_sf_catch))  
     trip_data$tot_sf_catch <- trip_data$tot_keep_sf+trip_data$tot_rel_sf
     trip_data$tot_bsb_catch <- trip_data$tot_keep_bsb+trip_data$tot_rel_bsb
     trip_data$tot_scup_catch <- trip_data$tot_keep_scup+trip_data$tot_rel_scup

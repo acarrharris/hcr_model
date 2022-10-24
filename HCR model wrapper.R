@@ -31,6 +31,57 @@ install.packages("rJava")
 install.packages("readr")
 install.packages("Mvt")
 
+
+
+args = commandArgs(trailingOnly=TRUE)
+
+# This is the modeling wrapper 
+
+# Steps in the process
+
+#2) Simulate the fishery under alternative regulations and a new catch-at-length distribution for summer flounder
+# a) Create new catch-at-length/catch-per-trip distributions for summer flounder based on population numbers at length. 
+# a) Calcualte angler welfare/fishing effort changes and changes in catch
+# Modeling wrapper test
+#profvis::profvis({
+#load needed packages and install if not currently installed.
+pkgs_to_use <- c("tidyr",
+                 "magrittr",
+                 "tidyverse",
+                 "reshape2",
+                 "splitstackshape",
+                 "doBy",
+                 "WriteXLS",
+                 "Rcpp",
+                 "ggplot2",
+                 "dplyr",
+                 "rlist",
+                 "fitdistrplus",
+                 "MASS",
+                 "psych",
+                 "rgl",
+                 "copula",
+                 "VineCopula",
+                 "scales",
+                 "univariateML",
+                 "logspline",
+                 "readr",
+                 "data.table",
+                 "conflicted", 
+                 "readxl", 
+                 "writexl", 
+                 "plyr")
+#install.packages(setdiff(pkgs_to_use, rownames(installed.packages())))  
+lapply(pkgs_to_use, library, character.only = TRUE, quietly = TRUE)
+# library(readxl)
+# library(writexl)
+conflict_prefer("filter", "dplyr")
+conflict_prefer("select", "dplyr")
+conflict_prefer("mutate", "dplyr")
+conflict_prefer("rename", "dplyr")
+conflict_prefer("summarize", "dplyr")
+
+
 library(psych)
 library(rgl)
 library(copula)
@@ -169,9 +220,10 @@ year_output = data.frame()
   
   state_pred_output = data.frame()
   years<-c("2021", "2023")
+  
   # regs <- c("minus1")
   
-  for (x in 1:50){
+  for (x in 1:60){
     for (y in years){
      year <- y
       #x<-1

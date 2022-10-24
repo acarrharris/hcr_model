@@ -5,7 +5,7 @@
 #     By state: trip costs, percent of trips taken by each mode (used for assigning trip costs), 
 #               and regulations (which also vary within a a season for a given state)
 #     By state: catch-per-trip and catch-at-length distributions
-#     By region (MA-NY, NJ, DE-MD, VA-NC): utility parameters and target species 
+#     By region (MA-NY, NJ, DE-NC, VA-NC): utility parameters and target species 
 
 
 # This code requires the following data:
@@ -80,115 +80,129 @@ for(p in levels(periodz)){
     sf_bsb_scup_catch_data <- sf_catch_data
     
     
+    sum_catch_check_sf<-sum(sf_bsb_scup_catch_data$tot_sf_catch)
+    sum_catch_check_bsb<-sum(sf_bsb_scup_catch_data$tot_bsb_catch)
+    
     
     # subset trips with zero catch, as no size draws are required
     sf_zero_catch <- subset(sf_catch_data, tot_sf_catch == 0)
     
     
+    if (sum_catch_check_sf!=0){
+      
+      
+      #remove trips with zero summer flounder catch
+      sf_catch_data<-sf_catch_data[sf_catch_data$tot_sf_catch!=0, ]
+      
+      
+      #expand the sf_catch_data so that each row represents a fish
+      row_inds <- seq_len(nrow(sf_catch_data))
+      sf_catch_data <- sf_catch_data[c(rep(row_inds, sf_catch_data$tot_sf_catch)), ]
+      rownames(sf_catch_data) <- NULL
+      sf_catch_data$fishid <- 1:nrow(sf_catch_data)
+      
+      
+      #Start Gavin code insert
+      size_data_read <- readRDS("sf_fitted_sizes_y2plus.rds") %>% tibble()
+      size_data <- size_data_read %>% filter(state == state1)
+      
+      # generate lengths for each fish
+      catch_size_data <- sf_catch_data %>% 
+        mutate(fitted_length = sample(size_data$length,
+                                      nrow(.),
+                                      prob = size_data$fitted_prob,
+                                      replace = TRUE)) #%>%
+      
+      
+      ##I()
+      
+      # Impose regulations, calculate keep and release per trip
+      # For summer flounder, retain keep- and release-at-length
+      
+      
+      
+      catch_size_data <- catch_size_data %>% 
+        #left_join(regs, by = "period") %>% 
+        mutate(posskeep = ifelse(fitted_length>=fluke_min & fitted_length<=fluke_max,1,0)) %>% 
+        group_by(tripid) %>% 
+        # keep = case_when(
+        # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
+        # TRUE ~ 0),
+        mutate(csum_keep = cumsum(posskeep)) %>% 
+        ungroup() %>% 
+        mutate(
+          keep_adj = case_when(
+            fluke_bag > 0 ~ ifelse(csum_keep<=fluke_bag & posskeep==1,1,0),
+            TRUE ~ 0),
+          # keep_adj = case_when(
+          #   csum_keep<=bag & keep==1 ~ 1,
+          #   TRUE ~ 0),
+          release = case_when(
+            fluke_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>fluke_bag ), 1,0)))
+      
+      
+      catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
+        rename(keep = keep_adj)
+      
+      
+      new_size_data <- catch_size_data %>% 
+        group_by( tripid, fitted_length) %>% 
+        summarize(keep = sum(keep),
+                  release = sum(release), .groups = "drop") #%>% 
+      
+      # generate sum of number of kept and released fish by tripid
+      summed_catch_data <- catch_size_data %>% 
+        group_by( tripid) %>% 
+        summarize(tot_keep_sf = sum(keep),
+                  tot_rel_sf = sum(release),
+                  .groups = "drop") #%>% 
+      
+      
+      keep_size_data <- new_size_data %>%
+        ungroup() %>%
+        dplyr::select(-release) %>% 
+        pivot_wider(names_from = fitted_length, #_length,
+                    names_glue = "keep_length_sf_{fitted_length}",
+                    names_sort = TRUE,
+                    values_from = keep, 
+                    values_fill = 0)# %>% 
+      #I()
+      #keep_size_data
+      
+      release_size_data <- new_size_data %>%
+        ungroup() %>% 
+        dplyr::select(-keep) %>% 
+        pivot_wider(names_from = fitted_length, #_length,
+                    names_glue = "release_length_sf_{fitted_length}",
+                    names_sort = TRUE,
+                    values_from = release, 
+                    values_fill = 0) #%>% 
+      
+      trip_data <- summed_catch_data %>% 
+        left_join(keep_size_data, by = c( "tripid")) %>% 
+        left_join(release_size_data, by = c( "tripid")) #%>% 
+      #I()
+      #trip_data
+      
+      
+      
+      #add the zero catch trips 
+      trip_data <- bind_rows(trip_data, sf_zero_catch) %>% 
+        #arrange(period, catch_draw, tripid) %>% 
+        mutate_if(is.numeric, replace_na, replace = 0) %>% 
+        mutate_if(is.character, replace_na, replace = state1) #%>%
+      trip_data <- subset(trip_data, select=-c(tot_bsb_catch))
+      
+      #trip_data$tot_sf_catch <- trip_data$tot_keep_sf+trip_data$tot_rel_sf
+    }
     
-    #remove trips with zero summer flounder catch
-    sf_catch_data<-sf_catch_data[sf_catch_data$tot_sf_catch!=0, ]
-    
-    
-    
-    #expand the sf_catch_data so that each row represents a fish
-    row_inds <- seq_len(nrow(sf_catch_data))
-    sf_catch_data <- sf_catch_data[c(rep(row_inds, sf_catch_data$tot_sf_catch)), ]
-    rownames(sf_catch_data) <- NULL
-    sf_catch_data$fishid <- 1:nrow(sf_catch_data)
-    
-    
-    #Start Gavin code insert
-    size_data_read <- readRDS("sf_fitted_sizes_y2plus.rds") %>% tibble()
-    size_data <- size_data_read %>% filter(state == state1)
-    
-    # generate lengths for each fish
-    catch_size_data <- sf_catch_data %>% 
-      mutate(fitted_length = sample(size_data$length,
-                                    nrow(.),
-                                    prob = size_data$fitted_prob,
-                                    replace = TRUE)) #%>%
-    
-    
-    ##I()
-    
-    # Impose regulations, calculate keep and release per trip
-    # For summer flounder, retain keep- and release-at-length
-    
-    
-    
-    catch_size_data <- catch_size_data %>% 
-      #left_join(regs, by = "period") %>% 
-      mutate(posskeep = ifelse(fitted_length>=fluke_min & fitted_length<=fluke_max,1,0)) %>% 
-      group_by(tripid) %>% 
-      # keep = case_when(
-      # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
-      # TRUE ~ 0),
-      mutate(csum_keep = cumsum(posskeep)) %>% 
-      ungroup() %>% 
-      mutate(
-        keep_adj = case_when(
-          fluke_bag > 0 ~ ifelse(csum_keep<=fluke_bag & posskeep==1,1,0),
-          TRUE ~ 0),
-        # keep_adj = case_when(
-        #   csum_keep<=bag & keep==1 ~ 1,
-        #   TRUE ~ 0),
-        release = case_when(
-          fluke_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>fluke_bag ), 1,0)))
-    
-    
-    catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
-      rename(keep = keep_adj)
-    
-    
-    new_size_data <- catch_size_data %>% 
-      group_by( tripid, fitted_length) %>% 
-      summarize(keep = sum(keep),
-                release = sum(release), .groups = "drop") #%>% 
-    
-    # generate sum of number of kept and released fish by tripid
-    summed_catch_data <- catch_size_data %>% 
-      group_by( tripid) %>% 
-      summarize(tot_keep_sf = sum(keep),
-                tot_rel_sf = sum(release),
-                .groups = "drop") #%>% 
-    
-    
-    keep_size_data <- new_size_data %>%
-      ungroup() %>%
-      dplyr::select(-release) %>% 
-      pivot_wider(names_from = fitted_length, #_length,
-                  names_glue = "keep_length_sf_{fitted_length}",
-                  names_sort = TRUE,
-                  values_from = keep, 
-                  values_fill = 0)# %>% 
-    #I()
-    #keep_size_data
-    
-    release_size_data <- new_size_data %>%
-      ungroup() %>% 
-      dplyr::select(-keep) %>% 
-      pivot_wider(names_from = fitted_length, #_length,
-                  names_glue = "release_length_sf_{fitted_length}",
-                  names_sort = TRUE,
-                  values_from = release, 
-                  values_fill = 0) #%>% 
-    
-    trip_data <- summed_catch_data %>% 
-      left_join(keep_size_data, by = c( "tripid")) %>% 
-      left_join(release_size_data, by = c( "tripid")) #%>% 
-    #I()
-    #trip_data
-    
-    #add the zero catch trips 
-    trip_data <- bind_rows(trip_data, sf_zero_catch) %>% 
-      #arrange(period, catch_draw, tripid) %>% 
-      mutate_if(is.numeric, replace_na, replace = 0) %>% 
-      mutate_if(is.character, replace_na, replace = state1) #%>%
-    #trip_data$tot_sf_catch <- trip_data$tot_keep_sf+trip_data$tot_rel_sf
-    
-    
-    
+    if (sum_catch_check_sf==0){
+      trip_data<-sf_catch_data
+      trip_data$tot_keep_sf<-0
+      trip_data$tot_rel_sf<-0
+      trip_data <- subset(trip_data, select=-c(tot_bsb_catch))
+      
+    }
     
     
     #########################
@@ -207,111 +221,121 @@ for(p in levels(periodz)){
     # subset trips with zero catch, as no size draws are required
     bsb_zero_catch <- subset(bsb_catch_data, tot_bsb_catch == 0)
     
+    if (sum_catch_check_bsb!=0){
+      
+      #remove trips with zero summer flounder catch
+      bsb_catch_data<-bsb_catch_data[bsb_catch_data$tot_bsb_catch!=0, ]
+      
+      
+      
+      #expand the bsb_catch_data so that each row represents a fish
+      row_inds <- seq_len(nrow(bsb_catch_data))
+      bsb_catch_data <- bsb_catch_data[c(rep(row_inds, bsb_catch_data$tot_bsb_catch)), ]
+      rownames(bsb_catch_data) <- NULL
+      bsb_catch_data$fishid <- 1:nrow(bsb_catch_data)
+      
+      
+      #Start Gavin code insert
+      size_data_read <- readRDS("bsb_fitted_sizes_y2plus.rds") %>% tibble()
+      size_data <- size_data_read %>% filter(state == state1)
+      
+      # generate lengths for each fish
+      catch_size_data <- bsb_catch_data %>% 
+        mutate(fitted_length = sample(size_data$length,
+                                      nrow(.),
+                                      prob = size_data$fitted_prob,
+                                      replace = TRUE)) #%>%
+      
+      
+      ##I()
+      
+      # Impose regulations, calculate keep and release per trip
+      # For summer flounder, retain keep- and release-at-length
+      
+      
+      
+      catch_size_data <- catch_size_data %>% 
+        #left_join(regs, by = "period") %>% 
+        mutate(posskeep = ifelse(fitted_length>=bsb_min ,1,0)) %>% 
+        group_by(tripid) %>% 
+        # keep = case_when(
+        # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
+        # TRUE ~ 0),
+        mutate(csum_keep = cumsum(posskeep)) %>% 
+        ungroup() %>% 
+        mutate(
+          keep_adj = case_when(
+            bsb_bag > 0 ~ ifelse(csum_keep<=bsb_bag & posskeep==1,1,0),
+            TRUE ~ 0),
+          # keep_adj = case_when(
+          #   csum_keep<=bag & keep==1 ~ 1,
+          #   TRUE ~ 0),
+          release = case_when(
+            bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
+      
+      
+      catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
+        rename(keep = keep_adj)
+      
+      
+      new_size_data <- catch_size_data %>% 
+        group_by( tripid, fitted_length) %>% 
+        summarize(keep = sum(keep),
+                  release = sum(release), .groups = "drop") #%>% 
+      
+      # generate sum of number of kept and released fish by tripid
+      summed_catch_data <- catch_size_data %>% 
+        group_by( tripid) %>% 
+        summarize(tot_keep_bsb = sum(keep),
+                  tot_rel_bsb = sum(release),
+                  .groups = "drop") #%>% 
+      
+      
+      keep_size_data <- new_size_data %>%
+        ungroup() %>%
+        dplyr::select(-release) %>% 
+        pivot_wider(names_from = fitted_length, #_length,
+                    names_glue = "keep_length_bsb_{fitted_length}",
+                    names_sort = TRUE,
+                    values_from = keep, 
+                    values_fill = 0)# %>% 
+      #I()
+      #keep_size_data
+      
+      release_size_data <- new_size_data %>%
+        ungroup() %>% 
+        dplyr::select(-keep) %>% 
+        pivot_wider(names_from = fitted_length, #_length,
+                    names_glue = "release_length_bsb_{fitted_length}",
+                    names_sort = TRUE,
+                    values_from = release, 
+                    values_fill = 0) #%>% 
+      
+      trip_data_bsb <- summed_catch_data %>% 
+        left_join(keep_size_data, by = c( "tripid")) %>% 
+        left_join(release_size_data, by = c( "tripid")) #%>% 
+      #I()
+      #trip_data
+      
+      #add the zero catch trips 
+      trip_data_bsb <- bind_rows(trip_data_bsb, bsb_zero_catch) %>% 
+        #arrange(period, catch_draw, tripid) %>% 
+        mutate_if(is.numeric, replace_na, replace = 0) %>% 
+        mutate_if(is.character, replace_na, replace = state1) #%>%
+      #trip_data_bsb$tot_bsb_catch <- trip_data_bsb$tot_keep_bsb+trip_data_bsb$tot_rel_bsb
+      
+      # merge the bsb trip data with the rest of the trip data 
+      trip_data <-  merge(trip_data,trip_data_bsb,by="tripid")
+      
+    }
     
-    
-    #remove trips with zero summer flounder catch
-    bsb_catch_data<-bsb_catch_data[bsb_catch_data$tot_bsb_catch!=0, ]
-    
-    
-    
-    #expand the bsb_catch_data so that each row represents a fish
-    row_inds <- seq_len(nrow(bsb_catch_data))
-    bsb_catch_data <- bsb_catch_data[c(rep(row_inds, bsb_catch_data$tot_bsb_catch)), ]
-    rownames(bsb_catch_data) <- NULL
-    bsb_catch_data$fishid <- 1:nrow(bsb_catch_data)
-    
-    
-    #Start Gavin code insert
-    size_data_read <- readRDS("bsb_fitted_sizes_y2plus.rds") %>% tibble()
-    size_data <- size_data_read %>% filter(state == state1)
-    
-    # generate lengths for each fish
-    catch_size_data <- bsb_catch_data %>% 
-      mutate(fitted_length = sample(size_data$length,
-                                    nrow(.),
-                                    prob = size_data$fitted_prob,
-                                    replace = TRUE)) #%>%
-    
-    
-    ##I()
-    
-    # Impose regulations, calculate keep and release per trip
-    # For summer flounder, retain keep- and release-at-length
-    
-    
-    
-    catch_size_data <- catch_size_data %>% 
-      #left_join(regs, by = "period") %>% 
-      mutate(posskeep = ifelse(fitted_length>=bsb_min ,1,0)) %>% 
-      group_by(tripid) %>% 
-      # keep = case_when(
-      # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
-      # TRUE ~ 0),
-      mutate(csum_keep = cumsum(posskeep)) %>% 
-      ungroup() %>% 
-      mutate(
-        keep_adj = case_when(
-          bsb_bag > 0 ~ ifelse(csum_keep<=bsb_bag & posskeep==1,1,0),
-          TRUE ~ 0),
-        # keep_adj = case_when(
-        #   csum_keep<=bag & keep==1 ~ 1,
-        #   TRUE ~ 0),
-        release = case_when(
-          bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
-    
-    
-    catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
-      rename(keep = keep_adj)
-    
-    
-    new_size_data <- catch_size_data %>% 
-      group_by( tripid, fitted_length) %>% 
-      summarize(keep = sum(keep),
-                release = sum(release), .groups = "drop") #%>% 
-    
-    # generate sum of number of kept and released fish by tripid
-    summed_catch_data <- catch_size_data %>% 
-      group_by( tripid) %>% 
-      summarize(tot_keep_bsb = sum(keep),
-                tot_rel_bsb = sum(release),
-                .groups = "drop") #%>% 
-    
-    
-    keep_size_data <- new_size_data %>%
-      ungroup() %>%
-      dplyr::select(-release) %>% 
-      pivot_wider(names_from = fitted_length, #_length,
-                  names_glue = "keep_length_bsb_{fitted_length}",
-                  names_sort = TRUE,
-                  values_from = keep, 
-                  values_fill = 0)# %>% 
-    #I()
-    #keep_size_data
-    
-    release_size_data <- new_size_data %>%
-      ungroup() %>% 
-      dplyr::select(-keep) %>% 
-      pivot_wider(names_from = fitted_length, #_length,
-                  names_glue = "release_length_bsb_{fitted_length}",
-                  names_sort = TRUE,
-                  values_from = release, 
-                  values_fill = 0) #%>% 
-    
-    trip_data_bsb <- summed_catch_data %>% 
-      left_join(keep_size_data, by = c( "tripid")) %>% 
-      left_join(release_size_data, by = c( "tripid")) #%>% 
-    #I()
-    #trip_data
-    
-    #add the zero catch trips 
-    trip_data_bsb <- bind_rows(trip_data_bsb, bsb_zero_catch) %>% 
-      #arrange(period, catch_draw, tripid) %>% 
-      mutate_if(is.numeric, replace_na, replace = 0) %>% 
-      mutate_if(is.character, replace_na, replace = state1) #%>%
-    #trip_data_bsb$tot_bsb_catch <- trip_data_bsb$tot_keep_bsb+trip_data_bsb$tot_rel_bsb
-    
-    # merge the bsb trip data with the rest of the trip data 
-    trip_data <-  merge(trip_data,trip_data_bsb,by="tripid")
+    if (sum_catch_check_bsb==0){ 
+      trip_data_bsb<-bsb_catch_data
+      trip_data_bsb$tot_keep_bsb<-0
+      trip_data_bsb$tot_rel_bsb<-0
+      trip_data <-  merge(trip_data,trip_data_bsb,by="tripid")
+      
+    }
     
     
     trip_data[is.na(trip_data)] <- 0    
@@ -504,7 +528,6 @@ for(p in levels(periodz)){
 pds_new_all_MD <-list.stack(pds_new, fill=TRUE)
 pds_new_all_MD[is.na(pds_new_all_MD)] = 0
 pds_new_all_MD$state = state1
-
 
 
 

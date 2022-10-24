@@ -128,6 +128,8 @@ scup_pred_cat=sim[,3]
 state="MA"
 
 pred_catch_data_MA=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
+pred_catch_data_MA[is.na(pred_catch_data_MA)] <- 0
+
 saveRDS(pred_catch_data_MA, "pred_catch_data_MA.rds")
 ########################
 
@@ -256,6 +258,8 @@ scup_pred_cat=sim[,3]
 state="RI"
 
 pred_catch_data_RI=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
+pred_catch_data_RI[is.na(pred_catch_data_RI)] <- 0
+
 saveRDS(pred_catch_data_RI, "pred_catch_data_RI.rds")
 ########################
 
@@ -381,6 +385,8 @@ scup_pred_cat=sim[,3]
 state="CT"
 
 pred_catch_data_CT=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
+pred_catch_data_CT[is.na(pred_catch_data_CT)] <- 0
+
 saveRDS(pred_catch_data_CT, "pred_catch_data_CT.rds")
 ########################
 
@@ -507,6 +513,8 @@ scup_pred_cat=sim[,3]
 state="NY"
 
 pred_catch_data_NY=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
+pred_catch_data_NY[is.na(pred_catch_data_NY)] <- 0
+
 saveRDS(pred_catch_data_NY, "pred_catch_data_NY.rds")
 ########################
 
@@ -635,6 +643,8 @@ scup_pred_cat=sim[,3]
 state="NJ"
 
 pred_catch_data_NJ=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
+pred_catch_data_NJ[is.na(pred_catch_data_NJ)] <- 0
+
 saveRDS(pred_catch_data_NJ, "pred_catch_data_NJ.rds")
 ########################
 
@@ -738,6 +748,8 @@ bsb_pred_cat=sim[,2]
 state="DE"
 
 pred_catch_data_DE=data.frame(sf_pred_cat, bsb_pred_cat, state)
+pred_catch_data_DE[is.na(pred_catch_data_DE)] <- 0
+
 saveRDS(pred_catch_data_DE, "pred_catch_data_DE.rds")
 ########################
 
@@ -844,6 +856,8 @@ bsb_pred_cat=sim[,2]
 state="MD"
 
 pred_catch_data_MD=data.frame(sf_pred_cat, bsb_pred_cat, state)
+pred_catch_data_MD[is.na(pred_catch_data_MD)] <- 0
+
 saveRDS(pred_catch_data_MD, "pred_catch_data_MD.rds")
 ########################
 
@@ -971,6 +985,8 @@ scup_pred_cat=sim[,3]
 state="VA"
 
 pred_catch_data_VA=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
+pred_catch_data_VA[is.na(pred_catch_data_VA)] <- 0
+
 saveRDS(pred_catch_data_VA, "pred_catch_data_VA.rds")
 ########################
 
@@ -1077,6 +1093,8 @@ bsb_pred_cat=sim[,2]
 state="NC"
 
 pred_catch_data_NC=data.frame(sf_pred_cat, bsb_pred_cat, state)
+pred_catch_data_NC[is.na(pred_catch_data_NC)] <- 0
+
 saveRDS(pred_catch_data_NC, "pred_catch_data_NC.rds")
 ########################
 
