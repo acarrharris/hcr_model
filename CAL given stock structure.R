@@ -340,6 +340,7 @@ scup_catch_expansion_factor_NC=round(tot_pred_scup_cat_NC/tot_cat_NC_base, digit
 # Here, execute the catch-per trip file. 
 # This file adjusts the expected number of catch per trip by population abundances. 
 source("predicted catch per trip by state.R")
+#source("predicted catch per trip by state-check.R")
 
 
 #####

@@ -153,6 +153,8 @@ for(p in levels(periodz)){
           keep_adj2 = case_when(
             fluke_bag2 > 0 ~ ifelse(csum_keep2<=fluke_bag2 & posskeep2==1,1,0)))
       
+      catch_size_data[is.na(catch_size_data)] <- 0
+      
       catch_size_data$release<-ifelse((catch_size_data$keep_adj==0 & catch_size_data$keep_adj2==0), 1,0)
       catch_size_data$keep_tot<-catch_size_data$keep_adj+catch_size_data$keep_adj2
       

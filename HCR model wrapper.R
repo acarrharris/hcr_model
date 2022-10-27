@@ -220,10 +220,11 @@ year_output = data.frame()
   
   state_pred_output = data.frame()
   years<-c("2021", "2023")
+  years<-c("2021")
   
   # regs <- c("minus1")
   
-  for (x in 1:60){
+  for (x in 1:1){
     for (y in years){
      year <- y
       #x<-1
@@ -248,6 +249,10 @@ year_output = data.frame()
       # THIS IS WHERE TO IMPORT THE NUMBERS AT AGE FOR EACH SPECIES BASED ON THE YEAR(S) OF INTEREST
       # Import the fluke MCMC draws
       fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      
+      #this is the check dataset with median values of the 2021 stock 
+      #fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_median_", year,".csv"), show_col_types = FALSE))
+      
       fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
       
       # Import the bsb MCMC draws
@@ -256,6 +261,10 @@ year_output = data.frame()
       
       # Import the scup MCMC draws
       scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      
+      #this is the check dataset with median values of the 2021 stock 
+      #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
+      
       scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
       
     
@@ -283,13 +292,14 @@ year_output = data.frame()
       source("HCR prediction NC.R")
       
       
-      prediction_output_by_period = as.data.frame(bind_rows(pds_new_all_MA, pds_new_all_RI, pds_new_all_CT,
-                                                            pds_new_all_NY, pds_new_all_NJ, pds_new_all_DE,
-                                                            pds_new_all_MD, pds_new_all_VA, pds_new_all_NC))
+       prediction_output_by_period = as.data.frame(bind_rows(pds_new_all_MA, pds_new_all_RI, pds_new_all_CT,
+                                                             pds_new_all_NY, pds_new_all_NJ, pds_new_all_DE,
+                                                             pds_new_all_MD, pds_new_all_VA, pds_new_all_NC))
       
+      #prediction_output_by_period = as.data.frame(bind_rows(pds_new_all_NJ))
       
       prediction_output_by_period[is.na(prediction_output_by_period)] = 0
-      write_xlsx(prediction_output_by_period,"prediction_output_by_period.xlsx")
+      #write_xlsx(prediction_output_by_period,"prediction_output_by_period.xlsx")
       
       
       
@@ -319,12 +329,10 @@ year_output = data.frame()
   
   
   }
-  write_xlsx(state_pred_output,"state_output.xlsx")
+  #write_xlsx(state_pred_output,"state_output.xlsx")
+  #write_xlsx(state_pred_output,"state_output_NJ.xlsx")
+  write_xlsx(state_pred_output,"state_output_calibration_test.xlsx")
   
-  write_xlsx(state_pred_output,"state_output_new_pop_ns_15_21.xlsx")
-  #write_xlsx(state_pred_output,"state_output_new_pop_ns_15_21_avg_selectivity.xlsx")
-  
-  #write_xlsx(state_pred_output,paste0("state_output_new_pop_ns",year,".xlsx"))
   
   
   
