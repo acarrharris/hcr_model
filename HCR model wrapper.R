@@ -217,10 +217,18 @@ year_output = data.frame()
 #}
 #write_xlsx(state_cal_output,"calibration_output_by_period.xlsx")
   
+  # Start the clock!
+  ptm <- proc.time()
   
   state_pred_output = data.frame()
-  years<-c("2021", "2023")
-  years<-c("2021")
+  # years<-c("2021", "2023")
+  # years<-c("2021")
+  
+  #Here is a placeholder for the non-preferred coastwide measures 
+    #2023 - status quo 2022 measures 
+    #2024 - summer flounder alternative with no changes to the other species 
+    #2025 - BSB alternative with no changes to the other species
+  years<-c("2023", "2024","2025")
   
   # regs <- c("minus1")
   
@@ -248,7 +256,8 @@ year_output = data.frame()
       
       # THIS IS WHERE TO IMPORT THE NUMBERS AT AGE FOR EACH SPECIES BASED ON THE YEAR(S) OF INTEREST
       # Import the fluke MCMC draws
-      fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      #fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
       
       #this is the check dataset with median values of the 2021 stock 
       #fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_median_", year,".csv"), show_col_types = FALSE))
@@ -260,7 +269,8 @@ year_output = data.frame()
       #bsb_numbers_at_age = subset(bsb_numbers_at_age, bsb_numbers_at_age$draw==1)
       
       # Import the scup MCMC draws
-      scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
       
       #this is the check dataset with median values of the 2021 stock 
       #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
@@ -329,9 +339,17 @@ year_output = data.frame()
   
   
   }
+  # Stop the clock
+  proc.time() - ptm
+  
+  # for one run of three sets of regs:
+  # user  system elapsed 
+  # 2157.30   98.85 2273.33 
+  
+  #
   #write_xlsx(state_pred_output,"state_output.xlsx")
   #write_xlsx(state_pred_output,"state_output_NJ.xlsx")
-  write_xlsx(state_pred_output,"state_output_calibration_test.xlsx")
+  write_xlsx(state_pred_output,"state_output_status_quo_pref_alts.xlsx")
   
   
   
@@ -339,7 +357,7 @@ year_output = data.frame()
   # Stop the clock
   proc.time() - ptm
   
-  
+
   
   
   

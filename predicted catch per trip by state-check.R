@@ -10,6 +10,15 @@
 
 ########################
 ###Massachusetts
+
+
+observed_catch_data <- subset(read.csv("observed_catch_2021_25.csv"), select=c(sf_tot_cat, bsb_tot_cat, scup_tot_cat))
+sf_cat <- observed_catch_data$sf_tot_cat
+bsb_cat <- observed_catch_data$bsb_tot_cat
+scup_cat <- observed_catch_data$scup_tot_cat
+
+
+
 #nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==25 & draw==x)
 nb_params<- readRDS("nb_catch_parameters_sf_MA_21.rds")
 sf_mu <- nb_params[["estimate"]][["mu"]]
@@ -117,11 +126,11 @@ rho2 <- coef(fit)[2]
 rho3 <- coef(fit)[3]
 df <- coef(fit)[4]
 
-copula_dist <- mvdc(copula=tCopula(param=c(rho1, rho2, rho3),dim=3,df=df,dispstr = "un"),  margins=c("nbinom", "nbinom", "nbinom"),
+copula_dist <- mvdc(copula=tCopula(param=c(rho1, rho2, rho3),dim=3,df=df, dispstr = "un"),  margins=c("nbinom", "nbinom", "nbinom"),
                     paramMargins=list(list(mu=sf_mu_new, size=sf_size_new),
                                       list(mu=bsb_mu_new, size=bsb_size_new), 
                                       list(mu=scup_mu_new, size=scup_size_new)))
-
+set.seed(65463)
 sim <- rMvdc(10000, copula_dist )
 
 sf_pred_cat=sim[,1]
@@ -131,6 +140,17 @@ state="MA"
 
 pred_catch_data_MA=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
 pred_catch_data_MA[is.na(pred_catch_data_MA)] <- 0
+
+check <- subset(pred_catch_data_MA, select=c(sf_pred_cat, bsb_pred_cat, scup_pred_cat))
+
+# cor(check, method = c("kendall"))
+# cor(observed_catch_data, method = c("kendall"))
+mean(check$sf_pred_cat)
+mean(observed_catch_data$sf_tot_cat)
+mean(check$bsb_pred_cat)
+mean(observed_catch_data$bsb_tot_cat)
+mean(check$scup_pred_cat)
+mean(observed_catch_data$scup_tot_cat)
 
 saveRDS(pred_catch_data_MA, "pred_catch_data_MA.rds")
 ########################
@@ -143,6 +163,12 @@ saveRDS(pred_catch_data_MA, "pred_catch_data_MA.rds")
 ########################
 ###Rhode Island 
 #nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==25 & draw==x)
+
+observed_catch_data <- subset(read.csv("observed_catch_2021_44.csv"), select=c(sf_tot_cat, bsb_tot_cat, scup_tot_cat))
+sf_cat <- observed_catch_data$sf_tot_cat
+bsb_cat <- observed_catch_data$bsb_tot_cat
+scup_cat <- observed_catch_data$scup_tot_cat
+
 nb_params<- readRDS("nb_catch_parameters_sf_RI_21.rds")
 sf_mu <- nb_params[["estimate"]][["mu"]]
 sf_size <- nb_params[["estimate"]][["size"]]
@@ -263,6 +289,11 @@ state="RI"
 
 pred_catch_data_RI=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
 pred_catch_data_RI[is.na(pred_catch_data_RI)] <- 0
+
+check <- subset(pred_catch_data_RI, select=c(sf_pred_cat, bsb_pred_cat, scup_pred_cat))
+
+# cor(check, method = c("kendall"))
+# cor(observed_catch_data, method = c("kendall"))
 
 saveRDS(pred_catch_data_RI, "pred_catch_data_RI.rds")
 ########################

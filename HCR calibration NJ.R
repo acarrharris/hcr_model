@@ -385,6 +385,7 @@ for(p in levels(periodz)){
   trip_data=pds
   trip_data$cost=rnorm(nrow(trip_data), mean=mean_cost,sd= sd_cost)
   trip_data[is.na(trip_data)] = 0
+  trip_data$cost=ifelse(trip_data$cost<0, 0,trip_data$cost )
   
   
   # Costs_new_state data sets will retain raw trip outcomes from the baseline scenario. 
