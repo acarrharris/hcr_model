@@ -276,6 +276,7 @@ for(p in levels(periodz)){
       
       
       
+      
       catch_size_data <- catch_size_data %>% 
         #left_join(regs, by = "period") %>% 
         mutate(posskeep = ifelse(fitted_length>=bsb_min ,1,0)) %>% 
@@ -288,13 +289,15 @@ for(p in levels(periodz)){
         mutate(
           keep_adj = case_when(
             bsb_bag > 0 ~ ifelse(csum_keep<=bsb_bag & posskeep==1,1,0),
-            TRUE ~ 0),
-          # keep_adj = case_when(
-          #   csum_keep<=bag & keep==1 ~ 1,
-          #   TRUE ~ 0),
-          release = case_when(
-            bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
+            TRUE ~ 0))
+      #,
+      # keep_adj = case_when(
+      #   csum_keep<=bag & keep==1 ~ 1,
+      #   TRUE ~ 0),
+      #release = case_when(
+      # bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
       
+      catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
       
       catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
         rename(keep = keep_adj)
@@ -427,13 +430,15 @@ for(p in levels(periodz)){
         mutate(
           keep_adj = case_when(
             scup_bag > 0 ~ ifelse(csum_keep<=scup_bag & posskeep==1,1,0),
-            TRUE ~ 0),
-          # keep_adj = case_when(
-          #   csum_keep<=bag & keep==1 ~ 1,
-          #   TRUE ~ 0),
-          release = case_when(
-            scup_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>scup_bag ), 1,0)))
+            TRUE ~ 0))
+      #,
+      # keep_adj = case_when(
+      #   csum_keep<=bag & keep==1 ~ 1,
+      #   TRUE ~ 0),
+      #release = case_when(
+      # bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
       
+      catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
       
       catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
         rename(keep = keep_adj)

@@ -228,11 +228,11 @@ year_output = data.frame()
     #2023 - status quo 2022 measures 
     #2024 - summer flounder alternative with no changes to the other species 
     #2025 - BSB alternative with no changes to the other species
-  years<-c("2023", "2024","2025")
+  years<-c("2023.1","2023.2", "2023.3", "2023.4", "2023.5", "2023.6", "2023.7", "2024","2025")
   
   # regs <- c("minus1")
   
-  for (x in 1:1){
+  for (x in 1:100){
     for (y in years){
      year <- y
       #x<-1
@@ -288,6 +288,8 @@ year_output = data.frame()
       # run the simulation code under the new set of regulations (regulation file is directed_trips_region - alternative regs test.xlsx)
       
       directed_trip_alt_regs=data.frame(read_csv(paste0("directed trips and regulations ", year,".csv"), show_col_types = FALSE))
+      #directed_trip_alt_regs=data.frame(read_csv("directed trips and regulations 2023.1.csv", show_col_types = FALSE))
+      
       directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip)
       
       
@@ -349,7 +351,8 @@ year_output = data.frame()
   #
   #write_xlsx(state_pred_output,"state_output.xlsx")
   #write_xlsx(state_pred_output,"state_output_NJ.xlsx")
-  write_xlsx(state_pred_output,"state_output_status_quo_pref_alts.xlsx")
+  #state_pred_output22<-subset(state_pred_output, draw!=23)
+  write_xlsx(state_pred_output,"state_output_status_quo_pref_alts_up_to_23plus.xlsx")
   
   
   

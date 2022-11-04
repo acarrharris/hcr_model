@@ -54,9 +54,18 @@ for(p in levels(periodz)){
   #n_draws = min(1000,n_trips*2.5 )
   n_draws = n_drawz
   
-  fluke_bag <- mean(directed_trips_p$fluke_bag)
-  fluke_min <- mean(directed_trips_p$fluke_min)
-  fluke_max <- mean(directed_trips_p$fluke_max)
+  # fluke_bag <- mean(directed_trips_p$fluke_bag)
+  # fluke_min <- mean(directed_trips_p$fluke_min)
+  # fluke_max <- mean(directed_trips_p$fluke_max)
+  
+  fluke_bag1 <- mean(directed_trips_p$fluke_bag1)
+  fluke_min1 <- mean(directed_trips_p$fluke_min1)
+  fluke_max1 <- mean(directed_trips_p$fluke_max1)
+  
+  fluke_bag2 <- mean(directed_trips_p$fluke_bag2)
+  fluke_min2 <- mean(directed_trips_p$fluke_min2)
+  fluke_max2 <- mean(directed_trips_p$fluke_max2)
+  
   bsb_bag <- mean(directed_trips_p$bsb_bag)
   bsb_min <- mean(directed_trips_p$bsb_min)
   scup_bag <- mean(directed_trips_p$scup_bag)
@@ -121,28 +130,62 @@ for(p in levels(periodz)){
       
       
       
-      catch_size_data <- catch_size_data %>% 
-        #left_join(regs, by = "period") %>% 
-        mutate(posskeep = ifelse(fitted_length>=fluke_min & fitted_length<=fluke_max,1,0)) %>% 
-        group_by(tripid) %>% 
+      # catch_size_data <- catch_size_data %>%
+      #   #left_join(regs, by = "period") %>%
+      #   mutate(posskeep = ifelse(fitted_length>=fluke_min & fitted_length<=fluke_max,1,0)) %>%
+      #   group_by(tripid) %>%
+      #   # keep = case_when(
+      #   # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
+      #   # TRUE ~ 0),
+      #   mutate(csum_keep = cumsum(posskeep)) %>%
+      #   ungroup() %>%
+      #   mutate(
+      #     keep_adj = case_when(
+      #       fluke_bag > 0 ~ ifelse(csum_keep<=fluke_bag & posskeep==1,1,0),
+      #       TRUE ~ 0),
+      #     # keep_adj = case_when(
+      #     #   csum_keep<=bag & keep==1 ~ 1,
+      #     #   TRUE ~ 0),
+      #     release = case_when(
+      #       fluke_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>fluke_bag ), 1,0)))
+      # 
+      # 
+      # catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>%
+      #   rename(keep = keep_adj)
+      
+      catch_size_data <- catch_size_data %>%
+        #left_join(regs, by = "period") %>%
+        mutate(posskeep = ifelse(fitted_length>=fluke_min1 & fitted_length<fluke_max1,1,0)) %>%
+        group_by(tripid) %>%
         # keep = case_when(
         # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
         # TRUE ~ 0),
-        mutate(csum_keep = cumsum(posskeep)) %>% 
-        ungroup() %>% 
+        mutate(csum_keep = cumsum(posskeep)) %>%
+        ungroup() %>%
         mutate(
           keep_adj = case_when(
-            fluke_bag > 0 ~ ifelse(csum_keep<=fluke_bag & posskeep==1,1,0),
-            TRUE ~ 0),
-          # keep_adj = case_when(
-          #   csum_keep<=bag & keep==1 ~ 1,
-          #   TRUE ~ 0),
-          release = case_when(
-            fluke_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>fluke_bag ), 1,0)))
+            fluke_bag1 > 0 ~ ifelse(csum_keep<=fluke_bag1 & posskeep==1,1,0),
+            TRUE ~ 0)) %>%
+        
+        mutate(posskeep2 = ifelse(fitted_length>=fluke_min2 & fitted_length<fluke_max2,1,0)) %>%
+        group_by(tripid) %>%
+        # keep = case_when(
+        # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
+        # TRUE ~ 0),
+        mutate(csum_keep2 = cumsum(posskeep2)) %>%
+        ungroup() %>%
+        mutate(
+          keep_adj2 = case_when(
+            fluke_bag2 > 0 ~ ifelse(csum_keep2<=fluke_bag2 & posskeep2==1,1,0)))
+      
+      catch_size_data[is.na(catch_size_data)] <- 0
+      
+      catch_size_data$release<-ifelse((catch_size_data$keep_adj==0 & catch_size_data$keep_adj2==0), 1,0)
+      catch_size_data$keep_tot<-catch_size_data$keep_adj+catch_size_data$keep_adj2
       
       
-      catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
-        rename(keep = keep_adj)
+      catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_tot, release)) %>%
+        rename(keep = keep_tot)
       
       
       new_size_data <- catch_size_data %>% 
@@ -270,13 +313,15 @@ for(p in levels(periodz)){
         mutate(
           keep_adj = case_when(
             bsb_bag > 0 ~ ifelse(csum_keep<=bsb_bag & posskeep==1,1,0),
-            TRUE ~ 0),
-          # keep_adj = case_when(
-          #   csum_keep<=bag & keep==1 ~ 1,
-          #   TRUE ~ 0),
-          release = case_when(
-            bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
+            TRUE ~ 0))
+      #,
+      # keep_adj = case_when(
+      #   csum_keep<=bag & keep==1 ~ 1,
+      #   TRUE ~ 0),
+      #release = case_when(
+      # bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
       
+      catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
       
       catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
         rename(keep = keep_adj)
@@ -409,17 +454,18 @@ for(p in levels(periodz)){
         mutate(
           keep_adj = case_when(
             scup_bag > 0 ~ ifelse(csum_keep<=scup_bag & posskeep==1,1,0),
-            TRUE ~ 0),
-          # keep_adj = case_when(
-          #   csum_keep<=bag & keep==1 ~ 1,
-          #   TRUE ~ 0),
-          release = case_when(
-            scup_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>scup_bag ), 1,0)))
+            TRUE ~ 0))
+      #,
+      # keep_adj = case_when(
+      #   csum_keep<=bag & keep==1 ~ 1,
+      #   TRUE ~ 0),
+      #release = case_when(
+      # bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
       
+      catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
       
       catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release)) %>% 
         rename(keep = keep_adj)
-      
       
       new_size_data <- catch_size_data %>% 
         group_by( tripid, fitted_length) %>% 
