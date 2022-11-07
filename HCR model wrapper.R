@@ -352,7 +352,8 @@ year_output = data.frame()
   #write_xlsx(state_pred_output,"state_output.xlsx")
   #write_xlsx(state_pred_output,"state_output_NJ.xlsx")
   #state_pred_output22<-subset(state_pred_output, draw!=23)
-  write_xlsx(state_pred_output,"state_output_status_quo_pref_alts_up_to_23plus.xlsx")
+  #write_xlsx(state_pred_output,"state_output_status_quo_pref_alts_up_to_23plus.xlsx")
+  write_xlsx(state_pred_output,"state_output_11_4.xlsx")
   
   
   
