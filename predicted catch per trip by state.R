@@ -11,7 +11,6 @@
 ########################
 ###Massachusetts
 nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==25 & draw==x)
-
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -20,6 +19,18 @@ bsb_size <- nb_params$bsb_size
 
 scup_mu <- nb_params$scup_mu
 scup_size <- nb_params$scup_size
+
+# nb_params<- readRDS("nb_catch_parameters_sf_MA_21.rds")
+# sf_mu <- nb_params[["estimate"]][["mu"]]
+# sf_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_bsb_MA_21.rds")
+# bsb_mu <-nb_params[["estimate"]][["mu"]]
+# bsb_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_scup_MA_21.rds")
+# scup_mu <- nb_params[["estimate"]][["mu"]]
+# scup_size <- nb_params[["estimate"]][["size"]]
 
 
 # We now adjust mean catch per trip by the expansion factor. 
@@ -130,6 +141,20 @@ state="MA"
 pred_catch_data_MA=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
 pred_catch_data_MA[is.na(pred_catch_data_MA)] <- 0
 
+
+#Remove outliers of scup, bsb, sf catch
+observed_21<- read_csv("observed_catch_2021_25.csv",  show_col_types = FALSE)
+max_sf<- max(observed_21$sf_tot_cat)
+max_bsb<- max(observed_21$bsb_tot_cat)
+max_scup<- max(observed_21$scup_tot_cat)
+
+
+
+pred_catch_data_MA<- subset(pred_catch_data_MA, pred_catch_data_MA$sf_pred_cat<=max_sf &
+                                                pred_catch_data_MA$bsb_pred_cat<=max_bsb &
+                                                pred_catch_data_MA$scup_pred_cat<=max_scup)
+
+
 saveRDS(pred_catch_data_MA, "pred_catch_data_MA.rds")
 ########################
 
@@ -141,7 +166,6 @@ saveRDS(pred_catch_data_MA, "pred_catch_data_MA.rds")
 ########################
 ###Rhode Island 
 nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==44 & draw==x)
-
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -150,6 +174,18 @@ bsb_size <- nb_params$bsb_size
 
 scup_mu <- nb_params$scup_mu
 scup_size <- nb_params$scup_size
+
+# nb_params<- readRDS("nb_catch_parameters_sf_RI_21.rds")
+# sf_mu <- nb_params[["estimate"]][["mu"]]
+# sf_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_bsb_RI_21.rds")
+# bsb_mu <- nb_params[["estimate"]][["mu"]]
+# bsb_size <-nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_scup_RI_21.rds")
+# scup_mu <- nb_params[["estimate"]][["mu"]]
+# scup_size <- nb_params[["estimate"]][["size"]]
 
 
 # We now adjust mean catch per trip by the expansion factor. 
@@ -260,6 +296,21 @@ state="RI"
 pred_catch_data_RI=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
 pred_catch_data_RI[is.na(pred_catch_data_RI)] <- 0
 
+
+
+
+#Remove outliers of scup, bsb, sf catch
+observed_21<- read_csv("observed_catch_2021_44.csv",  show_col_types = FALSE)
+max_sf<- max(observed_21$sf_tot_cat)
+max_bsb<- max(observed_21$bsb_tot_cat)
+max_scup<- max(observed_21$scup_tot_cat)
+
+
+
+pred_catch_data_RI<- subset(pred_catch_data_RI, pred_catch_data_RI$sf_pred_cat<=max_sf & 
+                              pred_catch_data_RI$bsb_pred_cat<=max_bsb &
+                              pred_catch_data_RI$scup_pred_cat<=max_scup)
+
 saveRDS(pred_catch_data_RI, "pred_catch_data_RI.rds")
 ########################
 
@@ -268,7 +319,6 @@ saveRDS(pred_catch_data_RI, "pred_catch_data_RI.rds")
 ########################
 ###Connecticut
 nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==9 & draw==x)
-
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -277,6 +327,18 @@ bsb_size <- nb_params$bsb_size
 
 scup_mu <- nb_params$scup_mu
 scup_size <- nb_params$scup_size
+
+# nb_params<- readRDS("nb_catch_parameters_sf_CT_21.rds")
+# sf_mu <- nb_params[["estimate"]][["mu"]]
+# sf_size <-nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_bsb_CT_21.rds")
+# bsb_mu <- nb_params[["estimate"]][["mu"]]
+# bsb_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_scup_CT_21.rds")
+# scup_mu <- nb_params[["estimate"]][["mu"]]
+# scup_size <- nb_params[["estimate"]][["size"]]
 
 
 # We now adjust mean catch per trip by the expansion factor. 
@@ -387,6 +449,20 @@ state="CT"
 pred_catch_data_CT=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
 pred_catch_data_CT[is.na(pred_catch_data_CT)] <- 0
 
+
+#Remove outliers of scup, bsb, sf catch
+observed_21<- read_csv("observed_catch_2021_9.csv",  show_col_types = FALSE)
+max_sf<- max(observed_21$sf_tot_cat)
+max_bsb<- max(observed_21$bsb_tot_cat)
+max_scup<- max(observed_21$scup_tot_cat)
+
+
+
+pred_catch_data_CT<- subset(pred_catch_data_CT, pred_catch_data_CT$sf_pred_cat<=max_sf & 
+                              pred_catch_data_CT$bsb_pred_cat<=max_bsb &
+                              pred_catch_data_CT$scup_pred_cat<=max_scup)
+
+
 saveRDS(pred_catch_data_CT, "pred_catch_data_CT.rds")
 ########################
 
@@ -396,7 +472,6 @@ saveRDS(pred_catch_data_CT, "pred_catch_data_CT.rds")
 ########################
 ###New York 
 nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==36 & draw==x)
-
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -405,6 +480,18 @@ bsb_size <- nb_params$bsb_size
 
 scup_mu <- nb_params$scup_mu
 scup_size <- nb_params$scup_size
+
+# nb_params<- readRDS("nb_catch_parameters_sf_NY_21.rds")
+# sf_mu <-nb_params[["estimate"]][["mu"]]
+# sf_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_bsb_NY_21.rds")
+# bsb_mu <- nb_params[["estimate"]][["mu"]]
+# bsb_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_scup_NY_21.rds")
+# scup_mu <- nb_params[["estimate"]][["mu"]]
+# scup_size <- nb_params[["estimate"]][["size"]]
 
 
 # We now adjust mean catch per trip by the expansion factor. 
@@ -515,6 +602,19 @@ state="NY"
 pred_catch_data_NY=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
 pred_catch_data_NY[is.na(pred_catch_data_NY)] <- 0
 
+
+#Remove outliers of scup, bsb, sf catch
+observed_21<- read_csv("observed_catch_2021_36.csv",  show_col_types = FALSE)
+max_sf<- max(observed_21$sf_tot_cat)
+max_bsb<- max(observed_21$bsb_tot_cat)
+max_scup<- max(observed_21$scup_tot_cat)
+
+
+
+pred_catch_data_NY<- subset(pred_catch_data_NY, pred_catch_data_NY$sf_pred_cat<=max_sf & 
+                              pred_catch_data_NY$bsb_pred_cat<=max_bsb &
+                              pred_catch_data_NY$scup_pred_cat<=max_scup)
+
 saveRDS(pred_catch_data_NY, "pred_catch_data_NY.rds")
 ########################
 
@@ -526,7 +626,6 @@ saveRDS(pred_catch_data_NY, "pred_catch_data_NY.rds")
 ########################
 ###New Jersey 
 nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==34 & draw==x)
-
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -535,6 +634,18 @@ bsb_size <- nb_params$bsb_size
 
 scup_mu <- nb_params$scup_mu
 scup_size <- nb_params$scup_size
+
+# nb_params<- readRDS("nb_catch_parameters_sf_NJ_21.rds")
+# sf_mu <- nb_params[["estimate"]][["mu"]]
+# sf_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_bsb_NJ_21.rds")
+# bsb_mu <- nb_params[["estimate"]][["mu"]]
+# bsb_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_scup_NJ_21.rds")
+# scup_mu <- nb_params[["estimate"]][["mu"]]
+# scup_size <- nb_params[["estimate"]][["size"]]
 
 
 # We now adjust mean catch per trip by the expansion factor. 
@@ -645,6 +756,18 @@ state="NJ"
 pred_catch_data_NJ=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
 pred_catch_data_NJ[is.na(pred_catch_data_NJ)] <- 0
 
+#Remove outliers of scup, bsb, sf catch
+observed_21<- read_csv("observed_catch_2021_34.csv",  show_col_types = FALSE)
+max_sf<- max(observed_21$sf_tot_cat)
+max_bsb<- max(observed_21$bsb_tot_cat)
+max_scup<- max(observed_21$scup_tot_cat)
+
+
+
+pred_catch_data_NJ<- subset(pred_catch_data_NJ, pred_catch_data_NJ$sf_pred_cat<=max_sf & 
+                              pred_catch_data_NJ$bsb_pred_cat<=max_bsb &
+                              pred_catch_data_NJ$scup_pred_cat<=max_scup)
+
 saveRDS(pred_catch_data_NJ, "pred_catch_data_NJ.rds")
 ########################
 
@@ -653,7 +776,6 @@ saveRDS(pred_catch_data_NJ, "pred_catch_data_NJ.rds")
 ########################
 ###Delaware
 nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==10 & draw==x)
-
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -662,6 +784,16 @@ bsb_size <- nb_params$bsb_size
 
 scup_mu <- nb_params$scup_mu
 scup_size <- nb_params$scup_size
+# 
+# nb_params<- readRDS("nb_catch_parameters_sf_DE_21.rds")
+# sf_mu <- nb_params[["estimate"]][["mu"]]
+# sf_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_bsb_DE_21.rds")
+# bsb_mu <- nb_params[["estimate"]][["mu"]]
+# bsb_size <- nb_params[["estimate"]][["size"]]
+
+
 
 
 # We now adjust mean catch per trip by the expansion factor. 
@@ -750,6 +882,17 @@ state="DE"
 pred_catch_data_DE=data.frame(sf_pred_cat, bsb_pred_cat, state)
 pred_catch_data_DE[is.na(pred_catch_data_DE)] <- 0
 
+#Remove outliers of scup, bsb, sf catch
+observed_21<- read_csv("observed_catch_2021_10.csv",  show_col_types = FALSE)
+max_sf<- max(observed_21$sf_tot_cat)
+max_scup<- max(observed_21$scup_tot_cat)
+
+
+
+pred_catch_data_DE<- subset(pred_catch_data_DE, pred_catch_data_DE$sf_pred_cat<=max_sf & 
+                              pred_catch_data_DE$bsb_pred_cat<=max_bsb)
+
+
 saveRDS(pred_catch_data_DE, "pred_catch_data_DE.rds")
 ########################
 
@@ -761,7 +904,6 @@ saveRDS(pred_catch_data_DE, "pred_catch_data_DE.rds")
 ########################
 ###Marlyand
 nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==24 & draw==x)
-
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -770,6 +912,15 @@ bsb_size <- nb_params$bsb_size
 
 scup_mu <- nb_params$scup_mu
 scup_size <- nb_params$scup_size
+
+# nb_params<- readRDS("nb_catch_parameters_sf_MD_21.rds")
+# sf_mu <-  nb_params[["estimate"]][["mu"]]
+# sf_size <-  nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_bsb_MD_21.rds")
+# bsb_mu <-  nb_params[["estimate"]][["mu"]]
+# bsb_size <-  nb_params[["estimate"]][["size"]]
+
 
 
 # We now adjust mean catch per trip by the expansion factor. 
@@ -858,6 +1009,16 @@ state="MD"
 pred_catch_data_MD=data.frame(sf_pred_cat, bsb_pred_cat, state)
 pred_catch_data_MD[is.na(pred_catch_data_MD)] <- 0
 
+#Remove outliers of scup, bsb, sf catch
+observed_21<- read_csv("observed_catch_2021_24.csv",  show_col_types = FALSE)
+max_sf<- max(observed_21$sf_tot_cat)
+max_scup<- max(observed_21$scup_tot_cat)
+
+
+
+pred_catch_data_MD<- subset(pred_catch_data_MD, pred_catch_data_MD$sf_pred_cat<=max_sf & 
+                              pred_catch_data_MD$bsb_pred_cat<=max_bsb)
+
 saveRDS(pred_catch_data_MD, "pred_catch_data_MD.rds")
 ########################
 
@@ -868,7 +1029,6 @@ saveRDS(pred_catch_data_MD, "pred_catch_data_MD.rds")
 ########################
 ###Virgina 
 nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==51 & draw==x)
-
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -877,6 +1037,18 @@ bsb_size <- nb_params$bsb_size
 
 scup_mu <- nb_params$scup_mu
 scup_size <- nb_params$scup_size
+
+# nb_params<- readRDS("nb_catch_parameters_sf_VA_21.rds")
+# sf_mu <- nb_params[["estimate"]][["mu"]]
+# sf_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_bsb_VA_21.rds")
+# bsb_mu <- nb_params[["estimate"]][["mu"]]
+# bsb_size <- nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_scup_VA_21.rds")
+# scup_mu <- nb_params[["estimate"]][["mu"]]
+# scup_size <- nb_params[["estimate"]][["size"]]
 
 
 # We now adjust mean catch per trip by the expansion factor. 
@@ -987,6 +1159,19 @@ state="VA"
 pred_catch_data_VA=data.frame(sf_pred_cat, bsb_pred_cat, scup_pred_cat, state)
 pred_catch_data_VA[is.na(pred_catch_data_VA)] <- 0
 
+#Remove outliers of scup, bsb, sf catch
+observed_21<- read_csv("observed_catch_2021_51.csv",  show_col_types = FALSE)
+max_sf<- max(observed_21$sf_tot_cat)
+max_bsb<- max(observed_21$bsb_tot_cat)
+max_scup<- max(observed_21$scup_tot_cat)
+
+
+
+pred_catch_data_VA<- subset(pred_catch_data_VA, pred_catch_data_VA$sf_pred_cat<=max_sf & 
+                              pred_catch_data_VA$bsb_pred_cat<=max_bsb &
+                              pred_catch_data_VA$scup_pred_cat<=max_scup)
+
+
 saveRDS(pred_catch_data_VA, "pred_catch_data_VA.rds")
 ########################
 
@@ -998,7 +1183,6 @@ saveRDS(pred_catch_data_VA, "pred_catch_data_VA.rds")
 ########################
 ###North Carolina
 nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==37 & draw==x)
-
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -1007,6 +1191,15 @@ bsb_size <- nb_params$bsb_size
 
 scup_mu <- nb_params$scup_mu
 scup_size <- nb_params$scup_size
+
+# nb_params<- readRDS("nb_catch_parameters_sf_NC_21.rds")
+# sf_mu <-  nb_params[["estimate"]][["mu"]]
+# sf_size <-  nb_params[["estimate"]][["size"]]
+# 
+# nb_params<- readRDS("nb_catch_parameters_bsb_NC_21.rds")
+# bsb_mu <-  nb_params[["estimate"]][["mu"]]
+# bsb_size <- nb_params[["estimate"]][["size"]]
+
 
 
 # We now adjust mean catch per trip by the expansion factor. 
@@ -1094,6 +1287,19 @@ state="NC"
 
 pred_catch_data_NC=data.frame(sf_pred_cat, bsb_pred_cat, state)
 pred_catch_data_NC[is.na(pred_catch_data_NC)] <- 0
+
+
+
+#Remove outliers of scup, bsb, sf catch
+observed_21<- read_csv("observed_catch_2021_37.csv",  show_col_types = FALSE)
+max_sf<- max(observed_21$sf_tot_cat)
+max_scup<- max(observed_21$scup_tot_cat)
+
+
+
+pred_catch_data_NC<- subset(pred_catch_data_NC, pred_catch_data_NC$sf_pred_cat<=max_sf & 
+                              pred_catch_data_NC$bsb_pred_cat<=max_bsb)
+
 
 saveRDS(pred_catch_data_NC, "pred_catch_data_NC.rds")
 ########################

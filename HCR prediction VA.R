@@ -81,7 +81,21 @@ for(p in levels(periodz)){
     sf_catch_data <- data.frame(readRDS("pred_catch_data_VA.rds"))                                                                            
     tot_sf_catch <- sf_catch_data$sf_pred_cat
     tot_bsb_catch <- sf_catch_data$bsb_pred_cat
-    tot_scup_catch <- sf_catch_data$scup_pred_cat
+    # scup_nbs <-readRDS("nb_catch_parameters_scup_MA_21.rds")
+    # scup_mu_param<-scup_nbs$estimate['mu']
+    # scup_size_param<- scup_nbs$estimate['size'] 
+    
+    ###
+    scup_nbs<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==51 & draw==x)
+    scup_mu_param <- scup_nbs$scup_mu
+    scup_size_param <- scup_nbs$scup_size
+    
+    ###
+    
+    tot_scup_catch <- rnbinom(1:nrow(sf_catch_data), mu = scup_mu_param, size = scup_size_param)
+    #tot_scup_catch <- sf_catch_data$scup_pred_cat
+    
+    #tot_scup_catch <- sf_catch_data$scup_pred_cat
     sf_catch_data <- data.frame(tot_sf_catch,tot_bsb_catch,tot_scup_catch)
     
     # random draw of fluke and bsb catch

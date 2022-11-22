@@ -113,7 +113,8 @@ library(stats)
 
 
 ##Estimate the parameters of the calibration year catch series'
-source("calibration year copula params.R")
+#source("calibration year copula params.R")
+source("calibration year copula params - two species.R")
 
 
 n_drawz<-1000
@@ -228,9 +229,8 @@ year_output = data.frame()
     #2023 - status quo 2022 measures 
     #2024 - summer flounder alternative with no changes to the other species 
     #2025 - BSB alternative with no changes to the other species
-  years<-c("2023.1","2023.2", "2023.3", "2023.4", "2023.5", "2023.6", "2023.7", "2024","2025")
-  
-  # regs <- c("minus1")
+  #years<-c("2023.1","2023.2", "2023.3", "2023.4", "2023.5", "2023.6", "2023.7", "2024","2025")
+  years<-c("2022", "2020", "2019", "2018")
   
   for (x in 1:100){
     for (y in years){
@@ -256,26 +256,29 @@ year_output = data.frame()
       
       # THIS IS WHERE TO IMPORT THE NUMBERS AT AGE FOR EACH SPECIES BASED ON THE YEAR(S) OF INTEREST
       # Import the fluke MCMC draws
-      #fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
-      fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
+      fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      #fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
+      fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
       
       #this is the check dataset with median values of the 2021 stock 
       #fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_median_", year,".csv"), show_col_types = FALSE))
       
-      fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
+      #fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==1)
       
       # Import the bsb MCMC draws
       #bsb_numbers_at_age = data.frame(read_csv("bsb_MCMC_100_2021.csv", show_col_types = FALSE))
       #bsb_numbers_at_age = subset(bsb_numbers_at_age, bsb_numbers_at_age$draw==1)
       
       # Import the scup MCMC draws
-      #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
-      scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
+      scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
+      
+      #scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
       
       #this is the check dataset with median values of the 2021 stock 
       #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
       
-      scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
+      #scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
       
     
       source("CAL given stock structure.R")
@@ -353,7 +356,17 @@ year_output = data.frame()
   #write_xlsx(state_pred_output,"state_output_NJ.xlsx")
   #state_pred_output22<-subset(state_pred_output, draw!=23)
   #write_xlsx(state_pred_output,"state_output_status_quo_pref_alts_up_to_23plus.xlsx")
-  write_xlsx(state_pred_output,"state_output_11_4.xlsx")
+  #write_xlsx(state_pred_output,"out_of_sample_projs.xlsx")
+  #write_xlsx(state_pred_output,"out_of_sample_projs_4plus.xlsx")
+  #write_xlsx(state_pred_output,"out_of_sample_projs_6plus.xlsx")
+  #write_xlsx(state_pred_output,"out_of_sample_projs_catch_restriction_test.xlsx")
+  #write_xlsx(state_pred_output,"out_of_sample_projs_catch_restriction_test_22plus.xlsx")
+  #write_xlsx(state_pred_output,"out_of_sample_projections.xlsx")
+  #write_xlsx(state_pred_output,"out_of_sample_projections_21plus.xlsx")
+  #write_xlsx(state_pred_output,"out_of_sample_projections_new.xlsx")
+  write_xlsx(state_pred_output,"out_of_sample_projections_new1.xlsx")
+  
+  
   
   
   

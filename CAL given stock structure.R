@@ -30,7 +30,7 @@ names(fluke_numbers_at_length)[names(fluke_numbers_at_length) == "Group.1"] <- "
 
 
 # Import and merge the selectivity data to this file 
-fluke_selectivity <- data.frame(read_csv("rec_selectivity_fluke_2021.csv", show_col_types = FALSE))
+fluke_selectivity <- data.frame(read_csv("avg_rec_selectivity_fluke.csv", show_col_types = FALSE))
 fluke_numbers_at_length_new <-  merge(fluke_selectivity,fluke_numbers_at_length,by=c("length"),  all.x=TRUE, all.y=TRUE)
 fluke_numbers_at_length_new <- subset(fluke_numbers_at_length_new, N_l!=0 & state!=0)
 
@@ -99,6 +99,16 @@ fluke_catch_expansion_factor_DE=round(tot_pred_fluke_cat_DE/tot_cat_DE_base, dig
 fluke_catch_expansion_factor_MD=round(tot_pred_fluke_cat_MD/tot_cat_MD_base, digits=4)
 fluke_catch_expansion_factor_VA=round(tot_pred_fluke_cat_VA/tot_cat_VA_base, digits=4)
 fluke_catch_expansion_factor_NC=round(tot_pred_fluke_cat_NC/tot_cat_NC_base, digits=4)
+
+fluke_catch_expansion_factor_MA=1
+fluke_catch_expansion_factor_RI=1
+fluke_catch_expansion_factor_CT=1
+fluke_catch_expansion_factor_NY=1
+fluke_catch_expansion_factor_NJ=1
+fluke_catch_expansion_factor_DE=1
+fluke_catch_expansion_factor_MD=1
+fluke_catch_expansion_factor_VA=1
+fluke_catch_expansion_factor_NC=1
 
 
 ######################################### 
@@ -255,7 +265,7 @@ names(scup_numbers_at_length)[names(scup_numbers_at_length) == "Group.1"] <- "le
 
 
 # Import and merge the selectivity data to this file 
-scup_selectivity <- data.frame(read_csv("rec_selectvity_scup_2021.csv", show_col_types = FALSE))
+scup_selectivity <- data.frame(read_csv("avg_rec_selectivity_scup.csv", show_col_types = FALSE))
 scup_numbers_at_length_new <-  merge(scup_selectivity,scup_numbers_at_length,by=c("length"),  all.x=TRUE, all.y=TRUE)
 scup_numbers_at_length_new <- subset(scup_numbers_at_length_new, N_l!=0 & state!=0)
 
@@ -325,6 +335,16 @@ scup_catch_expansion_factor_MD=round(tot_pred_scup_cat_MD/tot_cat_MD_base, digit
 scup_catch_expansion_factor_VA=round(tot_pred_scup_cat_VA/tot_cat_VA_base, digits=4)
 scup_catch_expansion_factor_NC=round(tot_pred_scup_cat_NC/tot_cat_NC_base, digits=4)
 
+scup_catch_expansion_factor_MA=1
+scup_catch_expansion_factor_RI=1
+scup_catch_expansion_factor_CT=1
+scup_catch_expansion_factor_NY=1
+scup_catch_expansion_factor_NJ=1
+scup_catch_expansion_factor_DE=1
+scup_catch_expansion_factor_MD=1
+scup_catch_expansion_factor_VA=1
+scup_catch_expansion_factor_NC=1
+
 
 ######################################### 
 ############ END SCUP ##################
@@ -339,8 +359,9 @@ scup_catch_expansion_factor_NC=round(tot_pred_scup_cat_NC/tot_cat_NC_base, digit
 ##########
 # Here, execute the catch-per trip file. 
 # This file adjusts the expected number of catch per trip by population abundances. 
-source("predicted catch per trip by state.R")
+#source("predicted catch per trip by state.R")
 #source("predicted catch per trip by state-check.R")
+source("predicted catch per trip by state - two species.R")
 
 
 #####

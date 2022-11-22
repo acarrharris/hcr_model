@@ -33,7 +33,6 @@ min_period=min(directed_trips$period)
 max_period=max(directed_trips$period)
 
 
-n_drawz<-2000
 
 # Set up an output file for the separately simulated within-season regulatory periods  
 pds = list()
