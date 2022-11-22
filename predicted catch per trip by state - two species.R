@@ -37,7 +37,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(10000, copula_dist )
+sim <- rMvdc(30000, copula_dist )
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
@@ -93,7 +93,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(10000, copula_dist )
+sim <- rMvdc(30000, copula_dist )
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
@@ -147,7 +147,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(10000, copula_dist )
+sim <- rMvdc(30000, copula_dist )
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
@@ -206,7 +206,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(10000, copula_dist )
+sim <- rMvdc(30000, copula_dist )
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
@@ -267,7 +267,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(10000, copula_dist )
+sim <- rMvdc(30000, copula_dist )
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
@@ -323,7 +323,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(10000, copula_dist )
+sim <- rMvdc(30000, copula_dist )
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
@@ -388,7 +388,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(10000, copula_dist )
+sim <- rMvdc(30000, copula_dist )
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
@@ -447,7 +447,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(10000, copula_dist )
+sim <- rMvdc(30000, copula_dist )
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
@@ -513,7 +513,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(10000, copula_dist )
+sim <- rMvdc(30000, copula_dist )
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
