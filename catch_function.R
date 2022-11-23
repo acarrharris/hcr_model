@@ -1,22 +1,15 @@
 
+
+
 costs_new_all_MA$state<-"MA"
-
 costs_new_all_RI$state<-"RI"
-
 costs_new_all_CT$state<-"CT"
-
 costs_new_all_NY$state<-"NY"
-
 costs_new_all_NJ$state<-"NJ"
-
 costs_new_all_DE$state<-"DE"
-
 costs_new_all_MD$state<-"MD"
-
 costs_new_all_VA$state<-"VA"
-
 costs_new_all_NC$state<-"NC"
-
 
 costs_all = dplyr::bind_rows(costs_new_all_MA, costs_new_all_RI,costs_new_all_CT,costs_new_all_NY,costs_new_all_NJ,
                              costs_new_all_DE, costs_new_all_MD, costs_new_all_VA, costs_new_all_NC)
@@ -749,10 +742,10 @@ predict_rec_catch <- function(state1,
 predictions = list()
 #years<-c("2022", "2020", "2019", "2018")
 
-for (x in 1:3){
+#for (x in 1:3){
   #for (y in years){
     year <- 2019
-
+    x<-1
 
 # THIS IS WHERE TO IMPORT THE ALKS FOR EACH SPECIES
 # Import the fluke ALK (in centimeters) provided by M. Terceiro

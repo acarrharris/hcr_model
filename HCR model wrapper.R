@@ -80,7 +80,8 @@ conflict_prefer("select", "dplyr")
 conflict_prefer("mutate", "dplyr")
 conflict_prefer("rename", "dplyr")
 conflict_prefer("summarize", "dplyr")
-
+conflict_prefer("summarise", "dplyr")
+conflict_prefer("count", "dplyr")
 
 library(psych)
 library(rgl)
