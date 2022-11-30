@@ -10,7 +10,7 @@
 
 ########################
 ###Massachusetts
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==25 & draw==x)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state=="MA" & draw==x)
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -37,7 +37,7 @@ copula_dist <- mvdc(copula=tCopula(dim=2, rho1, df=df),  margins=c("nbinom", "nb
                     paramMargins=list(list(mu=sf_mu, size=sf_size),
                                       list(mu=bsb_mu, size=bsb_size)))
 
-sim <- rMvdc(30000, copula_dist )
+sim <- rMvdc(30000, copula_dist)
 
 sf_pred_cat=sim[,1]
 bsb_pred_cat=sim[,2]
@@ -71,7 +71,7 @@ saveRDS(pred_catch_data_MA, "pred_catch_data_MA.rds")
 
 ########################
 ###Rhode Island 
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==44 & draw==x)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state=="RI" & draw==x)
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -124,7 +124,7 @@ saveRDS(pred_catch_data_RI, "pred_catch_data_RI.rds")
 
 ########################
 ###Connecticut
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==9 & draw==x)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state=="CT" & draw==x)
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -179,7 +179,7 @@ saveRDS(pred_catch_data_CT, "pred_catch_data_CT.rds")
 
 ########################
 ###New York 
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==36 & draw==x)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state=="NY" & draw==x)
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -240,7 +240,7 @@ saveRDS(pred_catch_data_NY, "pred_catch_data_NY.rds")
 
 ########################
 ###New Jersey 
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==34 & draw==x)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state=="NJ" & draw==x)
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -298,7 +298,7 @@ saveRDS(pred_catch_data_NJ, "pred_catch_data_NJ.rds")
 
 ########################
 ###Delaware
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==10 & draw==x)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state=="DE" & draw==x)
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -357,7 +357,7 @@ saveRDS(pred_catch_data_DE, "pred_catch_data_DE.rds")
 
 ########################
 ###Marlyand
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==24 & draw==x)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state=="MD" & draw==x)
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -421,7 +421,7 @@ saveRDS(pred_catch_data_MD, "pred_catch_data_MD.rds")
 
 ########################
 ###Virgina 
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==51 & draw==x)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state=="VA" & draw==x)
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -481,7 +481,7 @@ saveRDS(pred_catch_data_VA, "pred_catch_data_VA.rds")
 
 ########################
 ###North Carolina
-nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state==37 & draw==x)
+nb_params<- subset(read_csv("nb_params.csv",  show_col_types = FALSE), state=="NC" & draw==x)
 sf_mu <- nb_params$sf_mu
 sf_size <- nb_params$sf_size
 
@@ -541,3 +541,75 @@ saveRDS(pred_catch_data_NC, "pred_catch_data_NC.rds")
 ########################
 
 
+
+
+
+
+
+###Combine the predicted catches
+
+# #Predicted catches
+#
+# #catch data
+sf_catch_data_ma <- readRDS("pred_catch_data_MA.rds")%>%
+  tibble() %>%
+  rename(tot_sf_catch = sf_pred_cat,
+         tot_bsb_catch = bsb_pred_cat) %>%
+  I()
+
+sf_catch_data_ri <- readRDS("pred_catch_data_RI.rds") %>%
+  tibble() %>%
+  rename(tot_sf_catch = sf_pred_cat,
+         tot_bsb_catch = bsb_pred_cat) %>%
+  I()
+sf_catch_data_ct <- readRDS("pred_catch_data_CT.rds") %>%
+  tibble() %>%
+  rename(tot_sf_catch = sf_pred_cat,
+         tot_bsb_catch = bsb_pred_cat) %>%
+  I()
+
+sf_catch_data_ny <- readRDS("pred_catch_data_NY.rds") %>%
+  tibble() %>%
+  rename(tot_sf_catch = sf_pred_cat,
+         tot_bsb_catch = bsb_pred_cat) %>%
+  I()
+sf_catch_data_nj <- readRDS("pred_catch_data_NJ.rds") %>%
+  tibble() %>%
+  rename(tot_sf_catch = sf_pred_cat,
+         tot_bsb_catch = bsb_pred_cat) %>%
+  I()
+
+sf_catch_data_de <- readRDS("pred_catch_data_DE.rds") %>%
+  tibble() %>%
+  rename(tot_sf_catch = sf_pred_cat,
+         tot_bsb_catch = bsb_pred_cat) %>%
+  I()
+
+sf_catch_data_md <- readRDS("pred_catch_data_MD.rds") %>%
+  tibble() %>%
+  rename(tot_sf_catch = sf_pred_cat,
+         tot_bsb_catch = bsb_pred_cat) %>%
+  I()
+sf_catch_data_va <- readRDS("pred_catch_data_VA.rds") %>%
+  tibble() %>%
+  rename(tot_sf_catch = sf_pred_cat,
+         tot_bsb_catch = bsb_pred_cat) %>%
+  I()
+
+sf_catch_data_nc <- readRDS("pred_catch_data_NC.rds") %>%
+  tibble() %>%
+  rename(tot_sf_catch = sf_pred_cat,
+         tot_bsb_catch = bsb_pred_cat) %>%
+  I()
+
+
+#Predicted catches
+# sf_catch_data_all = dplyr::bind_rows(sf_catch_data_ma, sf_catch_data_ri,sf_catch_data_ct,sf_catch_data_ny,sf_catch_data_nj,
+#                                      sf_catch_data_de, sf_catch_data_md, sf_catch_data_va, sf_catch_data_nc)
+# 
+# sf_catch_data_all <- split(sf_catch_data_all, sf_catch_data_all$region)
+# 
+# sf_catch_data_all = dplyr::bind_rows(sf_catch_data_ma, sf_catch_data_ri,sf_catch_data_ct,sf_catch_data_ny,sf_catch_data_nj,
+#                                      sf_catch_data_de, sf_catch_data_md, sf_catch_data_va, sf_catch_data_nc)
+# 
+# sf_catch_data_all_base <- split(sf_catch_data_all, sf_catch_data_all$region)

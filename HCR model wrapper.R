@@ -232,10 +232,10 @@ year_output = data.frame()
     #2025 - BSB alternative with no changes to the other species
   #years<-c("2023.1","2023.2", "2023.3", "2023.4", "2023.5", "2023.6", "2023.7", "2024","2025")
   years<-c("2022", "2020", "2019", "2018")
-  
+  x<-1
   for (x in 1:100){
     for (y in years){
-     year <- y
+     year <- 2019
       #x<-1
       # 
       #for (x in 1:30){

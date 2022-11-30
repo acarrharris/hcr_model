@@ -31,6 +31,7 @@ names(fluke_numbers_at_length)[names(fluke_numbers_at_length) == "Group.1"] <- "
 
 # Import and merge the selectivity data to this file 
 fluke_selectivity <- data.frame(read_csv("avg_rec_selectivity_fluke.csv", show_col_types = FALSE))
+#fluke_selectivity <- data.frame(read_csv("rec_selectivity_fluke_2021.csv", show_col_types = FALSE))
 fluke_numbers_at_length_new <-  merge(fluke_selectivity,fluke_numbers_at_length,by=c("length"),  all.x=TRUE, all.y=TRUE)
 fluke_numbers_at_length_new <- subset(fluke_numbers_at_length_new, N_l!=0 & state!=0)
 
@@ -266,6 +267,8 @@ names(scup_numbers_at_length)[names(scup_numbers_at_length) == "Group.1"] <- "le
 
 # Import and merge the selectivity data to this file 
 scup_selectivity <- data.frame(read_csv("avg_rec_selectivity_scup.csv", show_col_types = FALSE))
+#scup_selectivity <- data.frame(read_csv("rec_selectvity_scup_2021.csv", show_col_types = FALSE))
+
 scup_numbers_at_length_new <-  merge(scup_selectivity,scup_numbers_at_length,by=c("length"),  all.x=TRUE, all.y=TRUE)
 scup_numbers_at_length_new <- subset(scup_numbers_at_length_new, N_l!=0 & state!=0)
 
@@ -673,3 +676,15 @@ scup_sizes_region_all_y2 = subset(scup_sizes_all_y2, select=c(fitted_prob, lengt
 saveRDS(scup_sizes_region_all_y2,file = "scup_fitted_sizes_y2plus.rds")
 
 
+
+# ##Sizes 
+sf_size_data_read <- readRDS("sf_fitted_sizes_y2plus.rds") %>% tibble()
+sf_size_data_read_base <- split(sf_size_data_read, sf_size_data_read$state)
+
+
+bsb_size_data_read <- readRDS("bsb_fitted_sizes_y2plus.rds") %>% tibble()
+bsb_size_data_read_base <- split(bsb_size_data_read, bsb_size_data_read$state)
+
+
+scup_size_data_read <- readRDS("scup_fitted_sizes_y2plus.rds") %>% tibble()
+scup_size_data_read_base <- split(scup_size_data_read, scup_size_data_read$state)

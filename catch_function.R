@@ -1,108 +1,44 @@
 
 
 
-costs_new_all_MA$state<-"MA"
-costs_new_all_RI$state<-"RI"
-costs_new_all_CT$state<-"CT"
-costs_new_all_NY$state<-"NY"
-costs_new_all_NJ$state<-"NJ"
-costs_new_all_DE$state<-"DE"
-costs_new_all_MD$state<-"MD"
-costs_new_all_VA$state<-"VA"
-costs_new_all_NC$state<-"NC"
-
-costs_all = dplyr::bind_rows(costs_new_all_MA, costs_new_all_RI,costs_new_all_CT,costs_new_all_NY,costs_new_all_NJ,
-                             costs_new_all_DE, costs_new_all_MD, costs_new_all_VA, costs_new_all_NC)
-costs_all_base <- split(costs_all, costs_all$state)
-
-# Input the calibration output which contains the number of choice occasions needed to simulate
-calibration_data_table <- readRDS("calibration_output_by_period.rds")
-calibration_data_table_base <- split(calibration_data_table, calibration_data_table$state)
-
-##Regulations file 
-directed_trips_table=data.frame(read_csv(paste0("directed trips and regulations ", year,".csv"), show_col_types = FALSE))
-directed_trips_table_base <- split(directed_trips_table, directed_trips_table$state)
-
-##Sizes 
-sf_size_data_read <- readRDS("sf_fitted_sizes_y2plus.rds") %>% tibble()
-sf_size_data_read_base <- split(sf_size_data_read, sf_size_data_read$state)
-
-
-bsb_size_data_read <- readRDS("bsb_fitted_sizes_y2plus.rds") %>% tibble()
-bsb_size_data_read_base <- split(bsb_size_data_read, bsb_size_data_read$state)
-
-
-scup_size_data_read <- readRDS("scup_fitted_sizes_y2plus.rds") %>% tibble()
-scup_size_data_read_base <- split(scup_size_data_read, scup_size_data_read$state)
-
-#Predicted catches
-
-#catch data
-sf_catch_data_ma <- readRDS("pred_catch_data_MA.rds")%>%
-  tibble() %>%
-  rename(tot_sf_catch = sf_pred_cat,
-         tot_bsb_catch = bsb_pred_cat) %>%
-  I()
-
-sf_catch_data_ri <- readRDS("pred_catch_data_RI.rds") %>%
-  tibble() %>%
-  rename(tot_sf_catch = sf_pred_cat,
-         tot_bsb_catch = bsb_pred_cat) %>%
-  I()
-sf_catch_data_ct <- readRDS("pred_catch_data_CT.rds") %>%
-  tibble() %>%
-  rename(tot_sf_catch = sf_pred_cat,
-         tot_bsb_catch = bsb_pred_cat) %>%
-  I()
-
-sf_catch_data_ny <- readRDS("pred_catch_data_NY.rds") %>%
-  tibble() %>%
-  rename(tot_sf_catch = sf_pred_cat,
-         tot_bsb_catch = bsb_pred_cat) %>%
-  I()
-sf_catch_data_nj <- readRDS("pred_catch_data_NJ.rds") %>%
-  tibble() %>%
-  rename(tot_sf_catch = sf_pred_cat,
-         tot_bsb_catch = bsb_pred_cat) %>%
-  I()
-
-sf_catch_data_de <- readRDS("pred_catch_data_DE.rds") %>%
-  tibble() %>%
-  rename(tot_sf_catch = sf_pred_cat,
-         tot_bsb_catch = bsb_pred_cat) %>%
-  I()
-
-sf_catch_data_md <- readRDS("pred_catch_data_MD.rds") %>%
-  tibble() %>%
-  rename(tot_sf_catch = sf_pred_cat,
-         tot_bsb_catch = bsb_pred_cat) %>%
-  I()
-sf_catch_data_va <- readRDS("pred_catch_data_VA.rds") %>%
-  tibble() %>%
-  rename(tot_sf_catch = sf_pred_cat,
-         tot_bsb_catch = bsb_pred_cat) %>%
-  I()
-
-sf_catch_data_nc <- readRDS("pred_catch_data_NC.rds") %>%
-  tibble() %>%
-  rename(tot_sf_catch = sf_pred_cat,
-         tot_bsb_catch = bsb_pred_cat) %>%
-  I()
-
-
-#Predicted catches
-# sf_catch_data_all = dplyr::bind_rows(sf_catch_data_ma, sf_catch_data_ri,sf_catch_data_ct,sf_catch_data_ny,sf_catch_data_nj,
-#                                      sf_catch_data_de, sf_catch_data_md, sf_catch_data_va, sf_catch_data_nc)
+# costs_new_all_MA$state<-"MA"
+# costs_new_all_RI$state<-"RI"
+# costs_new_all_CT$state<-"CT"
+# costs_new_all_NY$state<-"NY"
+# costs_new_all_NJ$state<-"NJ"
+# costs_new_all_DE$state<-"DE"
+# costs_new_all_MD$state<-"MD"
+# costs_new_all_VA$state<-"VA"
+# costs_new_all_NC$state<-"NC"
 # 
-# sf_catch_data_all <- split(sf_catch_data_all, sf_catch_data_all$region)
+# costs_all = dplyr::bind_rows(costs_new_all_MA, costs_new_all_RI,costs_new_all_CT,costs_new_all_NY,costs_new_all_NJ,
+#                              costs_new_all_DE, costs_new_all_MD, costs_new_all_VA, costs_new_all_NC)
+# costs_all_base <- split(costs_all, costs_all$state)
 # 
-# sf_catch_data_all = dplyr::bind_rows(sf_catch_data_ma, sf_catch_data_ri,sf_catch_data_ct,sf_catch_data_ny,sf_catch_data_nj,
-#                                      sf_catch_data_de, sf_catch_data_md, sf_catch_data_va, sf_catch_data_nc)
+# # Input the calibration output which contains the number of choice occasions needed to simulate
+# calibration_data_table <- readRDS("calibration_output_by_period.rds")
+# calibration_data_table_base <- split(calibration_data_table, calibration_data_table$state)
 # 
-# sf_catch_data_all_base <- split(sf_catch_data_all, sf_catch_data_all$region)
+# ##Regulations file 
+# directed_trips_table=data.frame(read_csv(paste0("directed trips and regulations ", year,".csv"), show_col_types = FALSE))
+# directed_trips_table_base <- split(directed_trips_table, directed_trips_table$state)
+# 
+# ##Sizes 
+# sf_size_data_read <- readRDS("sf_fitted_sizes_y2plus.rds") %>% tibble()
+# sf_size_data_read_base <- split(sf_size_data_read, sf_size_data_read$state)
+# 
+# 
+# bsb_size_data_read <- readRDS("bsb_fitted_sizes_y2plus.rds") %>% tibble()
+# bsb_size_data_read_base <- split(bsb_size_data_read, bsb_size_data_read$state)
+# 
+# 
+# scup_size_data_read <- readRDS("scup_fitted_sizes_y2plus.rds") %>% tibble()
+# scup_size_data_read_base <- split(scup_size_data_read, scup_size_data_read$state)
+# 
 
 
 
+# 
 predict_rec_catch <- function(state1,
                               calibration_data_table,
                               directed_trips_table,
@@ -112,7 +48,7 @@ predict_rec_catch <- function(state1,
                               param_draws_MA,
                               costs_new_all,
                               sf_catch_data_all){
-  
+  # 
   # state1 <- "CT"
   # calibration_data_table <- calibration_data_table_base[[1]]
   # directed_trips_table <- directed_trips_table_base[[1]]
@@ -143,21 +79,18 @@ predict_rec_catch <- function(state1,
     scup_size_param <- scup_nbs$scup_size
     
     ###
-    sf_catch_data_all$tot_scup_catch <- rnbinom(1:nrow(sf_catch_data_all), mu = scup_mu_param, size = scup_size_param)
-
-  #}
-  
-  # if (state1 %in% c("DE", "MD", "NC")) {
-  # sf_catch_data_all$tot_scup_catch <- 0
-  #   
-  #   
-  # }
-  
+    if (scup_mu_param!=0){
+      sf_catch_data_all$tot_scup_catch <- rnbinom(1:nrow(sf_catch_data_all), mu = scup_mu_param, size = scup_size_param)
+    }
+    
+    if (scup_mu_param==0){
+      sf_catch_data_all$tot_scup_catch <- 0
+    }
+    
   # Input the calibration output which contains the number of choice occasions needed to simulate
-  #calibration_data = data.frame(read_excel("calibration_output_by_period.xlsx"))
-  #calibration_data = subset(calibration_data, state == state1, select=c(period, sim, state, n_choice_occasions))
+  calibration_data <- calibration_data_table %>% tibble() %>% dplyr::filter(state == state1) 
   
-  calibration_data <- calibration_data_table %>% tibble() %>% dplyr::filter(state == state1) #%>% 
+  # Input regul
   directed_trips <- directed_trips_table %>% tibble() %>% dplyr::filter(state == state1)
   sf_size_data <- sf_size_data_read %>% filter(state == state1) %>% rename(fitted_length = length)
   bsb_size_data <- bsb_size_data_read %>% filter(state == state1) %>% rename(fitted_length = length)
@@ -240,7 +173,7 @@ predict_rec_catch <- function(state1,
   catch_size_data <- catch_size_data %>%
     left_join(regs, by = "period") %>%
     mutate(posskeep = ifelse(fitted_length>=fluke_min1 & fitted_length<fluke_max1,1,0)) %>%
-    group_by(tripid, period) %>%
+    group_by(tripid, period, catch_draw) %>%
     # keep = case_when(
     # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
     # TRUE ~ 0),
@@ -348,7 +281,7 @@ predict_rec_catch <- function(state1,
   catch_size_data <- catch_size_data %>% 
     left_join(regs, by = "period") %>% 
     mutate(posskeep = ifelse(fitted_length>=bsb_min ,1,0)) %>% 
-    group_by(tripid, period) %>% 
+    group_by(tripid, period, catch_draw) %>% 
     # keep = case_when(
     # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
     # TRUE ~ 0),
@@ -364,6 +297,8 @@ predict_rec_catch <- function(state1,
   #   TRUE ~ 0),
   #release = case_when(
   # bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
+  
+  catch_size_data[is.na(catch_size_data)] <- 0
   
   catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
   
@@ -424,6 +359,10 @@ predict_rec_catch <- function(state1,
   
 ##########Scup
   # subset trips with zero catch, as no size draws are required
+  
+  if (scup_mu_param!=0){
+    
+  
   scup_zero_catch <- filter(sf_bsb_catch_data, tot_scup_catch == 0)
   
   #remove trips with zero summer flounder catch
@@ -448,7 +387,7 @@ predict_rec_catch <- function(state1,
   catch_size_data <- catch_size_data %>% 
     left_join(regs, by = "period") %>% 
     mutate(posskeep = ifelse(fitted_length>=scup_min ,1,0)) %>% 
-    group_by(tripid, period) %>% 
+    group_by(tripid, period, catch_draw) %>% 
     # keep = case_when(
     # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
     # TRUE ~ 0),
@@ -464,6 +403,8 @@ predict_rec_catch <- function(state1,
   #   TRUE ~ 0),
   #release = case_when(
   # scup_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>scup_bag ), 1,0)))
+  
+  catch_size_data[is.na(catch_size_data)] <- 0
   
   catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
   
@@ -528,7 +469,15 @@ predict_rec_catch <- function(state1,
   trip_data$tot_sf_catch<-trip_data$tot_keep_sf+trip_data$tot_rel_sf
   trip_data$tot_scup_catch<-trip_data$tot_keep_scup+trip_data$tot_rel_scup
   
+  }
   
+  
+  ##Exclude scup from DE, MD, and NC
+  if (scup_mu_param==0){
+      trip_data$tot_scup_catch<-0
+      trip_data$tot_keep_scup<-0
+      trip_data$tot_rel_scup<-0
+  }
   
   # merge catch information for other species. Assume per-trip catch outcomes for these species are the same as the calibration. 
   # This info is contained in the costs_new_all_state datasets
@@ -658,23 +607,19 @@ predict_rec_catch <- function(state1,
                                                              opt_out, v0, v0_optout, vA, vA_optout, vA_col_sum, tot_keep_bsb_base, tot_cat_scup_base, 
                                                             tot_rel_bsb_base, tot_rel_sf_base , tot_keep_sf_base)) 
   
-  # Multiply the average trip probability by each of the catch variables (not the variable below) to get probability-weighted catch
-  list_names <- colnames(mean_trip_data)[ colnames(mean_trip_data) !="tripid" 
-                                         & colnames(mean_trip_data) !="catch_draw" & colnames(mean_trip_data) !="period" #& colnames(mean_trip_data) !="cost" 
-                                         & colnames(mean_trip_data) !="vA" & colnames(mean_trip_data) !="v0"  & colnames(mean_trip_data) !="probA"
-                                         & colnames(mean_trip_data) !="prob0" & colnames(mean_trip_data) !="change_CS"]    
+  # Multiply the average trip probability by each of the catch variables (not the variables below) to get probability-weighted catch
+  list_names <- colnames(mean_trip_data)[colnames(mean_trip_data) !="tripid" 
+                                         & colnames(mean_trip_data) !="period" 
+                                         & colnames(mean_trip_data) !="probA"
+                                         & colnames(mean_trip_data) !="prob0" 
+                                         & colnames(mean_trip_data) !="change_CS"]    
   
-  # mean_trip_data <- mean_trip_data %>% 
-  #   filter(!is.na(probA)) %>% 
-  #   mutate(chosen = rbinom(nrow(.), 1, prob = probA)) %>% 
-  #   mutate(across(.cols = all_of(list_names),.fns=function(x) chosen*x),
-  #          n_choice_occasions = rep(1,nrow(.)))
   for (l in list_names){
     mean_trip_data[,l] <- mean_trip_data[,l]*mean_trip_data$probA
   }
   
   mean_trip_data <- mean_trip_data %>%
-    mutate( n_choice_occasions = rep(1,nrow(.)))
+    mutate( n_choice_occasions_alt = rep(1,nrow(.)))
   
   
   #Now multiply the trip outcomes (catch, trip probabilities) for each choice occasion in 
@@ -690,7 +635,9 @@ predict_rec_catch <- function(state1,
   
   #mean_trip_data$sim=1
   mean_trip_data <- mean_trip_data %>%
-    mutate(sim = rep(1,nrow(.))) #,
+    mutate(sim = rep(1,nrow(.))) 
+  
+  #Here add other trip quality statistics
   #keep_one = ifelse(tot_keep>0,1,0))
   
   #sum probability weighted catch over all choice occasions
@@ -711,7 +658,7 @@ predict_rec_catch <- function(state1,
                                               & colnames(aggregate_trip_data) !="vA" & colnames(aggregate_trip_data) !="v0"
                                               & colnames(aggregate_trip_data) != "state" 
                                               & colnames(aggregate_trip_data) != "ndraws" 
-                                              & colnames(aggregate_trip_data) != "expand" & colnames(aggregate_trip_data) != "n_choice_occasions.y"
+                                              & colnames(aggregate_trip_data) != "expand" & colnames(aggregate_trip_data) != "n_choice_occasions"
                                               & colnames(aggregate_trip_data) != "parameter_draw" & colnames(aggregate_trip_data) != "prob0"]
   #& colnames(mean_trip_data) !="cost" & colnames(mean_trip_data) !="vA" & colnames(mean_trip_data) !="v0"
   
@@ -723,7 +670,9 @@ predict_rec_catch <- function(state1,
   
   aggregate_trip_data[,list_names] <- aggregate_trip_data$expand*aggregate_trip_data[,list_names]
   
-  
+  aggregate_trip_data = subset(aggregate_trip_data, select=-c(tripid, sim, prob0, expand, n_choice_occasions))
+  names(aggregate_trip_data)[names(aggregate_trip_data) == "probA"] = "observed_trips"
+
   
   pds_new_all_MA <- aggregate_trip_data %>%  #list.stack(pds_new, fill=TRUE) %>% 
     #mutate_at(vars(contains("length")), replace_na, replace = 0) %>% 
@@ -739,162 +688,161 @@ predict_rec_catch <- function(state1,
 
 
 
-predictions = list()
-#years<-c("2022", "2020", "2019", "2018")
-
-#for (x in 1:3){
-  #for (y in years){
-    year <- 2019
-    x<-1
-
-# THIS IS WHERE TO IMPORT THE ALKS FOR EACH SPECIES
-# Import the fluke ALK (in centimeters) provided by M. Terceiro
-fluke_ALK <- data.frame(read_csv("fluke_ALK_2018_adj.csv", show_col_types = FALSE))
-#bsb_ALK <- data.frame(read_csv("", show_col_types = FALSE))
-scup_ALK <- data.frame(read_csv("scup_ALK_2015_2018_adj.csv", show_col_types = FALSE))
-
-
-
-# THIS IS WHERE TO IMPORT THE NUMBERS AT AGE FOR EACH SPECIES BASED ON THE YEAR(S) OF INTEREST
-# Import the fluke MCMC draws
-fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
-#fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
-fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
-
-#this is the check dataset with median values of the 2021 stock 
-#fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_median_", year,".csv"), show_col_types = FALSE))
-
-#fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==1)
-
-# Import the bsb MCMC draws
-#bsb_numbers_at_age = data.frame(read_csv("bsb_MCMC_100_2021.csv", show_col_types = FALSE))
-#bsb_numbers_at_age = subset(bsb_numbers_at_age, bsb_numbers_at_age$draw==1)
-
-# Import the scup MCMC draws
-scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
-scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
-
-#scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
-
-#this is the check dataset with median values of the 2021 stock 
-#scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
-
-#scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
-
-
-source("CAL given stock structure.R")
-
-##########  
-
-
-
-##########  
-# run the simulation code under the new set of regulations (regulation file is directed_trips_region - alternative regs test.xlsx)
-
-directed_trip_alt_regs=data.frame(read_csv(paste0("directed trips and regulations ", year,".csv"), show_col_types = FALSE))
-#directed_trip_alt_regs=data.frame(read_csv("directed trips and regulations 2023.1.csv", show_col_types = FALSE))
-
-directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip)
-
-
-
-MA_pred <- predict_rec_catch(state1 <- "MA",
-                             calibration_data_table <- calibration_data_table_base[[3]],
-                             directed_trips_table <- directed_trips_table_base[[3]],
-                             sf_size_data_read <- sf_size_data_read_base[[3]],
-                             bsb_size_data_read <- bsb_size_data_read_base[[3]],
-                             scup_size_data_read <- scup_size_data_read_base[[3]],
-                             param_draws_MA <- param_draws_MA,
-                             costs_new_all <- costs_new_all_MA,
-                             sf_catch_data_all <- sf_catch_data_ma)
-
-RI_pred <- predict_rec_catch(state1 <- "RI",
-                             calibration_data_table <- calibration_data_table_base[[8]],
-                             directed_trips_table <- directed_trips_table_base[[8]],
-                             sf_size_data_read <- sf_size_data_read_base[[8]],
-                             bsb_size_data_read <- bsb_size_data_read_base[[8]],
-                             scup_size_data_read <- scup_size_data_read_base[[8]],
-                             param_draws_MA <- param_draws_RI,
-                             costs_new_all <- costs_new_all_RI,
-                             sf_catch_data_all <- sf_catch_data_ri)
-
-CT_pred <- predict_rec_catch(state1 <- "CT",
-                             calibration_data_table <- calibration_data_table_base[[1]],
-                             directed_trips_table <- directed_trips_table_base[[1]],
-                             sf_size_data_read <- sf_size_data_read_base[[1]],
-                             bsb_size_data_read <- bsb_size_data_read_base[[1]],
-                             scup_size_data_read <- scup_size_data_read_base[[1]],
-                             param_draws_MA <- param_draws_CT,
-                             costs_new_all <- costs_new_all_CT,
-                             sf_catch_data_all <- sf_catch_data_ct)
-
-
-NY_pred <- predict_rec_catch(state1 <- "NY",
-                             calibration_data_table <- calibration_data_table_base[[7]],
-                             directed_trips_table <- directed_trips_table_base[[7]],
-                             sf_size_data_read <- sf_size_data_read_base[[7]],
-                             bsb_size_data_read <- bsb_size_data_read_base[[7]],
-                             scup_size_data_read <- scup_size_data_read_base[[7]],
-                             param_draws_MA <- param_draws_NY,
-                             costs_new_all <- costs_new_all_NY,
-                             sf_catch_data_all <- sf_catch_data_ny)
-
-NJ_pred <- predict_rec_catch(state1 <- "NJ",
-                             calibration_data_table <- calibration_data_table_base[[6]],
-                             directed_trips_table <- directed_trips_table_base[[6]],
-                             sf_size_data_read <- sf_size_data_read_base[[6]],
-                             bsb_size_data_read <- bsb_size_data_read_base[[6]],
-                             scup_size_data_read <- scup_size_data_read_base[[6]],
-                             param_draws_MA <- param_draws_NJ,
-                             costs_new_all <- costs_new_all_NJ,
-                             sf_catch_data_all <- sf_catch_data_nj)
-
-
-DE_pred <- predict_rec_catch(state1 <- "DE",
-                             calibration_data_table <- calibration_data_table_base[[2]],
-                             directed_trips_table <- directed_trips_table_base[[2]],
-                             sf_size_data_read <- sf_size_data_read_base[[2]],
-                             bsb_size_data_read <- bsb_size_data_read_base[[2]],
-                             scup_size_data_read <- scup_size_data_read_base[[2]],
-                             param_draws_MA <- param_draws_DE,
-                             costs_new_all <- costs_new_all_DE,
-                             sf_catch_data_all <- sf_catch_data_de)
-
-
-MD_pred <- predict_rec_catch(state1 <- "MD",
-                             calibration_data_table <- calibration_data_table_base[[4]],
-                             directed_trips_table <- directed_trips_table_base[[4]],
-                             sf_size_data_read <- sf_size_data_read_base[[4]],
-                             bsb_size_data_read <- bsb_size_data_read_base[[4]],
-                             scup_size_data_read <- scup_size_data_read_base[[4]],
-                             param_draws_MA <- param_draws_MD,
-                             costs_new_all <- costs_new_all_MD,
-                             sf_catch_data_all <- sf_catch_data_md)
-
-VA_pred <- predict_rec_catch(state1 <- "VA",
-                             calibration_data_table <- calibration_data_table_base[[9]],
-                             directed_trips_table <- directed_trips_table_base[[9]],
-                             sf_size_data_read <- sf_size_data_read_base[[9]],
-                             bsb_size_data_read <- bsb_size_data_read_base[[9]],
-                             scup_size_data_read <- scup_size_data_read_base[[9]],
-                             param_draws_MA <- param_draws_VA,
-                             costs_new_all <- costs_new_all_VA,
-                             sf_catch_data_all <- sf_catch_data_va)
-
-NC_pred <- predict_rec_catch(state1 <- "NC",
-                             calibration_data_table <- calibration_data_table_base[[5]],
-                             directed_trips_table <- directed_trips_table_base[[5]],
-                             sf_size_data_read <- sf_size_data_read_base[[5]],
-                             bsb_size_data_read <- bsb_size_data_read_base[[5]],
-                             scup_size_data_read <- scup_size_data_read_base[[5]],
-                             param_draws_MA <- param_draws_NC,
-                             costs_new_all <- costs_new_all_NC,
-                             sf_catch_data_all <- sf_catch_data_nc)
-
-
-predictions[[x]]<- dplyr::bind_rows(MA_pred, RI_pred, CT_pred, NY_pred, NJ_pred, DE_pred, MD_pred, VA_pred, NC_pred)
-}
-  
-  predictions_all= list.stack(predictions, fill=TRUE)
-  predictions_all[is.na(predictions_all)] = 0  
-
+# predictions = list()
+# years<-c("2022", "2020", "2019", "2018")
+# 
+# for (x in 1:3){
+#   #for (y in years){
+#     year <- 2019
+# 
+# # THIS IS WHERE TO IMPORT THE ALKS FOR EACH SPECIES
+# # Import the fluke ALK (in centimeters) provided by M. Terceiro
+# fluke_ALK <- data.frame(read_csv("fluke_ALK_2018_adj.csv", show_col_types = FALSE))
+# #bsb_ALK <- data.frame(read_csv("", show_col_types = FALSE))
+# scup_ALK <- data.frame(read_csv("scup_ALK_2015_2018_adj.csv", show_col_types = FALSE))
+# 
+# 
+# 
+# # THIS IS WHERE TO IMPORT THE NUMBERS AT AGE FOR EACH SPECIES BASED ON THE YEAR(S) OF INTEREST
+# # Import the fluke MCMC draws
+# fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
+# #fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
+# fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
+# 
+# #this is the check dataset with median values of the 2021 stock
+# #fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_median_", year,".csv"), show_col_types = FALSE))
+# 
+# #fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==1)
+# 
+# # Import the bsb MCMC draws
+# #bsb_numbers_at_age = data.frame(read_csv("bsb_MCMC_100_2021.csv", show_col_types = FALSE))
+# #bsb_numbers_at_age = subset(bsb_numbers_at_age, bsb_numbers_at_age$draw==1)
+# 
+# # Import the scup MCMC draws
+# scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
+# scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
+# 
+# #scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
+# 
+# #this is the check dataset with median values of the 2021 stock
+# #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
+# 
+# #scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
+# 
+# 
+# source("CAL given stock structure.R")
+# 
+# ##########
+# 
+# 
+# 
+# ##########
+# # run the simulation code under the new set of regulations (regulation file is directed_trips_region - alternative regs test.xlsx)
+# 
+# directed_trip_alt_regs=data.frame(read_csv(paste0("directed trips and regulations ", year,".csv"), show_col_types = FALSE))
+# #directed_trip_alt_regs=data.frame(read_csv("directed trips and regulations 2023.1.csv", show_col_types = FALSE))
+# 
+# directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip)
+# 
+# 
+# 
+# MA_pred <- predict_rec_catch(state1 <- "MA",
+#                              calibration_data_table <- calibration_data_table_base[[3]],
+#                              directed_trips_table <- directed_trips_table_base[[3]],
+#                              sf_size_data_read <- sf_size_data_read_base[[3]],
+#                              bsb_size_data_read <- bsb_size_data_read_base[[3]],
+#                              scup_size_data_read <- scup_size_data_read_base[[3]],
+#                              param_draws_MA <- param_draws_MA,
+#                              costs_new_all <- costs_new_all_MA,
+#                              sf_catch_data_all <- sf_catch_data_ma)
+# 
+# RI_pred <- predict_rec_catch(state1 <- "RI",
+#                              calibration_data_table <- calibration_data_table_base[[8]],
+#                              directed_trips_table <- directed_trips_table_base[[8]],
+#                              sf_size_data_read <- sf_size_data_read_base[[8]],
+#                              bsb_size_data_read <- bsb_size_data_read_base[[8]],
+#                              scup_size_data_read <- scup_size_data_read_base[[8]],
+#                              param_draws_MA <- param_draws_RI,
+#                              costs_new_all <- costs_new_all_RI,
+#                              sf_catch_data_all <- sf_catch_data_ri)
+# 
+# CT_pred <- predict_rec_catch(state1 <- "CT",
+#                              calibration_data_table <- calibration_data_table_base[[1]],
+#                              directed_trips_table <- directed_trips_table_base[[1]],
+#                              sf_size_data_read <- sf_size_data_read_base[[1]],
+#                              bsb_size_data_read <- bsb_size_data_read_base[[1]],
+#                              scup_size_data_read <- scup_size_data_read_base[[1]],
+#                              param_draws_MA <- param_draws_CT,
+#                              costs_new_all <- costs_new_all_CT,
+#                              sf_catch_data_all <- sf_catch_data_ct)
+# 
+# 
+# NY_pred <- predict_rec_catch(state1 <- "NY",
+#                              calibration_data_table <- calibration_data_table_base[[7]],
+#                              directed_trips_table <- directed_trips_table_base[[7]],
+#                              sf_size_data_read <- sf_size_data_read_base[[7]],
+#                              bsb_size_data_read <- bsb_size_data_read_base[[7]],
+#                              scup_size_data_read <- scup_size_data_read_base[[7]],
+#                              param_draws_MA <- param_draws_NY,
+#                              costs_new_all <- costs_new_all_NY,
+#                              sf_catch_data_all <- sf_catch_data_ny)
+# 
+# NJ_pred <- predict_rec_catch(state1 <- "NJ",
+#                              calibration_data_table <- calibration_data_table_base[[6]],
+#                              directed_trips_table <- directed_trips_table_base[[6]],
+#                              sf_size_data_read <- sf_size_data_read_base[[6]],
+#                              bsb_size_data_read <- bsb_size_data_read_base[[6]],
+#                              scup_size_data_read <- scup_size_data_read_base[[6]],
+#                              param_draws_MA <- param_draws_NJ,
+#                              costs_new_all <- costs_new_all_NJ,
+#                              sf_catch_data_all <- sf_catch_data_nj)
+# 
+# 
+# DE_pred <- predict_rec_catch(state1 <- "DE",
+#                              calibration_data_table <- calibration_data_table_base[[2]],
+#                              directed_trips_table <- directed_trips_table_base[[2]],
+#                              sf_size_data_read <- sf_size_data_read_base[[2]],
+#                              bsb_size_data_read <- bsb_size_data_read_base[[2]],
+#                              scup_size_data_read <- scup_size_data_read_base[[2]],
+#                              param_draws_MA <- param_draws_DE,
+#                              costs_new_all <- costs_new_all_DE,
+#                              sf_catch_data_all <- sf_catch_data_de)
+# 
+# 
+# MD_pred <- predict_rec_catch(state1 <- "MD",
+#                              calibration_data_table <- calibration_data_table_base[[4]],
+#                              directed_trips_table <- directed_trips_table_base[[4]],
+#                              sf_size_data_read <- sf_size_data_read_base[[4]],
+#                              bsb_size_data_read <- bsb_size_data_read_base[[4]],
+#                              scup_size_data_read <- scup_size_data_read_base[[4]],
+#                              param_draws_MA <- param_draws_MD,
+#                              costs_new_all <- costs_new_all_MD,
+#                              sf_catch_data_all <- sf_catch_data_md)
+# 
+# VA_pred <- predict_rec_catch(state1 <- "VA",
+#                              calibration_data_table <- calibration_data_table_base[[9]],
+#                              directed_trips_table <- directed_trips_table_base[[9]],
+#                              sf_size_data_read <- sf_size_data_read_base[[9]],
+#                              bsb_size_data_read <- bsb_size_data_read_base[[9]],
+#                              scup_size_data_read <- scup_size_data_read_base[[9]],
+#                              param_draws_MA <- param_draws_VA,
+#                              costs_new_all <- costs_new_all_VA,
+#                              sf_catch_data_all <- sf_catch_data_va)
+# 
+# NC_pred <- predict_rec_catch(state1 <- "NC",
+#                              calibration_data_table <- calibration_data_table_base[[5]],
+#                              directed_trips_table <- directed_trips_table_base[[5]],
+#                              sf_size_data_read <- sf_size_data_read_base[[5]],
+#                              bsb_size_data_read <- bsb_size_data_read_base[[5]],
+#                              scup_size_data_read <- scup_size_data_read_base[[5]],
+#                              param_draws_MA <- param_draws_NC,
+#                              costs_new_all <- costs_new_all_NC,
+#                              sf_catch_data_all <- sf_catch_data_nc)
+# 
+# 
+# predictions[[x]]<- dplyr::bind_rows(MA_pred, RI_pred, CT_pred, NY_pred, NJ_pred, DE_pred, MD_pred, VA_pred, NC_pred)
+# }
+# 
+#   predictions_all= list.stack(predictions, fill=TRUE)
+#   predictions_all[is.na(predictions_all)] = 0
+# 
