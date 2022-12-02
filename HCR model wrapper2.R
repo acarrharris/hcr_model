@@ -129,7 +129,9 @@ ptm <- proc.time()
 predictions = list()
 predictions_all = list()
 
-years<-c( "2018", "2019", "2020", "2022")
+#years<-c( "2018", "2019", "2020", "2022")
+years<-c( "2018", "2019", "2020", "2022", "2023.1", "2023.2", "2023.3", "2023.4", "2023.5","2023.6", "2023.7", "2024", "2025" )
+#years<-c( "2018",  "2023.4" )
 
 for (x in 1:100){
   for (y in years){
@@ -142,7 +144,7 @@ for (x in 1:100){
   scup_ALK <- data.frame(read_csv("scup_ALK_2015_2018_adj.csv", show_col_types = FALSE))
   
   
-  
+  if (year %in% c("2018", "2019", "2020", "2022")){
   # THIS IS WHERE TO IMPORT THE NUMBERS AT AGE FOR EACH SPECIES BASED ON THE YEAR(S) OF INTEREST
   # Import the fluke MCMC draws
   fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
@@ -165,6 +167,17 @@ for (x in 1:100){
   #this is the check dataset with median values of the 2021 stock
   #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
   #scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
+  }
+  
+  #Choose 2023 stock distirbution for 2023 runs
+  if (year %in% c("2023.1", "2023.2", "2023.3", "2023.4", "2023.5","2023.6", "2023.7", "2024", "2025")){
+    fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
+    fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
+
+    scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
+    scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
+
+  }
   
   source("CAL given stock structure.R")
   
@@ -177,7 +190,7 @@ for (x in 1:100){
   directed_trips_table=data.frame(read_csv(paste0("directed trips and regulations ", year,".csv"), show_col_types = FALSE))
   directed_trips_table_base <- split(directed_trips_table, directed_trips_table$state)
   
-  directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip)
+  #directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip)
 
   
   # params <- list(state1 = c("MA","RI","CT","NY","NJ","DE","MD","VA", "NC"),
@@ -323,5 +336,7 @@ predictions_full[is.na(predictions_full)] = 0
 proc.time() - ptm
 
 
-write_xlsx(predictions_full,"out_of_sample_projections_new2.xlsx")
+#write_xlsx(predictions_full,"out_of_sample_projections_new2.xlsx")
+#write_xlsx(predictions_full,"out_of_sample_projections_check.xlsx")
+write_xlsx(predictions_full,"out_of_sample_and_2023_projections_11_30.xlsx")
 
