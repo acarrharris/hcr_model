@@ -130,8 +130,9 @@ predictions = list()
 predictions_all = list()
 
 #years<-c( "2018", "2019", "2020", "2022")
-years<-c( "2018", "2019", "2020", "2022", "2023.1", "2023.2", "2023.3", "2023.4", "2023.5","2023.6", "2023.7", "2024", "2025" )
+#years<-c( "2018", "2019", "2020", "2022", "2023.1", "2023.2", "2023.3", "2023.4", "2023.5","2023.6", "2023.7", "2024", "2025" )
 #years<-c( "2018",  "2023.4" )
+years<-c( "2022", "2023.1", "2023.4", "2023.5","2023.6", "2023.7", "2025" )
 
 for (x in 1:100){
   for (y in years){
@@ -338,5 +339,6 @@ proc.time() - ptm
 
 #write_xlsx(predictions_full,"out_of_sample_projections_new2.xlsx")
 #write_xlsx(predictions_full,"out_of_sample_projections_check.xlsx")
-write_xlsx(predictions_full,"out_of_sample_and_2023_projections_11_30.xlsx")
+#write_xlsx(predictions_full,"out_of_sample_and_2023_projections_11_30.xlsx")
+write_xlsx(predictions_full,"out_of_sample_and_2023_projections_11_30_redo_slot.xlsx")
 

@@ -185,7 +185,7 @@ predict_rec_catch <- function(state1,
         TRUE ~ 0)) %>%
     
     mutate(posskeep2 = ifelse(fitted_length>=fluke_min2 & fitted_length<fluke_max2,1,0)) %>%
-    group_by(tripid) %>%
+    group_by(tripid, period, catch_draw) %>%
     # keep = case_when(
     # fitted_length>=minsize & fitted_length<=maxsize ~ 1,
     # TRUE ~ 0),
