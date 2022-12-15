@@ -98,11 +98,11 @@ predict_rec_catch <- function(state1,
   
   
   # Input the data set containing alterntative regulations and directed trips
-  directed_trips$dtrip <- round(directed_trips$dtrip)
+  #directed_trips$dtrip <- round(directed_trips$dtrip)
   #directed_trips <- subset(directed_trips, state == state1)
   
-  min_period <- min(directed_trips$period)
-  max_period <- max(directed_trips$period)
+  #min_period <- min(directed_trips$period)
+  #max_period <- max(directed_trips$period)
   
   
   ######################################

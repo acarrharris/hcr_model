@@ -134,11 +134,11 @@ predictions_all = list()
 #years<-c( "2018",  "2023.4" )
 #years<-c( "2022", "2023.1", "2023.4", "2023.5","2023.6", "2023.7", "2025" )
 years<-c( "2023.8", "2023.9", "2025.1")
+years<-c( "2023.1")
 
-for (x in 1:100){
+for (x in 1:1){
   for (y in years){
-  year <- y
-  
+
   # THIS IS WHERE TO IMPORT THE ALKS FOR EACH SPECIES
   # Import the fluke ALK (in centimeters) provided by M. Terceiro
   fluke_ALK <- data.frame(read_csv("fluke_ALK_2018_adj.csv", show_col_types = FALSE))
@@ -185,47 +185,17 @@ for (x in 1:100){
   source("CAL given stock structure.R")
   
   ##########
-  
-  
+  # 
+  # sf_size_data_read <- c(list(sf_size_data_read_base[[7]]),list(sf_size_data_read_base[[8]]), list(sf_size_data_read_base[[1]]),
+  #                        list(sf_size_data_read_base[[7]]), list(sf_size_data_read_base[[6]]), list(sf_size_data_read_base[[2]]),
+  #                        list(sf_size_data_read_base[[4]]), list(sf_size_data_read_base[[9]]), list(sf_size_data_read_base[[5]]))
   
   ##########
   # run the simulation code under the new set of regulations (regulation file is directed trips and regulations XXXX.xlsx)
   directed_trips_table=data.frame(read_csv(paste0("directed trips and regulations ", year,".csv"), show_col_types = FALSE))
   directed_trips_table_base <- split(directed_trips_table, directed_trips_table$state)
   
-  #directed_trip_alt_regs$dtrip_2019=round(directed_trip_alt_regs$dtrip)
 
-  
-  # params <- list(state1 = c("MA","RI","CT","NY","NJ","DE","MD","VA", "NC"),
-  #                calibration_data_table = c(list(calibration_data_table_base[[3]]),list(calibration_data_table_base[[8]]), list(calibration_data_table_base[[1]]),
-  #                                           list(calibration_data_table_base[[7]]), list(calibration_data_table_base[[6]]), list(calibration_data_table_base[[2]]),
-  #                                           list(calibration_data_table_base[[4]]), list(calibration_data_table_base[[9]]), list(calibration_data_table_base[[5]])),
-  #                directed_trips_table = c(list(directed_trips_table[[3]]),list(directed_trips_table[[8]]), list(directed_trips_table[[1]]),
-  #                                         list(directed_trips_table[[7]]), list(directed_trips_table[[6]]), list(directed_trips_table[[2]]),
-  #                                         list(directed_trips_table[[4]]), list(directed_trips_table[[9]]), list(directed_trips_table[[5]])),
-  #                sf_size_data_read <- c(list(sf_size_data_read_base[[3]]),list(sf_size_data_read_base[[8]]), list(sf_size_data_read_base[[1]]),
-  #                                       list(sf_size_data_read_base[[7]]), list(sf_size_data_read_base[[6]]), list(sf_size_data_read_base[[2]]),
-  #                                       list(sf_size_data_read_base[[4]]), list(sf_size_data_read_base[[9]]), list(sf_size_data_read_base[[5]])),
-  #                bsb_size_data_read <- c(list(bsb_size_data_read_base[[3]]),list(bsb_size_data_read_base[[8]]), list(bsb_size_data_read_base[[1]]),
-  #                                        list(bsb_size_data_read_base[[7]]), list(bsb_size_data_read_base[[6]]), list(bsb_size_data_read_base[[2]]),
-  #                                        list(bsb_size_data_read_base[[4]]), list(bsb_size_data_read_base[[9]]), list(bsb_size_data_read_base[[5]])),
-  #                scup_size_data_read <- c(list(scup_size_data_read_base[[3]]),list(scup_size_data_read_base[[8]]), list(scup_size_data_read_base[[1]]),
-  #                                         list(scup_size_data_read_base[[7]]), list(scup_size_data_read_base[[6]]), list(scup_size_data_read_base[[2]]),
-  #                                         list(scup_size_data_read_base[[4]]), list(scup_size_data_read_base[[9]]), list(scup_size_data_read_base[[5]])),
-  #                param_draws_MA = c(list(param_draws_MA), list(param_draws_RI), list(param_draws_CT),
-  #                                   list(param_draws_NY), list(param_draws_NJ), list(param_draws_DE),
-  #                                   list(param_draws_MD), list(param_draws_VA), list(param_draws_NC)),
-  #                costs_new_all_MA = c(list(costs_new_all_MA), list(costs_new_all_RI), list(costs_new_all_CT),
-  #                                     list(costs_new_all_NY), list(costs_new_all_NJ), list(costs_new_all_DE),
-  #                                     list(costs_new_all_MD), list(costs_new_all_VA), list(costs_new_all_NC)),
-  #                sf_catch_data_all = c(list(sf_catch_data_ma),list(sf_catch_data_ri),
-  #                                      list(sf_catch_data_ct),list(sf_catch_data_ny),
-  #                                      list(sf_catch_data_nj),list(sf_catch_data_de),
-  #                                      list(sf_catch_data_md),list(sf_catch_data_va), list(sf_catch_data_nc)))
-  #  safe_predict_rec_catch <- purrr::safely(predict_rec_catch, otherwise = NA_real_)
-  #  xx <-  purrr::pmap(params, predict_rec_catch)
-  #  prediction_output_by_period <- purrr::map(xx, 1)
-  
   MA_pred <- predict_rec_catch(state1 <- "MA",
                                calibration_data_table <- calibration_data_table_base[[3]],
                                directed_trips_table <- directed_trips_table_base[[3]],
@@ -343,5 +313,6 @@ proc.time() - ptm
 #write_xlsx(predictions_full,"out_of_sample_projections_check.xlsx")
 #write_xlsx(predictions_full,"out_of_sample_and_2023_projections_11_30.xlsx")
 #write_xlsx(predictions_full,"out_of_sample_and_2023_projections_11_30_redo_slot.xlsx")
-write_xlsx(predictions_full,"projections2023_Dec_8.xlsx")
+#write_xlsx(predictions_full,"projections2023_Dec_8.xlsx")
+write_xlsx(predictions_full,"test_vals_loop.xlsx")
 
