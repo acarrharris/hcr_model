@@ -12,7 +12,7 @@
 ########## BEGIN FLUKE ##################
 ######################################### 
 
-
+#profvis::profvis({
 # Merge the ALK and Na datasets and create population numbers-at-length (inches)
 fluke_numbers_at_length <-  merge(fluke_ALK,fluke_numbers_at_age,by="age", all.x=TRUE, all.y=TRUE)
 fluke_numbers_at_length$N_l <- fluke_numbers_at_length$proportion*fluke_numbers_at_length$Na
@@ -688,3 +688,5 @@ bsb_size_data_read_base <- split(bsb_size_data_read, bsb_size_data_read$state)
 
 scup_size_data_read <- readRDS("scup_fitted_sizes_y2plus.rds") %>% tibble()
 scup_size_data_read_base <- split(scup_size_data_read, scup_size_data_read$state)
+
+#})

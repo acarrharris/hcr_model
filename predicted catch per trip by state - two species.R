@@ -48,7 +48,9 @@ pred_catch_data_MA[is.na(pred_catch_data_MA)] <- 0
 
 
 #Remove outliers of scup, bsb, sf catch
-observed_21<- read_csv("observed_catch_2018_2022_25.csv",  show_col_types = FALSE)
+#observed_21<- read_csv("observed_catch_2018_2022_25.csv",  show_col_types = FALSE)
+observed_21<- readRDS("observed_catch_2018_2022_25.rds")
+
 max_sf<- max(observed_21$sf_tot_cat)
 max_bsb<- max(observed_21$bsb_tot_cat)
 max_scup<- max(observed_21$scup_tot_cat)
@@ -104,7 +106,9 @@ pred_catch_data_RI[is.na(pred_catch_data_RI)] <- 0
 
 
 #Remove outliers of scup, bsb, sf catch
-observed_21<- read_csv("observed_catch_2018_2022_44.csv",  show_col_types = FALSE)
+#observed_21<- read_csv("observed_catch_2018_2022_44.csv",  show_col_types = FALSE)
+observed_21<- readRDS("observed_catch_2018_2022_44.rds")
+
 max_sf<- max(observed_21$sf_tot_cat)
 max_bsb<- max(observed_21$bsb_tot_cat)
 max_scup<- max(observed_21$scup_tot_cat)
@@ -158,7 +162,9 @@ pred_catch_data_CT[is.na(pred_catch_data_CT)] <- 0
 
 
 #Remove outliers of scup, bsb, sf catch
-observed_21<- read_csv("observed_catch_2018_2022_9.csv",  show_col_types = FALSE)
+#observed_21<- read_csv("observed_catch_2018_2022_9.csv",  show_col_types = FALSE)
+observed_21<- readRDS("observed_catch_2018_2022_9.rds")
+
 max_sf<- max(observed_21$sf_tot_cat)
 max_bsb<- max(observed_21$bsb_tot_cat)
 max_scup<- max(observed_21$scup_tot_cat)
@@ -217,7 +223,9 @@ pred_catch_data_NY[is.na(pred_catch_data_NY)] <- 0
 
 
 #Remove outliers of scup, bsb, sf catch
-observed_21<- read_csv("observed_catch_2018_2022_36.csv",  show_col_types = FALSE)
+#observed_21<- read_csv("observed_catch_2018_2022_36.csv",  show_col_types = FALSE)
+observed_21<- readRDS("observed_catch_2018_2022_36.rds")
+
 max_sf<- max(observed_21$sf_tot_cat)
 max_bsb<- max(observed_21$bsb_tot_cat)
 max_scup<- max(observed_21$scup_tot_cat)
@@ -278,7 +286,9 @@ pred_catch_data_NJ[is.na(pred_catch_data_NJ)] <- 0
 
 
 #Remove outliers of scup, bsb, sf catch
-observed_21<- read_csv("observed_catch_2018_2022_34.csv",  show_col_types = FALSE)
+#observed_21<- read_csv("observed_catch_2018_2022_34.csv",  show_col_types = FALSE)
+observed_21<- readRDS("observed_catch_2018_2022_34.rds")
+
 max_sf<- max(observed_21$sf_tot_cat)
 max_bsb<- max(observed_21$bsb_tot_cat)
 max_scup<- max(observed_21$scup_tot_cat)
@@ -334,7 +344,9 @@ pred_catch_data_DE[is.na(pred_catch_data_DE)] <- 0
 
 
 #Remove outliers of scup, bsb, sf catch
-observed_21<- read_csv("observed_catch_2018_2022_10.csv",  show_col_types = FALSE)
+#observed_21<- read_csv("observed_catch_2018_2022_10.csv",  show_col_types = FALSE)
+observed_21<- readRDS("observed_catch_2018_2022_10.rds")
+
 max_sf<- max(observed_21$sf_tot_cat)
 max_bsb<- max(observed_21$bsb_tot_cat)
 max_scup<- max(observed_21$scup_tot_cat)
@@ -399,7 +411,9 @@ pred_catch_data_MD[is.na(pred_catch_data_MD)] <- 0
 
 
 #Remove outliers of scup, bsb, sf catch
-observed_21<- read_csv("observed_catch_2018_2022_24.csv",  show_col_types = FALSE)
+#observed_21<- read_csv("observed_catch_2018_2022_24.csv",  show_col_types = FALSE)
+observed_21<- readRDS("observed_catch_2018_2022_24.rds")
+
 max_sf<- max(observed_21$sf_tot_cat)
 max_bsb<- max(observed_21$bsb_tot_cat)
 max_scup<- max(observed_21$scup_tot_cat)
@@ -458,7 +472,9 @@ pred_catch_data_VA[is.na(pred_catch_data_VA)] <- 0
 
 
 #Remove outliers of scup, bsb, sf catch
-observed_21<- read_csv("observed_catch_2018_2022_51.csv",  show_col_types = FALSE)
+#observed_21<- read_csv("observed_catch_2018_2022_51.csv",  show_col_types = FALSE)
+observed_21<- readRDS("observed_catch_2018_2022_51.rds")
+
 max_sf<- max(observed_21$sf_tot_cat)
 max_bsb<- max(observed_21$bsb_tot_cat)
 max_scup<- max(observed_21$scup_tot_cat)
@@ -524,7 +540,9 @@ pred_catch_data_NC[is.na(pred_catch_data_NC)] <- 0
 
 
 #Remove outliers of scup, bsb, sf catch
-observed_21<- read_csv("observed_catch_2018_2022_37.csv",  show_col_types = FALSE)
+#observed_21<- read_csv("observed_catch_2018_2022_37.csv",  show_col_types = FALSE)
+observed_21<- readRDS("observed_catch_2018_2022_37.rds")
+
 max_sf<- max(observed_21$sf_tot_cat)
 max_bsb<- max(observed_21$bsb_tot_cat)
 max_scup<- max(observed_21$scup_tot_cat)

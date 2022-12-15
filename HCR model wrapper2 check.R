@@ -53,6 +53,32 @@ conflict_prefer("count", "dplyr")
 ###Run the calibration model 
 source("calibration year copula params - two species.R")
 
+observed_catch_2018_2022_44 <- read_csv("observed_catch_2018_2022_44.csv",   show_col_types = FALSE)
+saveRDS(observed_catch_2018_2022_44, "observed_catch_2018_2022_44.rds")
+
+observed_catch_2018_2022_9 <- read_csv("observed_catch_2018_2022_9.csv",  show_col_types = FALSE)
+saveRDS(observed_catch_2018_2022_9, "observed_catch_2018_2022_9.rds")
+
+observed_catch_2018_2022_10 <- read_csv("observed_catch_2018_2022_10.csv",  show_col_types = FALSE)
+saveRDS(observed_catch_2018_2022_10, "observed_catch_2018_2022_10.rds")
+
+observed_catch_2018_2022_24 <- read_csv("observed_catch_2018_2022_24.csv",  show_col_types = FALSE)
+saveRDS(observed_catch_2018_2022_24, "observed_catch_2018_2022_24.rds")
+
+observed_catch_2018_2022_25 <- read_csv("observed_catch_2018_2022_25.csv",  show_col_types = FALSE)
+saveRDS(observed_catch_2018_2022_25, "observed_catch_2018_2022_25.rds")
+
+observed_catch_2018_2022_34 <- read_csv("observed_catch_2018_2022_34.csv",  show_col_types = FALSE)
+saveRDS(observed_catch_2018_2022_34, "observed_catch_2018_2022_34.rds")
+
+observed_catch_2018_2022_36 <- read_csv("observed_catch_2018_2022_36.csv",  show_col_types = FALSE)
+saveRDS(observed_catch_2018_2022_36, "observed_catch_2018_2022_36.rds")
+
+observed_catch_2018_2022_37 <- read_csv("observed_catch_2018_2022_37.csv",  show_col_types = FALSE)
+saveRDS(observed_catch_2018_2022_37, "observed_catch_2018_2022_37.rds")
+
+observed_catch_2018_2022_51 <- read_csv("observed_catch_2018_2022_51.csv",  show_col_types = FALSE)
+saveRDS(observed_catch_2018_2022_51, "observed_catch_2018_2022_51.rds")
 
 n_drawz<-1000
 
@@ -132,14 +158,16 @@ ptm <- proc.time()
 predictions = list()
 predictions_all = list()
 
+
+  
 #years<-c( "2018", "2019", "2020", "2022")
 #years<-c( "2018", "2019", "2020", "2022", "2023.1", "2023.2", "2023.3", "2023.4", "2023.5","2023.6", "2023.7", "2024", "2025" )
 #years<-c( "2018",  "2023.4" )
 #years<-c( "2022", "2023.1", "2023.4", "2023.5","2023.6", "2023.7", "2025" )
 years<-c( "2023.1")
 for (x in 1:1){
-  for (y in years)profvis({
-
+  for (y in years){
+    
     # THIS IS WHERE TO IMPORT THE ALKS FOR EACH SPECIES
     # Import the fluke ALK (in centimeters) provided by M. Terceiro
     fluke_ALK <- data.frame(read_csv("fluke_ALK_2018_adj.csv", show_col_types = FALSE))
@@ -213,6 +241,8 @@ for (x in 1:1){
                                          list(sf_catch_data_ny),list(sf_catch_data_ri), list(sf_catch_data_va)))
     
     safe_predict_rec_catch <- purrr::safely(predict_rec_catch, otherwise = NA_real_)
+    
+
     xx_check <-  future_pmap(params, safe_predict_rec_catch, .options = furrr_options(seed = 32190))
 
     prediction_output_by_period1 <- future_map(xx_check, 1)
@@ -223,8 +253,10 @@ for (x in 1:1){
     predictions[[y]]$draw<-x
     predictions[[y]]$year<-year
     
+   
     
-  })
+  }
+ 
   
   predictions_all[[x]]= list.stack(predictions, fill=TRUE)
   predictions_all[is.na(predictions_all)] = 0

@@ -71,7 +71,7 @@ predict_rec_catch <- function(state1,
   # sf_catch_data_all <- sf_catch_data_ma
   
   
-  
+  #profvis::profvis({
   #if (state1 %in% c("MA", "RI", "CT", "NY", "NJ", "VA")) {
   scup_nbs<- subset(read_csv("nb_params.csv",  show_col_types = FALSE))
   scup_nbs <- scup_nbs %>% tibble() %>% dplyr::filter(state == state1) %>% dplyr::filter(draw == x)
@@ -80,11 +80,16 @@ predict_rec_catch <- function(state1,
   
   ###
   if (scup_mu_param!=0){
-    sf_catch_data_all$tot_scup_catch <- rnbinom(1:nrow(sf_catch_data_all), mu = scup_mu_param, size = scup_size_param)
+    sf_catch_data_all <- sf_catch_data_all  %>% 
+      mutate(tot_scup_catch = rnbinom(1:nrow(sf_catch_data_all), mu = scup_mu_param, size = scup_size_param))
+    
+    #sf_catch_data_all$tot_scup_catch <- rnbinom(1:nrow(sf_catch_data_all), mu = scup_mu_param, size = scup_size_param)
   }
   
   if (scup_mu_param==0){
-    sf_catch_data_all$tot_scup_catch <- 0
+    sf_catch_data_all <- sf_catch_data_all  %>% 
+      mutate(tot_scup_catch = 0 )
+    #sf_catch_data_all$tot_scup_catch <- 0
   }
   
   # Input the calibration output which contains the number of choice occasions needed to simulate
@@ -195,10 +200,16 @@ predict_rec_catch <- function(state1,
       keep_adj2 = case_when(
         fluke_bag2 > 0 ~ ifelse(csum_keep2<=fluke_bag2 & posskeep2==1,1,0)))
   
-  catch_size_data[is.na(catch_size_data)] <- 0
+  #catch_size_data[is.na(catch_size_data)] <- 0
+  catch_size_data <- catch_size_data %>%
+   mutate_if(is.numeric, replace_na, replace = 0)
+    
+  catch_size_data <- catch_size_data %>%
+    mutate(keep_tot = keep_adj+keep_adj2,
+           release = ifelse(keep_adj==0 & keep_adj2==0,1,0))  
   
-  catch_size_data$release<-ifelse((catch_size_data$keep_adj==0 & catch_size_data$keep_adj2==0), 1,0)
-  catch_size_data$keep_tot<-catch_size_data$keep_adj+catch_size_data$keep_adj2
+  #catch_size_data$release<-ifelse((catch_size_data$keep_adj==0 & catch_size_data$keep_adj2==0), 1,0)
+  #catch_size_data$keep_tot<-catch_size_data$keep_adj+catch_size_data$keep_adj2
   
   
   
@@ -298,9 +309,14 @@ predict_rec_catch <- function(state1,
   #release = case_when(
   # bsb_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>bsb_bag ), 1,0)))
   
-  catch_size_data[is.na(catch_size_data)] <- 0
+  #catch_size_data[is.na(catch_size_data)] <- 0
+  catch_size_data <- catch_size_data %>%
+    mutate_if(is.numeric, replace_na, replace = 0)
   
-  catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
+  catch_size_data <- catch_size_data %>%
+    mutate(release = ifelse(keep_adj==0,1,0))  
+  
+  #catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
   
   catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release, period, catch_draw)) %>% 
     rename(keep = keep_adj)
@@ -404,9 +420,14 @@ predict_rec_catch <- function(state1,
     #release = case_when(
     # scup_bag > 0 ~ ifelse(posskeep==0 | (posskeep==1 & csum_keep>scup_bag ), 1,0)))
     
-    catch_size_data[is.na(catch_size_data)] <- 0
+    #catch_size_data[is.na(catch_size_data)] <- 0
+    catch_size_data <- catch_size_data %>%
+      mutate_if(is.numeric, replace_na, replace = 0)
     
-    catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
+    catch_size_data <- catch_size_data %>%
+      mutate(release = ifelse(keep_adj==0,1,0))  
+    
+    #catch_size_data$release<-ifelse((catch_size_data$keep_adj==0), 1,0)
     
     catch_size_data<- subset(catch_size_data, select=c(fishid, fitted_length, tripid, keep_adj, release, period, catch_draw)) %>% 
       rename(keep = keep_adj)
@@ -530,22 +551,21 @@ predict_rec_catch <- function(state1,
   
   
   # Expected utility (prediction year)
-  trip_data$vA = 
-    trip_data$beta_sqrt_sf_keep*sqrt(trip_data$tot_keep_sf) +
-    trip_data$beta_sqrt_sf_release*sqrt(trip_data$tot_rel_sf) +  
-    trip_data$beta_sqrt_bsb_keep*sqrt(trip_data$tot_keep_bsb) +
-    trip_data$beta_sqrt_bsb_release*sqrt(trip_data$tot_rel_bsb) +  
-    trip_data$beta_sqrt_scup_catch*sqrt(trip_data$tot_scup_catch) +
-    trip_data$beta_cost*trip_data$cost 
-  
+  trip_data <-trip_data %>%
+  mutate(
+    vA = beta_sqrt_sf_keep*sqrt(tot_keep_sf) +
+     beta_sqrt_sf_release*sqrt(tot_rel_sf) +  
+     beta_sqrt_bsb_keep*sqrt(tot_keep_bsb) +
+     beta_sqrt_bsb_release*sqrt(tot_rel_bsb) +  
+     beta_sqrt_scup_catch*sqrt(tot_scup_catch) +
+     beta_cost*cost,
   # Expected utility (base year)
-  trip_data$v0 = 
-    trip_data$beta_sqrt_sf_keep*sqrt(trip_data$tot_keep_sf_base) +
-    trip_data$beta_sqrt_sf_release*sqrt(trip_data$tot_rel_sf_base) +  
-    trip_data$beta_sqrt_bsb_keep*sqrt(trip_data$tot_keep_bsb_base) +
-    trip_data$beta_sqrt_bsb_release*sqrt(trip_data$tot_rel_bsb_base) +  
-    trip_data$beta_sqrt_scup_catch*sqrt(trip_data$tot_cat_scup_base) +
-    trip_data$beta_cost*trip_data$cost 
+   v0 = beta_sqrt_sf_keep*sqrt(tot_keep_sf_base) +
+     beta_sqrt_sf_release*sqrt(tot_rel_sf_base) +  
+     beta_sqrt_bsb_keep*sqrt(tot_keep_bsb_base) +
+     beta_sqrt_bsb_release*sqrt(tot_rel_bsb_base) +  
+     beta_sqrt_scup_catch*sqrt(tot_cat_scup_base) +
+     beta_cost*cost) 
   
   trip_data <- trip_data %>% 
     mutate(period = as.numeric(period))
@@ -614,9 +634,14 @@ predict_rec_catch <- function(state1,
                                          & colnames(mean_trip_data) !="prob0" 
                                          & colnames(mean_trip_data) !="change_CS"]    
   
-  for (l in list_names){
-    mean_trip_data[,l] <- mean_trip_data[,l]*mean_trip_data$probA
-  }
+  # for (l in list_names){
+  #   mean_trip_data[,l] <- mean_trip_data[,l]*mean_trip_data$probA
+  # }
+  
+  
+  mean_trip_data <- mean_trip_data %>% 
+    mutate(across(.cols = all_of(list_names),.fns=function(x) probA*x))
+  
   
   mean_trip_data <- mean_trip_data %>%
     mutate( n_choice_occasions_alt = rep(1,nrow(.)))
@@ -668,7 +693,11 @@ predict_rec_catch <- function(state1,
   # }
   
   
-  aggregate_trip_data[,list_names] <- aggregate_trip_data$expand*aggregate_trip_data[,list_names]
+  #aggregate_trip_data[,list_names] <- aggregate_trip_data$expand*aggregate_trip_data[,list_names]
+  
+  aggregate_trip_data <- aggregate_trip_data %>% 
+    mutate(across(.cols = all_of(list_names),.fns=function(x) expand*x))
+  
   
   aggregate_trip_data = subset(aggregate_trip_data, select=-c(tripid, sim, prob0, expand, n_choice_occasions))
   names(aggregate_trip_data)[names(aggregate_trip_data) == "probA"] = "observed_trips"
