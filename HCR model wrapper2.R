@@ -167,8 +167,9 @@ for (x in 1:1){
   #scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
   
   #this is the check dataset with median values of the 2021 stock
-  #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
-  #scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
+  # year<-2023
+  # scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
+  # scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
   }
   
   #Choose 2023 stock distirbution for 2023 runs

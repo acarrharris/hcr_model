@@ -674,6 +674,7 @@ scup_sizes_all_y2 = bind_rows(scup_Cl_new_MA, scup_Cl_new_RI,
 
 scup_sizes_region_all_y2 = subset(scup_sizes_all_y2, select=c(fitted_prob, length, state, year))
 saveRDS(scup_sizes_region_all_y2,file = "scup_fitted_sizes_y2plus.rds")
+#write_xlsx(scup_sizes_region_all_y2,"scup_sizes_region_all_y2_post_adjustment.xlsx")
 
 
 
