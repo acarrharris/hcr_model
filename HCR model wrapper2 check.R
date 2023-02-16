@@ -1006,180 +1006,185 @@ future::plan(multisession, workers=8)
 
 ###NY
 # Start the clock!
-#  ptm <- proc.time()
-# #
-# #
-# #
-#  predictions = list()
-#  predictions_all = list()
-# #
-# # #NY years
-# # #years<-c("2023.0", "2023.11", "2023.12",  "2023.21", "2023.22", "2023.31","2023.32")
-# #
-# # #NY years - 3rd run
-# # #years<-c("2023.61", "2023.62", "2023.71", "2023.72", "2023.82", "2023.92", "2023.102")
-# # years<-c("2023.0", "2023.51", "2023.53")
-# 
-# # #NY years - 3rd run addon
-# # years<-c("2023.63", "2023.73", "2023.83", "2023.93", "2023.103")
-#  
-#  #NY years - 5thr un
-#  # years<-c("2023.161", "2023.162", "2023.163",
-#  #          "2023.171", "2023.172", "2023.173",
-#  #          "2023.181", "2023.182", "2023.183",
-#  #          "2023.191", "2023.192", "2023.193",
-#  #          "2023.201", "2023.202", "2023.203",
-#  #          "2023.211", "2023.212", "2023.213",
-#  #          "2023.221", "2023.222", "2023.223")
-# 
-#  
-# #NY years - 6th run
-# #years<-c("2023.231", "2023.232", "2023.233") 
-#  
-# #NY year - red- proposal 11 (6)
-# #years<-c("2023.61", "2023.62", "2023.63") 
-# 
-# #NY year - run 7 
-# years<-c("2023.251", "2023.252", "2023.253", "2023.261", "2023.262", "2023.263", "2023.271", "2023.272", "2023.273") 
-# 
-# for (x in 1:100){
-#   for (y in years){
-# 
-#     year<-y
-# 
-#     # THIS IS WHERE TO IMPORT THE ALKS FOR EACH SPECIES
-#     # Import the fluke ALK (in centimeters) provided by M. Terceiro
-#     fluke_ALK <- data.frame(read_csv("fluke_ALK_2018_adj.csv", show_col_types = FALSE))
-#     #bsb_ALK <- data.frame(read_csv("", show_col_types = FALSE))
-#     scup_ALK <- data.frame(read_csv("scup_ALK_2015_2018_adj.csv", show_col_types = FALSE))
-# 
-# 
-#     if (year %in% c("2018", "2019", "2020", "2022")){
-#       # THIS IS WHERE TO IMPORT THE NUMBERS AT AGE FOR EACH SPECIES BASED ON THE YEAR(S) OF INTEREST
-#       # Import the fluke MCMC draws
-#       fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
-#       #fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
-#       fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
-# 
-#       #this is the check dataset with median values of the 2021 stock
-#       #fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_median_", year,".csv"), show_col_types = FALSE))
-#       #fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==1)
-# 
-#       # Import the bsb MCMC draws
-#       #bsb_numbers_at_age = data.frame(read_csv("bsb_MCMC_100_2021.csv", show_col_types = FALSE))
-#       #bsb_numbers_at_age = subset(bsb_numbers_at_age, bsb_numbers_at_age$draw==1)
-# 
-#       # Import the scup MCMC draws
-#       scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
-#       scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
-#       #scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
-# 
-#       #this is the check dataset with median values of the 2021 stock
-#       #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
-#       #scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
-#     }
-# 
-#     #Choose 2023 stock distribution for 2023 runs
-#     if (year %in% c("2023.0", "2023.1", "2023.2", "2023.3", "2023.4", "2023.5","2023.6", "2023.7", "2024", "2025",
-#                     "2023.8", "2023.9", "2025.1", "2023.63", "2023.73", "2023.83", "2023.93", "2023.103",
-#                     "2026.2", "2026.4", "2026.5", "2026.7", "2026.9", "2023.51", "2023.53", "2023.61", "2023.62", "2023.63",
-#                     "2023.161", "2023.162", "2023.163","2023.251", "2023.252", "2023.253", "2023.261", "2023.262", "2023.263", "2023.271", "2023.272", "2023.273",
-#                     "2023.171", "2023.172", "2023.173",
-#                     "2023.181", "2023.182", "2023.183",
-#                     "2023.191", "2023.192", "2023.193",
-#                     "2023.201", "2023.202", "2023.203",
-#                     "2023.211", "2023.212", "2023.213",
-#                     "2023.221", "2023.222", "2023.223",
-#                     "2023.231", "2023.232", "2023.233",
-#                     "2023.1", "2023.2",  "2023.31", "2023.32", "2023.41", "2023.42", "2023.5",
-#                     "2023.6", "2023.71", "2023.72", "2023.81", "2023.82", "2023.91", "2023.92",
-#                     "2023.101", "2023.102", "2023.61", "2023.62", "2023.71", "2023.72", "2023.82", "2023.92", "2023.102",
-#                     "2023.11", "2023.12",  "2023.21", "2023.22", "2023.31","2023.32")){
-#       fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
-#       fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
-# 
-#       scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
-#       scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
-# 
-#     }
-# 
-#     source("CAL given stock structure.R")
-# 
-#     ##########
-# 
-# 
-#     ##########
-#     # run the simulation code under the new set of regulations (regulation file is directed trips and regulations XXXX.xlsx)
-#     directed_trips_table=data.frame(read_csv(paste0("directed trips and regulations NY ", year,".csv"), show_col_types = FALSE))
-#     directed_trips_table_base <- split(directed_trips_table, directed_trips_table$state)
-# 
-# 
-#     # params <- list(state1 = c("CT", "DE", "MA", "MD", "NC", "NJ","NY", "RI", "VA"),
-#     #                calibration_data_table = calibration_data_table_base,
-#     #                directed_trips_table = directed_trips_table_base,
-#     #                sf_size_data_read = sf_size_data_read_base,
-#     #                bsb_size_data_read = bsb_size_data_read_base,
-#     #                scup_size_data_read = scup_size_data_read_base,
-#     #                param_draws_MA = c(list(param_draws_CT), list(param_draws_DE), list(param_draws_MA),
-#     #                                   list(param_draws_MD), list(param_draws_NC), list(param_draws_NJ),
-#     #                                   list(param_draws_NY), list(param_draws_RI), list(param_draws_VA)),
-#     #                costs_new_all = c(list(costs_new_all_CT), list(costs_new_all_DE), list(costs_new_all_MA),
-#     #                                  list(costs_new_all_MD), list(costs_new_all_NC), list(costs_new_all_NJ),
-#     #                                  list(costs_new_all_NY), list(costs_new_all_RI), list(costs_new_all_VA)),
-#     #                sf_catch_data_all = c(list(sf_catch_data_ct),list(sf_catch_data_de),list(sf_catch_data_ma),
-#     #                                      list(sf_catch_data_md),list(sf_catch_data_nc),list(sf_catch_data_nj),
-#     #                                      list(sf_catch_data_ny),list(sf_catch_data_ri), list(sf_catch_data_va)))
-# 
-#     # to run the model for individual states, need to enter here. Note some of the datasets are lists in alphabetical order by state
-#     params <- list(state1 = c("NY"),
-#                    calibration_data_table = calibration_data_table_base[7],
-#                    directed_trips_table = directed_trips_table_base[1],
-#                    sf_size_data_read = sf_size_data_read_base[7],
-#                    bsb_size_data_read = bsb_size_data_read_base[7],
-#                    scup_size_data_read = scup_size_data_read_base[7],
-#                    param_draws_MA = c( list(param_draws_NY)),
-#                    costs_new_all = c(list(costs_new_all_NY)),
-#                    sf_catch_data_all = c(list(sf_catch_data_ny)))
-# 
-# 
-# 
-#     safe_predict_rec_catch <- purrr::safely(predict_rec_catch, otherwise = NA_real_)
-# 
-# 
-#     xx_check <-  future_pmap(params, safe_predict_rec_catch, .options = furrr_options(seed = 32190))
-# 
-#     prediction_output_by_period1 <- future_map(xx_check, 1)
-# 
-# 
-# 
-#     predictions[[y]]<- list.stack(prediction_output_by_period1, fill=TRUE)
-#     predictions[[y]]$draw<-x
-#     predictions[[y]]$year<-year
-# 
-# 
-# 
-#   }
-# 
-# 
-#   predictions_all[[x]]= list.stack(predictions, fill=TRUE)
-#   predictions_all[is.na(predictions_all)] = 0
-# 
-# 
-# }
-# 
-#  predictions_full= list.stack(predictions_all, fill=TRUE)
-#  predictions_full[is.na(predictions_full)] = 0
-# #
-# # # Stop the clock
-#  proc.time() - ptm
-# 
-# #write_xlsx(predictions_full,"NY_regs_1_9.xlsx")
-# #write_xlsx(predictions_full,"NY_regs_1_20.xlsx")
-# #write_xlsx(predictions_full,"NY_regs_1_24.xlsx")
-# #write_xlsx(predictions_full,"NY_regs_1_25.xlsx")
-# #write_xlsx(predictions_full,"NY_regs_prop11_adj.xlsx")
-# write_xlsx(predictions_full,"NY_regs_1_30.xlsx")
- 
+ ptm <- proc.time()
+#
+#
+#
+ predictions = list()
+ predictions_all = list()
+#
+# #NY years
+# #years<-c("2023.0", "2023.11", "2023.12",  "2023.21", "2023.22", "2023.31","2023.32")
+#
+# #NY years - 3rd run
+# #years<-c("2023.61", "2023.62", "2023.71", "2023.72", "2023.82", "2023.92", "2023.102")
+# years<-c("2023.0", "2023.51", "2023.53")
+
+# #NY years - 3rd run addon
+# years<-c("2023.63", "2023.73", "2023.83", "2023.93", "2023.103")
+
+ #NY years - 5thr un
+ # years<-c("2023.161", "2023.162", "2023.163",
+ #          "2023.171", "2023.172", "2023.173",
+ #          "2023.181", "2023.182", "2023.183",
+ #          "2023.191", "2023.192", "2023.193",
+ #          "2023.201", "2023.202", "2023.203",
+ #          "2023.211", "2023.212", "2023.213",
+ #          "2023.221", "2023.222", "2023.223")
+
+
+#NY years - 6th run
+#years<-c("2023.231", "2023.232", "2023.233")
+
+#NY year - red- proposal 11 (6)
+#years<-c("2023.61", "2023.62", "2023.63")
+
+#NY year - run 7
+#years<-c("2023.251", "2023.252", "2023.253", "2023.261", "2023.262", "2023.263", "2023.271", "2023.272", "2023.273")
+
+
+#NY year - run 8
+years<-c("2023.291","2023.292", "2023.293", "2023.301", "2023.302", "2023.303" )
+
+
+for (x in 1:100){
+  for (y in years){
+
+    year<-y
+
+    # THIS IS WHERE TO IMPORT THE ALKS FOR EACH SPECIES
+    # Import the fluke ALK (in centimeters) provided by M. Terceiro
+    fluke_ALK <- data.frame(read_csv("fluke_ALK_2018_adj.csv", show_col_types = FALSE))
+    #bsb_ALK <- data.frame(read_csv("", show_col_types = FALSE))
+    scup_ALK <- data.frame(read_csv("scup_ALK_2015_2018_adj.csv", show_col_types = FALSE))
+
+
+    if (year %in% c("2018", "2019", "2020", "2022")){
+      # THIS IS WHERE TO IMPORT THE NUMBERS AT AGE FOR EACH SPECIES BASED ON THE YEAR(S) OF INTEREST
+      # Import the fluke MCMC draws
+      fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      #fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
+      fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
+
+      #this is the check dataset with median values of the 2021 stock
+      #fluke_numbers_at_age = data.frame(read_csv(paste0("fluke_MCMC_median_", year,".csv"), show_col_types = FALSE))
+      #fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==1)
+
+      # Import the bsb MCMC draws
+      #bsb_numbers_at_age = data.frame(read_csv("bsb_MCMC_100_2021.csv", show_col_types = FALSE))
+      #bsb_numbers_at_age = subset(bsb_numbers_at_age, bsb_numbers_at_age$draw==1)
+
+      # Import the scup MCMC draws
+      scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_100_", year,".csv"), show_col_types = FALSE))
+      scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
+      #scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
+
+      #this is the check dataset with median values of the 2021 stock
+      #scup_numbers_at_age = data.frame(read_csv(paste0("scup_MCMC_median_", year,".csv"), show_col_types = FALSE))
+      #scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==1)
+    }
+
+    #Choose 2023 stock distribution for 2023 runs
+    if (year %in% c("2023.0", "2023.1", "2023.2", "2023.3", "2023.4", "2023.5","2023.6", "2023.7", "2024", "2025",
+                    "2023.8", "2023.9", "2025.1", "2023.63", "2023.73", "2023.83", "2023.93", "2023.103",
+                    "2026.2", "2026.4", "2026.5", "2026.7", "2026.9", "2023.51", "2023.53", "2023.61", "2023.62", "2023.63",
+                    "2023.161", "2023.162", "2023.163","2023.251", "2023.252", "2023.253", "2023.261", "2023.262", "2023.263", "2023.271", "2023.272", "2023.273",
+                    "2023.171", "2023.172", "2023.173","2023.291","2023.292", "2023.293", "2023.301", "2023.302", "2023.303", 
+                    "2023.181", "2023.182", "2023.183",
+                    "2023.191", "2023.192", "2023.193",
+                    "2023.201", "2023.202", "2023.203",
+                    "2023.211", "2023.212", "2023.213",
+                    "2023.221", "2023.222", "2023.223",
+                    "2023.231", "2023.232", "2023.233",
+                    "2023.1", "2023.2",  "2023.31", "2023.32", "2023.41", "2023.42", "2023.5",
+                    "2023.6", "2023.71", "2023.72", "2023.81", "2023.82", "2023.91", "2023.92",
+                    "2023.101", "2023.102", "2023.61", "2023.62", "2023.71", "2023.72", "2023.82", "2023.92", "2023.102",
+                    "2023.11", "2023.12",  "2023.21", "2023.22", "2023.31","2023.32")){
+      fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
+      fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
+
+      scup_numbers_at_age = data.frame(read_csv("scup_MCMC_100_2023.csv", show_col_types = FALSE))
+      scup_numbers_at_age = subset(scup_numbers_at_age, scup_numbers_at_age$draw==x)
+
+    }
+
+    source("CAL given stock structure.R")
+
+    ##########
+
+
+    ##########
+    # run the simulation code under the new set of regulations (regulation file is directed trips and regulations XXXX.xlsx)
+    directed_trips_table=data.frame(read_csv(paste0("directed trips and regulations NY ", year,".csv"), show_col_types = FALSE))
+    directed_trips_table_base <- split(directed_trips_table, directed_trips_table$state)
+
+
+    # params <- list(state1 = c("CT", "DE", "MA", "MD", "NC", "NJ","NY", "RI", "VA"),
+    #                calibration_data_table = calibration_data_table_base,
+    #                directed_trips_table = directed_trips_table_base,
+    #                sf_size_data_read = sf_size_data_read_base,
+    #                bsb_size_data_read = bsb_size_data_read_base,
+    #                scup_size_data_read = scup_size_data_read_base,
+    #                param_draws_MA = c(list(param_draws_CT), list(param_draws_DE), list(param_draws_MA),
+    #                                   list(param_draws_MD), list(param_draws_NC), list(param_draws_NJ),
+    #                                   list(param_draws_NY), list(param_draws_RI), list(param_draws_VA)),
+    #                costs_new_all = c(list(costs_new_all_CT), list(costs_new_all_DE), list(costs_new_all_MA),
+    #                                  list(costs_new_all_MD), list(costs_new_all_NC), list(costs_new_all_NJ),
+    #                                  list(costs_new_all_NY), list(costs_new_all_RI), list(costs_new_all_VA)),
+    #                sf_catch_data_all = c(list(sf_catch_data_ct),list(sf_catch_data_de),list(sf_catch_data_ma),
+    #                                      list(sf_catch_data_md),list(sf_catch_data_nc),list(sf_catch_data_nj),
+    #                                      list(sf_catch_data_ny),list(sf_catch_data_ri), list(sf_catch_data_va)))
+
+    # to run the model for individual states, need to enter here. Note some of the datasets are lists in alphabetical order by state
+    params <- list(state1 = c("NY"),
+                   calibration_data_table = calibration_data_table_base[7],
+                   directed_trips_table = directed_trips_table_base[1],
+                   sf_size_data_read = sf_size_data_read_base[7],
+                   bsb_size_data_read = bsb_size_data_read_base[7],
+                   scup_size_data_read = scup_size_data_read_base[7],
+                   param_draws_MA = c( list(param_draws_NY)),
+                   costs_new_all = c(list(costs_new_all_NY)),
+                   sf_catch_data_all = c(list(sf_catch_data_ny)))
+
+
+
+    safe_predict_rec_catch <- purrr::safely(predict_rec_catch, otherwise = NA_real_)
+
+
+    xx_check <-  future_pmap(params, safe_predict_rec_catch, .options = furrr_options(seed = 32190))
+
+    prediction_output_by_period1 <- future_map(xx_check, 1)
+
+
+
+    predictions[[y]]<- list.stack(prediction_output_by_period1, fill=TRUE)
+    predictions[[y]]$draw<-x
+    predictions[[y]]$year<-year
+
+
+
+  }
+
+
+  predictions_all[[x]]= list.stack(predictions, fill=TRUE)
+  predictions_all[is.na(predictions_all)] = 0
+
+
+}
+
+ predictions_full= list.stack(predictions_all, fill=TRUE)
+ predictions_full[is.na(predictions_full)] = 0
+#
+# # Stop the clock
+ proc.time() - ptm
+
+#write_xlsx(predictions_full,"NY_regs_1_9.xlsx")
+#write_xlsx(predictions_full,"NY_regs_1_20.xlsx")
+#write_xlsx(predictions_full,"NY_regs_1_24.xlsx")
+#write_xlsx(predictions_full,"NY_regs_1_25.xlsx")
+#write_xlsx(predictions_full,"NY_regs_prop11_adj.xlsx")
+#write_xlsx(predictions_full,"NY_regs_1_30.xlsx")
+write_xlsx(predictions_full,"NY_regs_2_9.xlsx")
 
 
 
@@ -1223,8 +1228,10 @@ predictions_all = list()
 #          "2023.181", "2023.182", "2023.183")
 
 #CT years - run 8
-years<-c("2023.201", "2023.202","2023.203")
+#years<-c("2023.201", "2023.202","2023.203")
 
+#CT years - run 8
+years<-c("2023.211", "2023.212","2023.213")
 for (x in 1:100){
   for (y in years){
 
@@ -1271,7 +1278,7 @@ for (x in 1:100){
                     "2023.6", "2023.71", "2023.72", "2023.81", "2023.82", "2023.91", "2023.92",
                     "2023.101", "2023.102","2023.31", "2023.33",
                     "2023.11", "2023.12",  "2023.21", "2023.22", "2023.31","2023.32", 
-                    "2023.111", "2023.112", "2023.113", 
+                    "2023.111", "2023.112", "2023.113", "2023.211", "2023.212","2023.213",
                     "2023.121", "2023.122", "2023.123",
                     "2023.131", "2023.132", "2023.133",
                     "2023.141", "2023.142", "2023.143",
@@ -1362,7 +1369,8 @@ proc.time() - ptm
 # write_xlsx(predictions_full,"CT_regs_1_20.xlsx")
 #write_xlsx(predictions_full,"CT_regs_1_25.xlsx")
 #write_xlsx(predictions_full,"CT_regs_1_31.xlsx")
-write_xlsx(predictions_full,"CT_regs_2_2.xlsx")
+#write_xlsx(predictions_full,"CT_regs_2_2.xlsx")
+write_xlsx(predictions_full,"CT_regs_2_16.xlsx")
 
 #
 #
@@ -1397,7 +1405,14 @@ predictions_all = list()
 #          "2023.151", "2023.152", "2023.153")
 
 #RI years - 8th run
-years<-c("2023.161", "2023.162", "2023.163")
+#years<-c("2023.161", "2023.162", "2023.163")
+
+
+#RI years - 9th run
+# years<-c("2023.171", "2023.172", "2023.173")
+
+#RI years - 10th run
+ years<-c("2023.191", "2023.192", "2023.193", "2023.201", "2023.202", "2023.203")
 
 for (x in 1:100){
   for (y in years){
@@ -1443,8 +1458,8 @@ for (x in 1:100){
                     "2023.1", "2023.2",  "2023.31", "2023.32", "2023.41", "2023.42", "2023.5",
                     "2023.6", "2023.71", "2023.72", "2023.81", "2023.82", "2023.91", "2023.92",
                     "2023.101", "2023.102","2023.131", "2023.132", "2023.133", 
-                    "2023.141", "2023.142", "2023.143",
-                    "2023.151", "2023.152", "2023.153", 
+                    "2023.141", "2023.142", "2023.143","2023.171", "2023.172", "2023.173", 
+                    "2023.151", "2023.152", "2023.153", "2023.191", "2023.192", "2023.193", "2023.201", "2023.202", "2023.203",
                     "2023.11", "2023.12",  "2023.21", "2023.22", "2023.31","2023.32")){
       fluke_numbers_at_age = data.frame(read_csv("fluke_MCMC_100_2023.csv", show_col_types = FALSE))
       fluke_numbers_at_age = subset(fluke_numbers_at_age, fluke_numbers_at_age$draw==x)
@@ -1530,7 +1545,9 @@ proc.time() - ptm
 #write_xlsx(predictions_full,"RI_regs_1_24.xlsx")
 #write_xlsx(predictions_full,"RI_regs_1_25.xlsx")
 #write_xlsx(predictions_full,"RI_regs_2_1.xlsx")
-write_xlsx(predictions_full,"RI_regs_2_6.xlsx")
+#write_xlsx(predictions_full,"RI_regs_2_6.xlsx")
+#write_xlsx(predictions_full,"RI_regs_2_7.xlsx")
+write_xlsx(predictions_full,"RI_regs_2_14.xlsx")
 
 
 
@@ -1566,8 +1583,20 @@ predictions_all = list()
 # years<-c("2023.221")
 
 # #MA years - run 7 
-years<-c("2023.231", "2023.232", "2023.233")
+#years<-c("2023.231", "2023.232", "2023.233")
 
+# #MA years - run 8 
+#years<-c("2023.241", "2023.242", "2023.243")
+
+# #MA years - run 9 
+# years<-c("2023.261", "2023.262", "2023.263", 
+#          "2023.271", "2023.272", "2023.273", 
+#          "2023.281", "2023.282", "2023.283", 
+#          "2023.291", "2023.292", "2023.293", 
+#          "2023.301", "2023.302", "2023.303")
+# #MA years - run 9 adjusted for the shore private 
+years<-c("2023.291", "2023.292", "2023.293", 
+         "2023.301", "2023.302", "2023.303")
 
 for (x in 1:100){
   for (y in years){
@@ -1612,13 +1641,17 @@ for (x in 1:100){
                     "2026.2", "2026.4", "2026.5", "2026.7", "2026.9",
                     "2023.1", "2023.2",  "2023.31", "2023.32", "2023.41", "2023.42", "2023.5",
                     "2023.6", "2023.71", "2023.72", "2023.81", "2023.82", "2023.91", "2023.92",
-                    "2023.101", "2023.102",
+                    "2023.101", "2023.102","2023.241", "2023.242", "2023.243", 
                     "2023.11", "2023.12",  "2023.21", "2023.22", "2023.31","2023.32",
                     "2023.0", "2023.102", "2023.111", "2023.113", "2023.131", "2023.133", "2023.151", "2023.153", "2023.161", "2023.163", "2023.171",
                     "2023.11", "2023.12", "2023.13",
                     "2023.41","2023.42","2023.43",
                     "2023.61","2023.62", "2023.63",
-                    "2023.71","2023.73",
+                    "2023.71","2023.73","2023.261", "2023.262", "2023.263", 
+                    "2023.271", "2023.272", "2023.273", 
+                    "2023.281", "2023.282", "2023.283", 
+                    "2023.291", "2023.292", "2023.293", 
+                    "2023.301", "2023.302", "2023.303" ,
                     "2023.81","2023.83","2023.181", "2023.182","2023.183","2023.191","2023.192","2023.193",
                     "2023.201", "2023.202","2023.203","2023.211","2023.212","2023.213",
                     "2023.221","2023.222","2023.223", 
@@ -1705,8 +1738,10 @@ proc.time() - ptm
 #write_xlsx(predictions_full,"MA_regs_1_24.xlsx")
 #write_xlsx(predictions_full,"MA_regs_1_26.xlsx")
 #write_xlsx(predictions_full,"MA_regs_1_26_addon.xlsx")
-write_xlsx(predictions_full,"MA_regs_1_30.xlsx")
-
+#write_xlsx(predictions_full,"MA_regs_1_30.xlsx")
+#write_xlsx(predictions_full,"MA_regs_2_7.xlsx")
+#write_xlsx(predictions_full,"MA_regs_2_14.xlsx")
+write_xlsx(predictions_full,"MA_regs_2_15.xlsx")
 
 
 
